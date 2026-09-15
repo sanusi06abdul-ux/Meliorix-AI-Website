@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Membership automation case study | Meliorix AI</title>
+<meta name="description" content="How Meliorix AI automated a five-tier membership lifecycle end to end: purchases, activation, renewals, and cancellations, with zero manual input.">
+<link rel="icon" href="Images%20-%20for%20Website/files/m-caret-favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="Images%20-%20for%20Website/files/m-caret-favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="Images%20-%20for%20Website/files/m-caret-favicon-192.png">
+<link rel="apple-touch-icon" href="Images%20-%20for%20Website/files/m-caret-favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #111211; --paper: #FAFAF8; --paper-2: #F1F0EA;
+    --green: #0F6E56; --green-deep: #085041; --mint: #5DCAA5;
+    --line: #DEDCD3; --muted-ink-2: #8B8B85;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: -0.01em; }
+  a { color: inherit; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 32px; }
+  .wrap-wide { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  nav { position: sticky; top: 0; z-index: 20; padding: 24px 0; border-bottom: 1px solid var(--line); background: rgba(250,250,248,0.92); backdrop-filter: blur(6px); }
+  nav .wrap-wide { display: flex; justify-content: space-between; align-items: center; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; text-decoration: none; }
+  .contact-link { font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #6B6B65; text-decoration: none; margin-bottom: 28px; }
+  .back-link:hover { color: var(--ink); }
+
+  header.cs-hero {
+    padding: 64px 0 0; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse 700px 420px at 90% -20%, rgba(15,110,86,0.10), transparent 60%),
+      var(--paper);
+  }
+  header.cs-hero .wrap { position: relative; }
+  .cs-tag { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 14px; }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.15; max-width: 680px; }
+  .cs-sub { margin-top: 18px; font-size: 17px; color: #4A4A46; max-width: 620px; padding-bottom: 40px; }
+
+  /* Hero photo band + stat badges */
+  .cs-hero-media {
+    position: relative; margin-top: 0; min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
+    background: repeating-linear-gradient(135deg, #1B2622, #1B2622 10px, #202B26 10px, #202B26 20px);
+  }
+  .cs-hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .cs-hero-media::before {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(17,18,17,0.2) 0%, rgba(17,18,17,0.5) 55%, rgba(17,18,17,0.9) 100%);
+  }
+  .cs-hero-media-fill { position: relative; z-index: 1; flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+  .cs-hero-media-label { text-align: center; max-width: 260px; font-size: 12.5px; color: rgba(250,250,248,0.55); line-height: 1.5; }
+  .cs-badges { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 14px; padding: 0 32px 32px; max-width: 1040px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  .cs-badge { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(6px); border-radius: 10px; padding: 14px 20px; }
+  .cs-badge strong { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; color: #fff; }
+  .cs-badge span { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--mint); margin-top: 3px; }
+
+  /* Client overview */
+  .cs-overview-eyebrow { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .cs-overview { padding: 56px 0; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+  .cs-overview-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 40px; align-items: center; }
+  .cs-overview-media {
+    position: relative; min-height: 220px; border-radius: 12px; overflow: hidden;
+    background: repeating-linear-gradient(135deg, var(--paper), var(--paper) 10px, #E9E7DF 10px, #E9E7DF 20px);
+    border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .cs-overview-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cs-overview-media-label { position: relative; font-size: 12px; color: #8A8A84; text-align: center; max-width: 200px; line-height: 1.5; }
+  .cs-overview-copy h2 { font-size: 22px; margin-bottom: 12px; color: var(--ink); }
+  .cs-overview-copy > p { font-size: 15px; color: #4A4A46; margin-bottom: 22px; }
+  .cs-overview-meta { display: flex; flex-direction: column; gap: 14px; }
+  .cs-overview-meta-row { display: flex; gap: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .cs-overview-meta-row:first-child { padding-top: 0; border-top: none; }
+  .cs-overview-meta-row dt { flex: 0 0 130px; font-size: 12px; font-weight: 500; color: #6B6B65; text-transform: uppercase; letter-spacing: 0.03em; }
+  .cs-overview-meta-row dd { font-size: 14.5px; color: var(--ink); }
+  @media (max-width: 760px) { .cs-overview-grid { grid-template-columns: 1fr; } }
+
+  main { padding: 56px 0 0; }
+  main h2 { font-size: 24px; margin-top: 52px; margin-bottom: 18px; color: var(--green); }
+  main .wrap > h2:first-child { margin-top: 0; }
+  main h3 { font-size: 17px; margin-bottom: 4px; }
+  main p { font-size: 16px; color: #3A3A36; margin-bottom: 14px; }
+
+  /* Challenge checklist */
+  .challenge-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 32px; margin: 20px 0 8px; }
+  .challenge-item { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: #3A3A36; }
+  .challenge-item::before { content: '\2715'; color: #B23A2A; font-size: 11px; font-weight: 700; margin-top: 5px; flex-shrink: 0; }
+  @media (max-width: 640px) { .challenge-grid { grid-template-columns: 1fr; } }
+
+  .workflow { display: flex; gap: 18px; align-items: flex-start; margin: 22px 0; }
+  .workflow-num {
+    flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #14966F, var(--green-deep));
+    color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 12.5px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .workflow h3 { color: var(--ink); margin-top: 0; }
+  .workflow p { color: #4A4A46; font-size: 15px; margin-bottom: 0; }
+
+  .results-wrap { position: relative; }
+  .results-wrap .ghost-text {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(52px, 11vw, 120px);
+    color: var(--ink); opacity: 0.045; white-space: nowrap; pointer-events: none; user-select: none; z-index: 0;
+  }
+  .results-wrap > h2, .results-wrap > p { position: relative; z-index: 1; }
+  .results-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 28px 0 8px; }
+  .result-stat { background: var(--paper-2); border: 1px solid var(--line); border-radius: 10px; padding: 20px 22px; text-align: center; }
+  .result-stat strong { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px; color: var(--green-deep); }
+  .result-stat span { display: block; font-size: 12px; color: #6B6B65; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+  @media (max-width: 640px) { .results-stats { grid-template-columns: 1fr; } }
+
+  .approach-overview {
+    margin: 28px 0 8px; padding: 28px 30px; border-radius: 10px;
+    background: linear-gradient(160deg, #171817, var(--ink));
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 32px;
+    position: relative; overflow: hidden;
+  }
+  .approach-overview::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 320px 220px at 100% 0%, rgba(15,110,86,0.32), transparent 60%);
+    pointer-events: none;
+  }
+  .approach-item { position: relative; display: flex; gap: 12px; align-items: flex-start; }
+  .approach-num { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--mint); font-size: 13px; flex-shrink: 0; }
+  .approach-item span:last-child { font-size: 14px; color: #D8D7D2; line-height: 1.5; }
+  @media (max-width: 600px) { .approach-overview { grid-template-columns: 1fr; } }
+
+  .email-mock2 { margin: 32px 0; border-radius: 8px; overflow: hidden; max-width: 460px; }
+  .email-mock2 .banner {
+    position: relative; overflow: hidden; padding: 32px 30px;
+    background:
+      radial-gradient(ellipse 260px 200px at 90% -20%, rgba(15,110,86,0.35), transparent 60%),
+      var(--ink);
+  }
+  .email-mock2 .eyebrow { color: #8B8B85; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+  .email-mock2 .greet { color: #D8D7D2; font-size: 14px; margin-bottom: 14px; }
+  .email-mock2 .greet strong { color: #fff; }
+  .email-mock2 h4 { color: #fff; font-size: 26px; margin-bottom: 10px; }
+  .email-mock2 .price { color: #B8B7B1; font-size: 13px; margin-bottom: 22px; }
+  .email-mock2 .btn-mock { background: #fff; color: var(--ink); text-align: center; padding: 14px; font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em; border-radius: 4px; }
+  .email-mock2 .fine { color: #8B8B85; font-size: 11px; margin-top: 10px; text-align: center; }
+  .email-caption2 { text-align: center; font-size: 12.5px; color: #8A8A84; margin-top: 12px; }
+
+  .sheet-mock { margin: 40px 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .sheet-mock table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .sheet-mock th { background: linear-gradient(135deg, #171817, var(--ink)); color: #fff; font-weight: 500; text-align: left; padding: 10px 12px; white-space: nowrap; }
+  .sheet-mock td { padding: 10px 12px; border-top: 1px solid var(--line); color: #3A3A36; white-space: nowrap; }
+  .sheet-mock .tabs { display: flex; gap: 2px; background: var(--paper-2); padding: 8px 8px 0; }
+  .sheet-mock .tab { font-size: 11.5px; padding: 8px 14px; color: #6B6B65; border-radius: 4px 4px 0 0; }
+  .sheet-mock .tab.active { background: var(--paper); color: var(--ink); font-weight: 500; }
+  .status-pill { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 3px; }
+  .status-pill.active { background: rgba(15,110,86,0.12); color: var(--green); }
+
+  /* Testimonial band */
+  .testimonial-band { position: relative; overflow: hidden; padding: 64px 0; background: linear-gradient(160deg, #171817, var(--ink)); margin-top: 52px; }
+  .testimonial-band::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 500px 300px at 12% 0%, rgba(15,110,86,0.28), transparent 60%);
+  }
+  .testimonial-inner { position: relative; display: flex; gap: 22px; align-items: flex-start; max-width: 760px; }
+  .testimonial-avatar {
+    flex-shrink: 0; width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, #14966F, var(--green-deep)); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px;
+  }
+  .testimonial-quote { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 500; color: #fff; line-height: 1.5; }
+  .testimonial-cite { margin-top: 14px; font-size: 14px; color: var(--mint); }
+  @media (max-width: 600px) { .testimonial-inner { flex-direction: column; } }
+
+  .cs-cta {
+    position: relative; overflow: hidden; color: var(--paper); padding: 72px 0;
+    background:
+      radial-gradient(ellipse 600px 320px at 50% 0%, rgba(93,202,165,0.16), transparent 70%),
+      var(--ink);
+  }
+  .cs-cta .wrap-wide { position: relative; }
+  .cs-cta .wrap-wide h2 { color: var(--paper); font-size: clamp(24px, 3.5vw, 34px); max-width: 520px; }
+  .cs-cta p { margin-top: 14px; color: #B8B7B1; font-size: 16px; max-width: 460px; }
+  .btn-primary { background: var(--green); color: var(--paper); text-decoration: none; padding: 14px 26px; border-radius: 4px; font-size: 15px; font-weight: 500; display: inline-block; margin-top: 28px; }
+  .btn-primary:hover { background: var(--mint); color: var(--ink); }
+
+  /* Technology stack */
+  .tech-stack { padding: 52px 0; text-align: center; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+  .tech-stack .cs-overview-eyebrow { text-align: center; }
+  .tech-chips { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 18px; }
+  .tech-chip { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; color: var(--ink); background: var(--paper); border: 1px solid var(--line); padding: 10px 20px; border-radius: 8px; }
+
+  /* Before vs after */
+  .before-after { padding: 56px 0; }
+  .before-after h2 { font-size: 22px; color: var(--ink); }
+  .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-top: 24px; }
+  .ba-col { background: var(--paper); padding: 28px 30px; }
+  .ba-col.after { background: linear-gradient(160deg, rgba(15,110,86,0.07), rgba(93,202,165,0.03)); }
+  .ba-col h4 { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; color: #6B6B65; margin-bottom: 16px; }
+  .ba-col.after h4 { color: var(--green-deep); }
+  .ba-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .ba-col li { font-size: 14.5px; display: flex; gap: 10px; align-items: flex-start; color: #3A3A36; }
+  .ba-col.before li::before { content: '\2715'; color: #B23A2A; font-size: 10px; margin-top: 4px; flex-shrink: 0; font-weight: 700; }
+  .ba-col.after li::before { content: '\2713'; color: var(--green-deep); font-size: 11px; margin-top: 4px; flex-shrink: 0; font-weight: 700; }
+  @media (max-width: 600px) { .ba-grid { grid-template-columns: 1fr; } }
+
+  /* Key takeaway */
+  .key-takeaway { padding: 48px 0; background: var(--paper-2); border-top: 1px solid var(--line); }
+  .key-takeaway-label { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .key-takeaway p { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 500; color: var(--ink); line-height: 1.5; max-width: 760px; }
+  .key-takeaway .btn-primary { background: var(--green-deep); color: #fff; padding: 12px 22px; font-size: 14px; }
+  .key-takeaway .btn-primary:hover { background: var(--green); }
+
+  footer { padding: 28px 0; }
+  footer .wrap-wide { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted-ink-2); }
+
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="logo" href="index.html">
+      <svg width="26" height="24" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M35 170 L35 90 L82 138 L130 90 L130 170" fill="none" stroke="#111211" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><path d="M156 150 L182 90 L208 150" fill="none" stroke="#0F6E56" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Meliorix AI
+    </a>
+    <a class="contact-link" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+  </div>
+</nav>
+
+<header class="cs-hero">
+  <div class="wrap">
+    <a class="back-link" href="index.html#case-studies">&larr; Back to case studies</a>
+    <p class="cs-tag">Membership platform</p>
+    <h1>A membership programme that runs itself, across five tiers</h1>
+    <p class="cs-sub">How we replaced manual renewals, ticket reissuing, and cross-tier tracking with a fully automated member lifecycle system.</p>
+  </div>
+  <div class="cs-hero-media">
+    <img src="Images%20-%20for%20Website/case-studies/membership-hero.jpg" alt="" loading="lazy">
+    <div class="cs-badges">
+      <div class="cs-badge"><strong>6</strong><span>Automated workflows</span></div>
+      <div class="cs-badge"><strong>0</strong><span>Manual steps</span></div>
+      <div class="cs-badge"><strong>5</strong><span>Membership tiers</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="cs-overview">
+  <div class="wrap cs-overview-grid">
+    <div class="cs-overview-media">
+      <img src="Images%20-%20for%20Website/case-studies/membership-overview.jpg" alt="" loading="lazy">
+    </div>
+    <div class="cs-overview-copy">
+      <p class="cs-overview-eyebrow">Client overview</p>
+      <h2>Membership platform</h2>
+      <p>This client ran a membership programme across five tiers with no automation in place, and needed every purchase, renewal, and cancellation tracked and communicated automatically.</p>
+      <dl class="cs-overview-meta">
+        <div class="cs-overview-meta-row"><dt>Industry</dt><dd>Membership &amp; ticketing</dd></div>
+        <div class="cs-overview-meta-row"><dt>Automation type</dt><dd>Full lifecycle automation</dd></div>
+        <div class="cs-overview-meta-row"><dt>Tools used</dt><dd>Ticket Tailor, Pabbly Connect, Pabbly Subscriptions, Google Sheets</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap">
+    <h2>The challenge</h2>
+    <p>This client ran a membership programme across five tiers with no automation in place. Every renewal meant a member manually re-entering payment details, and every new ticket had to be issued by hand. Every purchase, renewal, or cancellation required manual tracking and communication. With members spread across five different tiers, keeping records accurate and sending the right communication at the right time had become unmanageable.</p>
+    <div class="challenge-grid">
+      <div class="challenge-item">New membership tickets had to be issued manually on every renewal</div>
+      <div class="challenge-item">Members had to manually re-enter payment details for a subscription to renew</div>
+      <div class="challenge-item">No centralised record of who had purchased, activated, or cancelled their membership</div>
+      <div class="challenge-item">No automated reminders for members who purchased but never activated</div>
+      <div class="challenge-item">No automated renewal reminders before a member's billing date</div>
+      <div class="challenge-item">Cancellations had to be tracked manually across multiple systems</div>
+    </div>
+
+    <h2>Our approach</h2>
+    <p>We built a fully automated end-to-end membership management system across Ticket Tailor, Pabbly Connect, Pabbly Subscriptions, and Google Sheets, covering every stage of the member lifecycle without any manual input required.</p>
+    <p>The system centres on a two-tab Google Sheet acting as the membership database. The <em>All Contacts</em> tab logs every purchase with the member's name, email, tier, order date, activation status, and reminder status. The <em>Active Members</em> tab tracks every activated member with their tier, price, renewal date, days until renewal, and active or cancelled status. Both tabs update automatically as members move through the lifecycle.</p>
+
+    <div class="approach-overview">
+      <div class="approach-item"><span class="approach-num">01</span><span>New purchase logs the member and sends onboarding</span></div>
+      <div class="approach-item"><span class="approach-num">02</span><span>Activation confirms the tier and starts the renewal clock</span></div>
+      <div class="approach-item"><span class="approach-num">03</span><span>Reminder nudges anyone who hasn't activated after a day</span></div>
+      <div class="approach-item"><span class="approach-num">04</span><span>Renewal reminder goes out three days before billing</span></div>
+      <div class="approach-item"><span class="approach-num">05</span><span>Successful payment reissues the ticket automatically</span></div>
+      <div class="approach-item"><span class="approach-num">06</span><span>Cancellation updates both tracking tabs at once</span></div>
+    </div>
+
+    <h2>What we built</h2>
+    <div class="email-mock2">
+      <div class="banner">
+        <p class="eyebrow">Sample activation email &middot; anonymised</p>
+        <p class="greet">Hi <strong>Sam</strong>, one last step to activate your membership.</p>
+        <h4>Sample Membership</h4>
+        <p class="price">$XX / year &middot; Renews automatically</p>
+        <div class="btn-mock">ACTIVATE MY MEMBERSHIP</div>
+        <p class="fine">No charge today &middot; Secure checkout</p>
+      </div>
+    </div>
+    <p class="email-caption2">Example format, anonymised. Not a real client, name, or price</p>
+
+    <div class="sheet-mock">
+      <div class="tabs">
+        <span class="tab">All Contacts</span>
+        <span class="tab active">Active Members</span>
+      </div>
+      <table>
+        <tr><th>First name</th><th>Last name</th><th>Email</th><th>Tier</th><th>Price</th><th>Renewal date</th><th>Days until renewal</th><th>Reminder sent</th><th>Status</th></tr>
+        <tr><td>Sam</td><td>Ellis</td><td>example@email.com</td><td>Gold</td><td>$XX</td><td>Jul 15 2026</td><td>43</td><td>No</td><td><span class="status-pill active">Active</span></td></tr>
+      </table>
+    </div>
+    <p class="email-caption2">Example database structure, anonymised. Not real member data</p>
+
+    <div class="workflow">
+      <span class="workflow-num">01</span>
+      <div>
+        <h3>New purchase</h3>
+        <p>Triggered instantly when a new order is placed in Ticket Tailor. Filters for membership orders only, timestamps the purchase, logs the member to the All Contacts tab, and routes them to the correct tier-specific onboarding email.</p>
+      </div>
+    </div>
+    <div class="workflow">
+      <span class="workflow-num">02</span>
+      <div>
+        <h3>Subscription activated</h3>
+        <p>Triggered when a member completes activation in Pabbly Subscriptions. Updates their record, adds them to the Active Members tab with their renewal date, and sends a tier-specific confirmation email.</p>
+      </div>
+    </div>
+    <div class="workflow">
+      <span class="workflow-num">03</span>
+      <div>
+        <h3>Reminder to activate</h3>
+        <p>Runs daily. Checks for members who purchased a day ago and haven't yet activated, and sends a reminder with their checkout link, matched to the right tier.</p>
+      </div>
+    </div>
+    <div class="workflow">
+      <span class="workflow-num">04</span>
+      <div>
+        <h3>Subscription about to renew</h3>
+        <p>Runs daily. Checks for members whose renewal date is three days away and who haven't yet received a reminder, sends one, and marks it sent to prevent duplicates.</p>
+      </div>
+    </div>
+    <div class="workflow">
+      <span class="workflow-num">05</span>
+      <div>
+        <h3>Subscription renewed</h3>
+        <p>Triggered instantly when a recurring payment succeeds. Updates the renewal date and automatically issues a new membership ticket via the Ticket Tailor API, no one has to lift a finger.</p>
+      </div>
+    </div>
+    <div class="workflow">
+      <span class="workflow-num">06</span>
+      <div>
+        <h3>Membership cancelled</h3>
+        <p>Triggered instantly when a subscription is cancelled. Updates the member's status to cancelled in both tracking tabs. Pabbly Subscriptions handles the cancellation confirmation email automatically.</p>
+      </div>
+    </div>
+
+    <p>The client received full documentation, including a written SOP, workflow diagrams for all six automations, and video walkthroughs covering how the system works and how to update pricing independently.</p>
+  </div>
+
+  <section class="testimonial-band">
+    <div class="wrap">
+      <div class="testimonial-inner">
+        <div class="testimonial-avatar" aria-hidden="true">MP</div>
+        <div>
+          <p class="testimonial-quote">"He's focused on providing solutions in a quick period of time. He finds the problem and quickly resolves it, while explaining what, how, and why he took certain actions, without adding extra workload to your process. This is my second project with him and his work is very appreciated."</p>
+          <p class="testimonial-cite">Founder, Membership Platform</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="results-wrap">
+      <span class="ghost-text" aria-hidden="true">Results</span>
+      <h2>The results</h2>
+      <p>The entire membership lifecycle now runs without manual input. From the moment someone purchases through to renewal, reminders, and cancellation, every action triggers automatically, every record updates in real time, and every communication routes to the correct tier.</p>
+      <div class="results-stats">
+        <div class="result-stat"><strong>6</strong><span>Automated workflows</span></div>
+        <div class="result-stat"><strong>0</strong><span>Manual steps</span></div>
+        <div class="result-stat"><strong>5</strong><span>Membership tiers</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section class="cs-cta">
+  <div class="wrap-wide">
+    <h2>Got a process like this one?</h2>
+    <p>If manual renewals, tracking, or reminders are eating into your team's time, we'll tell you honestly whether automation is the right fix.</p>
+    <a class="btn-primary" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+  </div>
+</section>
+
+<section class="tech-stack">
+  <div class="wrap">
+    <p class="cs-overview-eyebrow">Technology stack</p>
+    <h2 style="font-size: 20px;">Built with the tools already in use</h2>
+    <div class="tech-chips">
+      <span class="tech-chip">Ticket Tailor</span>
+      <span class="tech-chip">Pabbly Connect</span>
+      <span class="tech-chip">Pabbly Subscriptions</span>
+      <span class="tech-chip">Google Sheets</span>
+    </div>
+  </div>
+</section>
+
+<section class="before-after">
+  <div class="wrap">
+    <p class="cs-overview-eyebrow">Transformation</p>
+    <h2>Before vs after</h2>
+    <div class="ba-grid">
+      <div class="ba-col before">
+        <h4>Before</h4>
+        <ul>
+          <li>Payment details re-entered manually on every renewal</li>
+          <li>Tickets issued by hand after each renewal</li>
+          <li>No centralised record across 5 tiers</li>
+        </ul>
+      </div>
+      <div class="ba-col after">
+        <h4>After</h4>
+        <ul>
+          <li>6 automated workflows covering the full lifecycle</li>
+          <li>0 manual steps in renewals or tracking</li>
+          <li>Full SOP and video walkthroughs handed over</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="key-takeaway">
+  <div class="wrap">
+    <p class="key-takeaway-label">Key takeaway</p>
+    <p>The renewal reminder was the domino. Once it fired on its own, the ticket reissue, the status update, and the tracking all followed without anyone touching them.</p>
+    <a class="btn-primary" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap-wide">
+    <span>Meliorix AI</span>
+    <span>abdul@meliorixai.com</span>
+  </div>
+</footer>
+
+</body>
+</html>

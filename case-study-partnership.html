@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partnership tracking case study | Meliorix AI</title>
+<meta name="description" content="How Meliorix AI automated daily football sponsorship intelligence: scraping, AI filtering, and a branded morning digest that replaces hours of manual research.">
+<link rel="icon" href="Images%20-%20for%20Website/files/m-caret-favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="Images%20-%20for%20Website/files/m-caret-favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="Images%20-%20for%20Website/files/m-caret-favicon-192.png">
+<link rel="apple-touch-icon" href="Images%20-%20for%20Website/files/m-caret-favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #111211; --paper: #FAFAF8; --paper-2: #F1F0EA;
+    --green: #0F6E56; --green-deep: #085041; --mint: #5DCAA5;
+    --line: #DEDCD3; --muted-ink-2: #8B8B85;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: -0.01em; }
+  a { color: inherit; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 32px; }
+  .wrap-wide { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  nav { position: sticky; top: 0; z-index: 20; padding: 24px 0; border-bottom: 1px solid var(--line); background: rgba(250,250,248,0.92); backdrop-filter: blur(6px); }
+  nav .wrap-wide { display: flex; justify-content: space-between; align-items: center; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; text-decoration: none; }
+  .contact-link { font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: #6B6B65; text-decoration: none; margin-bottom: 28px; }
+  .back-link:hover { color: var(--ink); }
+
+  header.cs-hero {
+    padding: 64px 0 0; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse 700px 420px at 90% -20%, rgba(15,110,86,0.10), transparent 60%),
+      var(--paper);
+  }
+  header.cs-hero .wrap { position: relative; }
+  .cs-tag { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 14px; }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.15; max-width: 680px; }
+  .cs-sub { margin-top: 18px; font-size: 17px; color: #4A4A46; max-width: 620px; padding-bottom: 40px; }
+
+  /* Hero photo band + stat badges */
+  .cs-hero-media {
+    position: relative; margin-top: 0; min-height: 380px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden;
+    background: repeating-linear-gradient(135deg, #1B2622, #1B2622 10px, #202B26 10px, #202B26 20px);
+  }
+  .cs-hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .cs-hero-media::before {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(17,18,17,0.2) 0%, rgba(17,18,17,0.5) 55%, rgba(17,18,17,0.9) 100%);
+  }
+  .cs-hero-media-fill { position: relative; z-index: 1; flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+  .cs-hero-media-label { text-align: center; max-width: 260px; font-size: 12.5px; color: rgba(250,250,248,0.55); line-height: 1.5; }
+  .cs-badges { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 14px; padding: 0 32px 32px; max-width: 1040px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  .cs-badge { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(6px); border-radius: 10px; padding: 14px 20px; }
+  .cs-badge strong { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; color: #fff; }
+  .cs-badge span { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--mint); margin-top: 3px; }
+
+  /* Client overview */
+  .cs-overview-eyebrow { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .cs-overview { padding: 56px 0; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+  .cs-overview-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 40px; align-items: center; }
+  .cs-overview-media {
+    position: relative; min-height: 220px; border-radius: 12px; overflow: hidden;
+    background: repeating-linear-gradient(135deg, var(--paper), var(--paper) 10px, #E9E7DF 10px, #E9E7DF 20px);
+    border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .cs-overview-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cs-overview-media-label { position: relative; font-size: 12px; color: #8A8A84; text-align: center; max-width: 200px; line-height: 1.5; }
+  .cs-overview-copy h2 { font-size: 22px; margin-bottom: 12px; color: var(--ink); }
+  .cs-overview-copy > p { font-size: 15px; color: #4A4A46; margin-bottom: 22px; }
+  .cs-overview-meta { display: flex; flex-direction: column; gap: 14px; }
+  .cs-overview-meta-row { display: flex; gap: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .cs-overview-meta-row:first-child { padding-top: 0; border-top: none; }
+  .cs-overview-meta-row dt { flex: 0 0 130px; font-size: 12px; font-weight: 500; color: #6B6B65; text-transform: uppercase; letter-spacing: 0.03em; }
+  .cs-overview-meta-row dd { font-size: 14.5px; color: var(--ink); }
+  @media (max-width: 760px) { .cs-overview-grid { grid-template-columns: 1fr; } }
+
+  main { padding: 56px 0 0; }
+  main h2 { font-size: 24px; margin-top: 52px; margin-bottom: 18px; color: var(--green); }
+  main .wrap > h2:first-child { margin-top: 0; }
+  main h3 { font-size: 17px; margin-bottom: 4px; }
+  main p { font-size: 16px; color: #3A3A36; margin-bottom: 14px; }
+
+  /* Challenge checklist */
+  .challenge-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 32px; margin: 20px 0 8px; }
+  .challenge-item { display: flex; gap: 10px; align-items: flex-start; font-size: 15px; color: #3A3A36; }
+  .challenge-item::before { content: '\2715'; color: #B23A2A; font-size: 11px; font-weight: 700; margin-top: 5px; flex-shrink: 0; }
+  @media (max-width: 640px) { .challenge-grid { grid-template-columns: 1fr; } }
+
+  .workflow { display: flex; gap: 18px; align-items: flex-start; margin: 28px 0; }
+  .workflow-num {
+    flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, #14966F, var(--green-deep));
+    color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .workflow-meta { font-size: 12px; color: var(--green); font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+  .workflow h3 { color: var(--ink); margin-top: 0; }
+  .workflow p { color: #4A4A46; font-size: 15px; margin-bottom: 0; }
+
+  .email-mock { margin: 40px 0; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .email-banner {
+    position: relative; overflow: hidden; padding: 36px 28px; text-align: center;
+    background:
+      radial-gradient(ellipse 300px 200px at 85% -10%, rgba(15,110,86,0.35), transparent 60%),
+      var(--ink);
+  }
+  .email-banner .icon { width: 40px; height: 40px; margin: 0 auto 14px; border-radius: 50%; border: 2px solid var(--mint); display: flex; align-items: center; justify-content: center; }
+  .email-banner h4 { color: #FAFAF8; font-size: 21px; }
+  .email-banner p { color: var(--mint); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 6px; }
+  .email-body { padding: 28px 30px; background: #fff; }
+  .email-date { font-size: 11.5px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--green); margin-bottom: 20px; }
+  .email-story { border-left: 2px solid var(--line); padding-left: 16px; margin-bottom: 22px; }
+  .email-story h5 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .email-story p { font-size: 13.5px; color: #4A4A46; margin-bottom: 8px; }
+  .email-story .meta { font-size: 11px; color: #8A8A84; text-transform: uppercase; letter-spacing: 0.03em; }
+  .email-story a { font-size: 12.5px; color: var(--green); font-weight: 500; text-decoration: none; display: inline-block; margin-top: 4px; }
+  .email-caption { text-align: center; font-size: 12.5px; color: #8A8A84; margin-top: 12px; }
+
+  .results-wrap { position: relative; }
+  .results-wrap .ghost-text {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(52px, 11vw, 120px);
+    color: var(--ink); opacity: 0.045; white-space: nowrap; pointer-events: none; user-select: none; z-index: 0;
+  }
+  .results-wrap > h2, .results-wrap > p { position: relative; z-index: 1; }
+  .results-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 28px 0 8px; }
+  .result-stat { background: var(--paper-2); border: 1px solid var(--line); border-radius: 10px; padding: 20px 22px; text-align: center; }
+  .result-stat strong { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px; color: var(--green-deep); }
+  .result-stat span { display: block; font-size: 12px; color: #6B6B65; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+  @media (max-width: 640px) { .results-stats { grid-template-columns: 1fr; } }
+
+  .approach-overview {
+    margin: 28px 0 8px; padding: 28px 30px; border-radius: 10px;
+    background: linear-gradient(160deg, #171817, var(--ink));
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 32px;
+    position: relative; overflow: hidden;
+  }
+  .approach-overview::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 320px 220px at 100% 0%, rgba(15,110,86,0.32), transparent 60%);
+    pointer-events: none;
+  }
+  .approach-item { position: relative; display: flex; gap: 12px; align-items: flex-start; }
+  .approach-num { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--mint); font-size: 13px; flex-shrink: 0; }
+  .approach-item span:last-child { font-size: 14px; color: #D8D7D2; line-height: 1.5; }
+  @media (max-width: 600px) { .approach-overview { grid-template-columns: 1fr; } }
+
+  /* Testimonial band */
+  .testimonial-band { position: relative; overflow: hidden; padding: 64px 0; background: linear-gradient(160deg, #171817, var(--ink)); margin-top: 52px; }
+  .testimonial-band::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 500px 300px at 12% 0%, rgba(15,110,86,0.28), transparent 60%);
+  }
+  .testimonial-inner { position: relative; display: flex; gap: 22px; align-items: flex-start; max-width: 760px; }
+  .testimonial-avatar {
+    flex-shrink: 0; width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, #14966F, var(--green-deep)); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px;
+  }
+  .testimonial-quote { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 500; color: #fff; line-height: 1.5; }
+  .testimonial-cite { margin-top: 14px; font-size: 14px; color: var(--mint); }
+  @media (max-width: 600px) { .testimonial-inner { flex-direction: column; } }
+
+  .cs-cta {
+    position: relative; overflow: hidden; color: var(--paper); padding: 72px 0;
+    background:
+      radial-gradient(ellipse 600px 320px at 50% 0%, rgba(93,202,165,0.16), transparent 70%),
+      var(--ink);
+  }
+  .cs-cta .wrap-wide { position: relative; }
+  .cs-cta .wrap-wide h2 { color: var(--paper); font-size: clamp(24px, 3.5vw, 34px); max-width: 520px; }
+  .cs-cta p { margin-top: 14px; color: #B8B7B1; font-size: 16px; max-width: 460px; }
+  .btn-primary { background: var(--green); color: var(--paper); text-decoration: none; padding: 14px 26px; border-radius: 4px; font-size: 15px; font-weight: 500; display: inline-block; margin-top: 28px; }
+  .btn-primary:hover { background: var(--mint); color: var(--ink); }
+
+  /* Technology stack */
+  .tech-stack { padding: 52px 0; text-align: center; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+  .tech-stack .cs-overview-eyebrow { text-align: center; }
+  .tech-chips { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 18px; }
+  .tech-chip { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; color: var(--ink); background: var(--paper); border: 1px solid var(--line); padding: 10px 20px; border-radius: 8px; }
+
+  /* Before vs after */
+  .before-after { padding: 56px 0; }
+  .before-after h2 { font-size: 22px; color: var(--ink); }
+  .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-top: 24px; }
+  .ba-col { background: var(--paper); padding: 28px 30px; }
+  .ba-col.after { background: linear-gradient(160deg, rgba(15,110,86,0.07), rgba(93,202,165,0.03)); }
+  .ba-col h4 { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; color: #6B6B65; margin-bottom: 16px; }
+  .ba-col.after h4 { color: var(--green-deep); }
+  .ba-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .ba-col li { font-size: 14.5px; display: flex; gap: 10px; align-items: flex-start; color: #3A3A36; }
+  .ba-col.before li::before { content: '\2715'; color: #B23A2A; font-size: 10px; margin-top: 4px; flex-shrink: 0; font-weight: 700; }
+  .ba-col.after li::before { content: '\2713'; color: var(--green-deep); font-size: 11px; margin-top: 4px; flex-shrink: 0; font-weight: 700; }
+  @media (max-width: 600px) { .ba-grid { grid-template-columns: 1fr; } }
+
+  /* Key takeaway */
+  .key-takeaway { padding: 48px 0; background: var(--paper-2); border-top: 1px solid var(--line); }
+  .key-takeaway-label { font-size: 13px; font-weight: 500; color: var(--green); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+  .key-takeaway p { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 500; color: var(--ink); line-height: 1.5; max-width: 760px; }
+  .key-takeaway .btn-primary { background: var(--green-deep); color: #fff; padding: 12px 22px; font-size: 14px; }
+  .key-takeaway .btn-primary:hover { background: var(--green); }
+
+  footer { padding: 28px 0; }
+  footer .wrap-wide { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted-ink-2); }
+
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="logo" href="index.html">
+      <svg width="26" height="24" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M35 170 L35 90 L82 138 L130 90 L130 170" fill="none" stroke="#111211" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><path d="M156 150 L182 90 L208 150" fill="none" stroke="#0F6E56" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Meliorix AI
+    </a>
+    <a class="contact-link" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+  </div>
+</nav>
+
+<header class="cs-hero">
+  <div class="wrap">
+    <a class="back-link" href="index.html#case-studies">&larr; Back to case studies</a>
+    <p class="cs-tag">Sports sponsorship agency</p>
+    <h1>A daily brief that catches partnership news before anyone else does</h1>
+    <p class="cs-sub">How we replaced hours of manual news-tracking with an AI-filtered digest delivered to the owner's inbox every morning at 8am.</p>
+  </div>
+  <div class="cs-hero-media">
+    <img src="Images%20-%20for%20Website/case-studies/partnership-hero.jpg" alt="" loading="lazy">
+    <div class="cs-badges">
+      <div class="cs-badge"><strong>6&ndash;8 hrs</strong><span>Saved weekly</span></div>
+      <div class="cs-badge"><strong>4&times;</strong><span>Daily scrapes</span></div>
+      <div class="cs-badge"><strong>Jan 2026</strong><span>Live since</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="cs-overview">
+  <div class="wrap cs-overview-grid">
+    <div class="cs-overview-media">
+      <img src="Images%20-%20for%20Website/case-studies/partnership-overview.jpg" alt="" loading="lazy">
+    </div>
+    <div class="cs-overview-copy">
+      <p class="cs-overview-eyebrow">Client overview</p>
+      <h2>Sports sponsorship agency</h2>
+      <p>A football sponsorship activation agency needed to track every new brand and club partnership announcement across six leagues, every single day, without spending the morning doing it by hand.</p>
+      <dl class="cs-overview-meta">
+        <div class="cs-overview-meta-row"><dt>Industry</dt><dd>Sports sponsorship</dd></div>
+        <div class="cs-overview-meta-row"><dt>Automation type</dt><dd>Daily intelligence digest</dd></div>
+        <div class="cs-overview-meta-row"><dt>Tools used</dt><dd>n8n, OpenAI, Gmail</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap">
+    <h2>The challenge</h2>
+    <p>The owner of a football sponsorship activation agency needed to stay on top of every new brand and club partnership announcement across the Premier League, Championship, League One, League Two, and Europe's top five leagues. Every single day.</p>
+    <div class="challenge-grid">
+      <div class="challenge-item">Announcements are scattered across sports publications, club press releases, Google News, and niche lower-league outlets</div>
+      <div class="challenge-item">Manually tracking all of this would take hours every morning and was essentially impossible to do comprehensively</div>
+      <div class="challenge-item">The owner had higher-leverage work to focus on and couldn't afford to spend the morning reading sports news</div>
+      <div class="challenge-item">Lower league clubs rarely appear in mainstream sports publications, making them especially hard to track manually</div>
+    </div>
+
+    <h2>Our approach</h2>
+    <p>A two-workflow n8n automation system that scrapes multiple news sources daily, filters for relevant announcements using AI, and delivers a branded email digest to the owner's inbox at 8am every morning.</p>
+
+    <div class="approach-overview">
+      <div class="approach-item"><span class="approach-num">01</span><span>Main pipeline scrapes RSS and Google News, filters with AI, sends at 8am</span></div>
+      <div class="approach-item"><span class="approach-num">02</span><span>Lower-league scraper runs four times a day to catch what the main pass misses</span></div>
+    </div>
+
+    <svg viewBox="0 0 700 220" width="100%" height="auto" role="img" aria-labelledby="archTitle" style="margin: 32px 0;">
+      <title id="archTitle">Diagram showing the two-workflow architecture: scheduled RSS and news fetching, a separate four-times-daily lower-league scrape feeding into it, both filtered by AI, merged, and sent as one 8am email</title>
+      <rect x="10" y="20" width="140" height="40" rx="4" fill="none" stroke="#DEDCD3"/>
+      <text x="80" y="45" fill="#3A3A36" font-size="12" font-family="Inter, sans-serif" text-anchor="middle">Scheduled trigger (8am)</text>
+      <rect x="10" y="150" width="140" height="40" rx="4" fill="none" stroke="#DEDCD3"/>
+      <text x="80" y="171" fill="#3A3A36" font-size="11.5" font-family="Inter, sans-serif" text-anchor="middle">Lower-league scrape</text>
+      <text x="80" y="185" fill="#6B6B65" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">runs 4&times; daily</text>
+      <line x1="150" y1="40" x2="250" y2="95" stroke="#0F6E56" stroke-width="1.5"/>
+      <line x1="150" y1="170" x2="250" y2="110" stroke="#0F6E56" stroke-width="1.5"/>
+      <rect x="252" y="80" width="140" height="46" rx="4" fill="none" stroke="#0F6E56" stroke-width="1.6"/>
+      <text x="322" y="99" fill="#0F6E56" font-size="12" font-family="Space Grotesk, sans-serif" text-anchor="middle">Merge sources</text>
+      <text x="322" y="114" fill="#6B6B65" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">RSS + Google News + scrape</text>
+      <line x1="392" y1="103" x2="452" y2="103" stroke="#0F6E56" stroke-width="1.5"/>
+      <rect x="454" y="80" width="120" height="46" rx="4" fill="none" stroke="#0F6E56" stroke-width="1.6"/>
+      <text x="514" y="99" fill="#0F6E56" font-size="12" font-family="Space Grotesk, sans-serif" text-anchor="middle">AI filter</text>
+      <text x="514" y="114" fill="#6B6B65" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">qualifying deals only</text>
+      <line x1="574" y1="103" x2="620" y2="103" stroke="#0F6E56" stroke-width="1.5"/>
+      <rect x="622" y="78" width="70" height="50" rx="4" fill="#FAFAF8" stroke="#0F6E56" stroke-width="1.8"/>
+      <text x="657" y="98" fill="#111211" font-size="11" font-family="Space Grotesk, sans-serif" text-anchor="middle">8am</text>
+      <text x="657" y="112" fill="#6B6B65" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">email brief</text>
+    </svg>
+
+    <h2>What we built</h2>
+    <div class="workflow">
+      <span class="workflow-num">01</span>
+      <div>
+        <p class="workflow-meta">Triggers at 8am</p>
+        <h3>Main pipeline</h3>
+        <p>Pulls from RSS feeds covering major sports-business publications, and queries Google News with targeted search strings to surface announcements not covered by specialist outlets. Filters all articles from the previous 24 hours, then passes the merged data to OpenAI, which applies chain-of-thought reasoning to each item, identifying the brand, the club, and the commercial action. Only items that explicitly announce or update a qualifying commercial partnership are kept, then formatted into a branded HTML email and sent via Gmail as The Football Partnership Brief.</p>
+      </div>
+    </div>
+    <div class="workflow">
+      <span class="workflow-num">02</span>
+      <div>
+        <p class="workflow-meta">Runs 6am, 12pm, 6pm, midnight</p>
+        <h3>Lower league scraper</h3>
+        <p>Scrapes a dedicated news aggregator four times daily, since it updates frequently enough that running once a day would miss earlier stories. Extracts article content and passes it through the same AI filtering logic as the main workflow. Results are aggregated and fed into the main workflow at 8am, where they're merged with the RSS data before the final email is generated.</p>
+      </div>
+    </div>
+
+    <div class="email-mock">
+      <div class="email-banner">
+        <div class="icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#5DCAA5" stroke-width="1.6"/><path d="M8 12h8M12 8v8" stroke="#5DCAA5" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
+        <h4>The Football Partnership Brief</h4>
+        <p>Daily partnership news &amp; updates</p>
+      </div>
+      <div class="email-body">
+        <p class="email-date">Daily partnership intelligence: sample day</p>
+
+        <div class="email-story">
+          <h5>Championship club extends kit partner for 2026&ndash;27</h5>
+          <p>A Championship club has renewed its training kit agreement with its principal partner ahead of next season.</p>
+          <p class="meta">Published: this morning</p>
+          <a href="#">Read full report &rarr;</a>
+        </div>
+
+        <div class="email-story">
+          <h5>Premier League club renews stadium naming rights</h5>
+          <p>A top-flight club has renewed its stadium naming rights partnership and confirmed the ground will be renamed accordingly.</p>
+          <p class="meta">Published: this morning</p>
+          <a href="#">Read full report &rarr;</a>
+        </div>
+
+        <div class="email-story" style="margin-bottom: 0;">
+          <h5>League One club announces new wellbeing partner</h5>
+          <p>A League One club has appointed a new official wellbeing partner.</p>
+          <p class="meta">Published: this morning</p>
+          <a href="#">Read full report &rarr;</a>
+        </div>
+      </div>
+    </div>
+    <p class="email-caption">Example format, anonymised. Not real client data or actual deals</p>
+
+    <p>The client has specifically noted the system has surfaced partnership news they'd have otherwise missed entirely. Announcements that would never have crossed their radar without it. The system has been live and in use since January 2026.</p>
+  </div>
+
+  <section class="testimonial-band">
+    <div class="wrap">
+      <div class="testimonial-inner">
+        <div class="testimonial-avatar" aria-hidden="true">SA</div>
+        <div>
+          <p class="testimonial-quote">"Before this I was spending 6&ndash;8 hours weekly looking for partnership news. Now I receive a daily email informing me of the activity going on within the sponsorship market, allowing me to capture high-intent leads looking to activate sponsorships."</p>
+          <p class="testimonial-cite">Founder, Sports Sponsorship Agency</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="results-wrap">
+      <span class="ghost-text" aria-hidden="true">Results</span>
+      <h2>The results</h2>
+      <p>6&ndash;8 hours a week saved on manual news monitoring, confirmed directly by the client as their prior weekly time spent on this task. Every relevant partnership announcement across English professional football and Europe's top five leagues now surfaces automatically. Nothing is missed, and the system flags explicitly when no new activity has occurred that day.</p>
+      <div class="results-stats">
+        <div class="result-stat"><strong>6&ndash;8 hrs</strong><span>Saved weekly</span></div>
+        <div class="result-stat"><strong>4&times;</strong><span>Daily scrapes</span></div>
+        <div class="result-stat"><strong>2</strong><span>Connected workflows</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<section class="cs-cta">
+  <div class="wrap-wide">
+    <h2>Drowning in manual research too?</h2>
+    <p>If your team spends hours every day tracking information across scattered sources, we'll tell you honestly whether automation is the right fix.</p>
+    <a class="btn-primary" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+  </div>
+</section>
+
+<section class="tech-stack">
+  <div class="wrap">
+    <p class="cs-overview-eyebrow">Technology stack</p>
+    <h2 style="font-size: 20px;">Built with the tools already in use</h2>
+    <div class="tech-chips">
+      <span class="tech-chip">n8n</span>
+      <span class="tech-chip">OpenAI</span>
+      <span class="tech-chip">Gmail</span>
+    </div>
+  </div>
+</section>
+
+<section class="before-after">
+  <div class="wrap">
+    <p class="cs-overview-eyebrow">Transformation</p>
+    <h2>Before vs after</h2>
+    <div class="ba-grid">
+      <div class="ba-col before">
+        <h4>Before</h4>
+        <ul>
+          <li>Announcements scattered across dozens of outlets</li>
+          <li>Hours spent manually reading sports news each morning</li>
+          <li>Lower-league deals routinely missed</li>
+        </ul>
+      </div>
+      <div class="ba-col after">
+        <h4>After</h4>
+        <ul>
+          <li>6&ndash;8 hours saved weekly</li>
+          <li>4&times; daily scrapes, so nothing gets missed</li>
+          <li>Live and in use since January 2026</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="key-takeaway">
+  <div class="wrap">
+    <p class="key-takeaway-label">Key takeaway</p>
+    <p>The bottleneck was never finding out about a deal. It was finding the time to look. Once reading the news became automatic, spotting the opportunity stayed a human call.</p>
+    <a class="btn-primary" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap-wide">
+    <span>Meliorix AI</span>
+    <span>abdul@meliorixai.com</span>
+  </div>
+</footer>
+
+</body>
+</html>
