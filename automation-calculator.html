@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automation &amp; AI Opportunity Calculator | Meliorix AI</title>
+<meta name="description" content="A free 3–5 minute assessment that estimates the time spent on one repetitive process and shows where automation and AI could help your business.">
+<link rel="icon" href="Images%20-%20for%20Website/files/m-caret-favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="Images%20-%20for%20Website/files/m-caret-favicon-32.png">
+<link rel="apple-touch-icon" href="Images%20-%20for%20Website/files/m-caret-favicon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #111211;
+    --paper: #FAFAF8;
+    --paper-2: #F1F0EA;
+    --green: #0F6E56;
+    --green-deep: #085041;
+    --mint: #5DCAA5;
+    --line: #DEDCD3;
+    --line-ink: rgba(250,250,248,0.16);
+    --muted: #5F5F59;
+    --muted-ink: #B8B7B1;
+    --muted-ink-2: #8B8B85;
+    --error: #B42318;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: -0.01em; }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible, .choice input:focus-visible + span { outline: 2px solid var(--green); outline-offset: 3px; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  .narrow { max-width: 720px; margin: 0 auto; }
+  @media (max-width: 600px) { .wrap { padding: 0 16px; } }
+  [hidden] { display: none !important; }
+
+  /* Nav (matches index.html) */
+  nav { position: sticky; top: 0; z-index: 20; background: rgba(250,250,248,0.92); backdrop-filter: blur(6px); padding: 20px 0; border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; text-decoration: none; }
+  .mark { width: 28px; height: 26px; }
+  nav .contact-link { font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+
+  .btn-primary { background: var(--ink); color: var(--paper); text-decoration: none; padding: 14px 26px; border-radius: 4px; font-size: 15px; font-weight: 500; display: inline-block; border: none; cursor: pointer; font-family: inherit; }
+  .btn-primary:hover { background: var(--green-deep); }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-ghost { background: none; border: none; font: inherit; font-size: 14px; color: var(--muted); cursor: pointer; padding: 10px 4px; }
+  .btn-ghost:hover { color: var(--ink); }
+  .eyebrow { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--green); font-weight: 500; }
+
+  /* Landing */
+  .hero { padding: 80px 0 72px; border-bottom: 1px solid var(--line); }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
+  .hero h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.08; margin-top: 14px; }
+  .hero h1 .accent { color: var(--green); }
+  .hero .sub { margin-top: 22px; font-size: 18px; color: #4A4A46; max-width: 540px; }
+  .ticks { list-style: none; margin-top: 26px; display: grid; gap: 10px; }
+  .ticks li { padding-left: 28px; position: relative; font-size: 15.5px; }
+  .ticks li::before { content: ""; position: absolute; left: 0; top: 4px; width: 18px; height: 18px; border-radius: 50%; background: var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 11.2 3.3 8l1-1 2.2 2.2 5.2-5.2 1 1z' fill='%23fff'/%3E%3C/svg%3E") center/14px no-repeat; }
+  .cta-row { margin-top: 32px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .cta-note { font-size: 13.5px; color: var(--muted); }
+  .trust { margin-top: 26px; font-size: 13px; color: var(--muted); max-width: 540px; border-left: 2px solid var(--line); padding-left: 12px; }
+  .sample { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; box-shadow: 0 18px 40px -24px rgba(17,18,17,.25); transform: rotate(.6deg); }
+  .sample .tag { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-ink-2); }
+  .sample h3 { font-size: 18px; margin: 4px 0 14px; }
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: var(--paper-2); border-radius: 8px; padding: 12px; }
+  .stat b { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 500; }
+  .stat span { font-size: 12px; color: var(--muted); }
+  .sample .opp { margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13px; }
+  .sample .opp b { font-weight: 500; }
+  .pill { display: inline-block; font-size: 10.5px; letter-spacing: .06em; font-weight: 500; color: #8a5a00; background: #fff4dc; padding: 2px 8px; border-radius: 10px; vertical-align: 1px; margin-left: 6px; }
+  .how { padding: 64px 0; }
+  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 28px; }
+  .how-grid div { border-top: 1px solid var(--ink); padding-top: 16px; }
+  .how-grid h3 { font-size: 18px; margin-bottom: 6px; }
+  .how-grid p { font-size: 14.5px; color: var(--muted); }
+  @media (max-width: 860px) { .hero-grid, .how-grid { grid-template-columns: 1fr; } .sample { transform: none; } .hero { padding: 48px 0; } }
+
+  /* Assessment */
+  .app { padding: 48px 0 80px; min-height: 70vh; }
+  .progress { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .bar { flex: 1; height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--green); width: 0; transition: width 250ms ease; }
+  .progress span { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .step h2 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.2; }
+  .step .help { margin-top: 8px; color: var(--muted); font-size: 15px; }
+  .choices { display: grid; gap: 10px; margin-top: 24px; }
+  .choices.two { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 600px) { .choices.two { grid-template-columns: 1fr; } }
+  .choice { position: relative; display: block; cursor: pointer; }
+  .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .choice > span { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 14px 16px; font-size: 15.5px; transition: border-color 120ms, background 120ms; }
+  .choice > span::before { content: ""; width: 18px; height: 18px; flex-shrink: 0; border: 1.5px solid var(--muted-ink-2); border-radius: 50%; background: #fff; }
+  .choice input[type=checkbox] + span::before { border-radius: 4px; }
+  .choice:hover > span { border-color: var(--ink); }
+  .choice input:checked + span { border-color: var(--green); background: #EEF6F2; }
+  .choice input:checked + span::before { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 3px #fff; }
+  .choice input[type=checkbox]:checked + span::before { box-shadow: none; background: var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 11.2 3.3 8l1-1 2.2 2.2 5.2-5.2 1 1z' fill='%23fff'/%3E%3C/svg%3E") center/14px no-repeat; }
+  .field { margin-top: 24px; }
+  .field label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .field .hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  input[type=number], input[type=email], input[type=text], textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
+  input:focus, textarea:focus { border-color: var(--green); outline: none; }
+  textarea { min-height: 96px; resize: vertical; }
+  .inline { display: flex; gap: 10px; }
+  .inline input { flex: 1; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #fff; }
+  .seg label { margin: 0; }
+  .seg input { position: absolute; opacity: 0; }
+  .seg span { display: block; padding: 12px 16px; font-size: 15px; cursor: pointer; }
+  .seg input:checked + span { background: var(--ink); color: var(--paper); }
+  .error { color: var(--error); font-size: 14px; margin-top: 10px; }
+  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; gap: 12px; }
+
+  /* Results */
+  .result-head h2 { font-size: clamp(26px, 3.8vw, 36px); line-height: 1.15; margin-top: 10px; }
+  .big-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 26px; }
+  .big-stats .stat { background: #fff; border: 1px solid var(--line); padding: 18px; }
+  .big-stats .stat b { font-size: 30px; }
+  @media (max-width: 700px) { .big-stats { grid-template-columns: 1fr; } }
+  .est-note { margin-top: 12px; font-size: 13px; color: var(--muted); }
+  details.assume { margin-top: 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper-2); padding: 12px 16px; font-size: 14px; }
+  details.assume summary { cursor: pointer; font-weight: 500; }
+  details.assume ul { margin: 10px 0 0 18px; color: var(--muted); }
+  .opp-card { margin-top: 26px; background: #fff; border: 1px solid var(--line); border-left: 3px solid var(--green); border-radius: 8px; padding: 20px; }
+  .opp-card h3 { font-size: 20px; margin: 6px 0 8px; }
+  .opp-card p { font-size: 15px; color: #3A3A36; }
+  .opp-card .flow { margin-top: 10px; font-size: 14px; color: var(--muted); }
+  .locked { margin-top: 14px; display: grid; gap: 8px; }
+  .locked div { border: 1px dashed var(--line); border-radius: 8px; padding: 12px 16px; color: var(--muted-ink-2); font-size: 14px; }
+  .request { margin-top: 36px; background: var(--ink); color: var(--paper); border-radius: 10px; padding: 28px; }
+  .request h3 { font-size: 24px; }
+  .request p.lead { color: var(--muted-ink); margin-top: 6px; font-size: 15px; }
+  .request .field label { color: var(--paper); }
+  .request input[type=email], .request input[type=text] { border-color: transparent; }
+  .request .choice > span { background: transparent; border-color: var(--line-ink); color: var(--paper); font-size: 14.5px; align-items: flex-start; }
+  .request .choice > span::before { margin-top: 2px; background: transparent; border-color: var(--muted-ink); }
+  .request .choice input:checked + span { background: rgba(93,202,165,.1); border-color: var(--mint); }
+  .request .choice input:checked + span::before { background-color: var(--mint); border-color: var(--mint); }
+  .request .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .request .grid2 { grid-template-columns: 1fr; } .request { padding: 20px; } }
+  .request .btn-primary { background: var(--green); margin-top: 20px; }
+  .request .btn-primary:hover { background: var(--mint); color: var(--ink); }
+  .request .small { font-size: 12.5px; color: var(--muted-ink); margin-top: 14px; }
+  .request .small a { color: var(--mint); }
+  .request .error { color: #FDA29B; }
+  .done { margin-top: 28px; padding: 18px 20px; border-radius: 8px; background: #EEF6F2; border: 1px solid #BFE3D3; font-size: 15px; }
+  .report-wrap { margin-top: 28px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
+  .restart { margin-top: 20px; }
+
+  /* Privacy */
+  .privacy { padding: 0 0 64px; }
+  .privacy details { border-top: 1px solid var(--line); padding-top: 18px; font-size: 14px; color: var(--muted); }
+  .privacy summary { cursor: pointer; color: var(--ink); font-weight: 500; }
+  .privacy p, .privacy ul { margin-top: 10px; }
+  .privacy ul { padding-left: 18px; }
+
+  footer { background: var(--ink); color: var(--paper); padding: 40px 0 28px; }
+  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted-ink); }
+  footer a { color: var(--paper); text-decoration: none; }
+  footer a:hover { color: var(--mint); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="index.html" aria-label="Meliorix AI home">
+      <img class="mark" src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="28" height="26">
+      Meliorix AI
+    </a>
+    <a class="contact-link" href="index.html#case-studies">Case studies</a>
+  </div>
+</nav>
+
+<!-- ============ LANDING ============ -->
+<section id="landing">
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Free assessment · 3–5 minutes</p>
+        <h1>Find your business's hidden <span class="accent">automation &amp; AI opportunities</span></h1>
+        <p class="sub">Answer a few plain-English questions to find your repetitive processes, estimate how much time they take, and see where automation and AI could help.</p>
+        <ul class="ticks">
+          <li>Estimate the time spent on one of your processes</li>
+          <li>Get three automation ideas that fit how you work</li>
+          <li>See three practical places AI could help your team, with a person still in charge</li>
+          <li>See suggested integrations and a practical place to start</li>
+        </ul>
+        <div class="cta-row">
+          <button class="btn-primary" type="button" data-action="start">Find my automation &amp; AI opportunities &rarr;</button>
+          <span class="cta-note">No email needed to see your result.</span>
+        </div>
+        <p class="trust">Results are estimates based on your answers, not guaranteed savings. Any automation or AI use needs to be checked against your existing processes, tools and requirements.</p>
+      </div>
+      <aside class="sample" aria-label="Example result">
+        <p class="tag">Example result</p>
+        <h3>Client onboarding · agency, 6–20 people</h3>
+        <div class="stat-row">
+          <div class="stat"><b>5 hrs</b><span>estimated per week</span></div>
+          <div class="stat"><b>230 hrs</b><span>estimated per year</span></div>
+        </div>
+        <div class="opp"><b>1. Client onboarding with automatic chasing</b><span class="pill">EXPLORE</span><br><span style="color:var(--muted)">Signed → welcome pack → checklist → reminders when forms are late</span></div>
+        <div class="opp"><b>2. Deadline and follow-up tracking</b><span class="pill">EXPLORE</span></div>
+        <p class="tag" style="margin-top:14px">Where AI could help</p>
+        <div class="opp"><b>AI document reader</b><span class="pill">AI</span><br><span style="color:var(--muted)">Pulls key terms and deadlines out of long documents and flags anything that rules you out</span></div>
+      </aside>
+    </div>
+  </header>
+  <section class="how">
+    <div class="wrap">
+      <p class="eyebrow">How it works</p>
+      <div class="how-grid">
+        <div><h3>1. Pick one process</h3><p>Choose the repetitive work that takes up your team's time, then answer a few questions about one of those processes.</p></div>
+        <div><h3>2. See the estimate</h3><p>Get your weekly and yearly hours straight away, using simple formulas you can check. All the assumptions are shown.</p></div>
+        <div><h3>3. Get your report</h3><p>If you'd like, get the full report by email, with three automation ideas, three uses for AI, the risks, and what to do first.</p></div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ============ ASSESSMENT ============ -->
+<section id="assessment" class="app" hidden>
+  <div class="wrap narrow">
+    <div class="progress" aria-hidden="true"><div class="bar"><i id="bar"></i></div><span id="progress-label"></span></div>
+    <form id="quiz" novalidate>
+      <div id="step-host" aria-live="polite"></div>
+      <p class="error" id="step-error" role="alert"></p>
+      <div class="nav-row">
+        <button type="button" class="btn-ghost" data-action="back">&larr; Back</button>
+        <button type="submit" class="btn-primary" id="next-btn">Next &rarr;</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ RESULT ============ -->
+<section id="result" class="app" hidden>
+  <div class="wrap narrow">
+    <div class="result-head">
+      <p class="eyebrow">Your initial result</p>
+      <h2 id="r-title"></h2>
+    </div>
+    <div class="big-stats">
+      <div class="stat"><b id="r-weekly"></b><span>estimated hours per week</span></div>
+      <div class="stat"><b id="r-annual"></b><span>estimated hours per year</span></div>
+      <div class="stat"><b id="r-value"></b><span id="r-value-label">estimated labour-time value per year</span></div>
+    </div>
+    <p class="est-note" id="r-recoverable"></p>
+    <details class="assume"><summary>How this was calculated</summary><ul id="r-assumptions"></ul></details>
+
+    <div class="opp-card">
+      <p class="eyebrow">Your top opportunity <span class="pill">EXPLORE</span></p>
+      <h3 id="r-opp-title"></h3>
+      <p id="r-opp-problem"></p>
+      <p class="flow" id="r-opp-flow"></p>
+    </div>
+    <div class="opp-card">
+      <p class="eyebrow">Where AI could help <span class="pill">AI · EXPLORE</span></p>
+      <h3 id="r-ai-title"></h3>
+      <p id="r-ai-what"></p>
+      <p class="flow" id="r-ai-human"></p>
+    </div>
+    <div class="locked" id="r-locked"></div>
+
+    <div class="request" id="request">
+      <h3>Get your full report</h3>
+      <p class="lead">Your full report includes three automation ideas and three uses for AI. For each one, you'll see example tools, what you'd need, the risks, where a person stays in charge, and what to do first.</p>
+      <form id="request-form" novalidate>
+        <div class="field">
+          <label for="email">Email (to send your report)</label>
+          <input type="email" id="email" name="email" autocomplete="email" required>
+        </div>
+        <div class="grid2">
+          <div class="field"><label for="name">First name <span style="opacity:.6">(optional)</span></label><input type="text" id="name" name="name" autocomplete="given-name" maxlength="80"></div>
+          <div class="field"><label for="company">Company <span style="opacity:.6">(optional)</span></label><input type="text" id="company" name="company" autocomplete="organization" maxlength="120"></div>
+        </div>
+        <div class="choices">
+          <label class="choice"><input type="checkbox" name="review_requested" id="review_requested"><span>I'd like a free 15-minute review of this workflow. Meliorix AI will email me to arrange a time.</span></label>
+          <label class="choice"><input type="checkbox" name="marketing_opt_in" id="marketing_opt_in"><span>Send me occasional automation ideas and case studies by email. I can unsubscribe at any time. (Optional, and not needed to get your report.)</span></label>
+        </div>
+        <p class="error" id="request-error" role="alert"></p>
+        <button type="submit" class="btn-primary" id="request-btn">Email me my report</button>
+        <p class="small">We use your email only to send this report and, if you tick the boxes above, to arrange a review or send updates. See the <a href="#privacy">privacy notice</a>.</p>
+      </form>
+    </div>
+
+    <div class="done" id="done" hidden></div>
+    <div class="report-wrap" id="report" hidden></div>
+    <div class="restart"><button type="button" class="btn-ghost" data-action="restart">&#8635; Start a new assessment</button></div>
+  </div>
+</section>
+
+<!-- ============ PRIVACY ============ -->
+<section class="privacy" id="privacy">
+  <div class="wrap narrow">
+    <details>
+      <summary>Privacy notice for this calculator</summary>
+      <p><strong>Who we are:</strong> Meliorix AI (abdul@meliorixai.com) is responsible for the information you submit here.</p>
+      <p><strong>What we collect:</strong> your answers to the assessment. If you ask for the report, we also collect your email address and, if you choose to give them, your first name and company. Please don't enter confidential customer records or sensitive personal information.</p>
+      <p><strong>Why:</strong></p>
+      <ul>
+        <li>To calculate your results and email you the report you asked for.</li>
+        <li>To contact you about a workflow review, but only if you tick that box.</li>
+        <li>To send occasional automation ideas, but only if you tick that separate box. Asking for a report does not sign you up for marketing.</li>
+      </ul>
+      <p><strong>Storage and retention:</strong> your answers are stored in a private, access-restricted Google Sheet and processed using n8n and our email provider. We keep them for 12 months, then delete them, unless we're working together. You can ask us to see, correct or delete your data at any time by emailing abdul@meliorixai.com.</p>
+      <p><strong>Your result before you give your email:</strong> it is calculated in your browser, and nothing is sent to us until you ask for the report.</p>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <span>&copy; <span id="year"></span> Meliorix AI</span>
+    <span><a href="index.html">Home</a> · <a href="https://www.linkedin.com/company/meliorix-ai/" target="_blank" rel="noopener">LinkedIn</a> · abdul@meliorixai.com</span>
+  </div>
+</footer>
+
+<script src="automation-calc.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  // ---- Configuration -------------------------------------------------------
+  // Paste the n8n production webhook URL here. Left empty, the page runs in demo mode:
+  // the full report is shown on screen but nothing is sent or stored.
+  var WEBHOOK_URL = "https://abdulrahmanbusiness.app.n8n.cloud/webhook/automation-calculator";
+  var REVIEW_URL = "https://calendly.com/abdul-meliorixai/30min";
+  var CONSENT_VERSION = "2026-10-02";
+
+  var AC = window.AutomationCalc;
+  var O = AC.OPTIONS;
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Optional analytics hook: works with Plausible or a GTM dataLayer if either is added to the site.
+  function track(event, props) {
+    try {
+      if (window.plausible) window.plausible(event, { props: props || {} });
+      if (window.dataLayer) window.dataLayer.push(Object.assign({ event: event }, props || {}));
+    } catch (e) { /* analytics must never break the page */ }
+  }
+
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16);
+    });
+  }
+
+  var EXAMPLES = {
+    professional_services: "e.g. chasing clients for documents, re-typing details into your practice software, sending deadline reminders.",
+    agency: "e.g. setting up new clients, pulling campaign reports, following up on proposals.",
+    ecommerce: "e.g. answering order enquiries, updating stock or customer records, weekly sales reports.",
+    construction_trades: "e.g. following up on quotes, booking jobs, chasing invoices, sorting tender documents.",
+    other: "e.g. following up on enquiries, copying data between systems, compiling reports."
+  };
+
+  // ---- State ---------------------------------------------------------------
+  var state = { answers: {}, stepIndex: 0, submissionId: uuid(), output: null, started: false };
+
+  function procName() { return (O.processes[state.answers.primary_process] || "this process").toLowerCase(); }
+
+  // ---- Step definitions ----------------------------------------------------
+  // type: radio | checkbox | custom. Radio steps auto-advance.
+  var STEPS = [
+    { id: "business_type", type: "radio", q: function () { return "What type of business do you run?"; }, options: O.business_type },
+    { id: "team_size", type: "radio", q: function () { return "How many people work in the business?"; }, options: O.team_size, cols: 2 },
+    { id: "processes", type: "checkbox", q: function () { return "Which processes involve the most repetitive manual work?"; },
+      help: function () { return "Choose all that apply. " + (EXAMPLES[state.answers.business_type] || ""); }, options: O.processes },
+    { id: "primary_process", type: "radio", q: function () { return "Which one should we estimate?"; },
+      help: function () { return "Pick the one that takes up the most time. We'll still use the others when choosing your recommendations."; },
+      options: function () { var o = {}; (state.answers.processes || []).forEach(function (k) { o[k] = O.processes[k]; }); return o; },
+      skip: function () { return (state.answers.processes || []).length === 1; } },
+    { id: "frequency", type: "custom", q: function () { return "How often does " + procName() + " happen?"; }, render: renderFrequency, fields: ["frequency", "occurrences_per_day"] },
+    { id: "duration", type: "custom", q: function () { return "Roughly how long does it take each time?"; },
+      help: function () { return "Count the hands-on time for one occurrence, including copying, checking and chasing."; }, render: renderDuration, fields: ["duration"] },
+    { id: "people", type: "custom", q: function () { return "How many people are involved each time it happens?"; }, render: renderPeople, fields: ["people"] },
+    { id: "hourly_cost", type: "custom", q: function () { return "What does an hour of their time roughly cost?"; },
+      help: function () { return "This is optional. Use the approximate hourly cost of employing them, including on-costs. It's only used to put a value on the time, and isn't a cash saving."; },
+      render: renderCost, fields: ["hourly_cost"] },
+    { id: "manual_level", type: "radio", q: function () { return "How automated is it today?"; }, options: O.manual_level },
+    { id: "error_frequency", type: "radio", q: function () { return "How often do errors, delays or missed follow-ups happen?"; }, options: O.error_frequency, cols: 2 },
+    { id: "problem_type", type: "radio", q: function () { return "When it goes wrong, what's the main problem?"; },
+      help: function () { return "Slow and dropped problems need different fixes."; }, options: O.problem_type },
+    { id: "tools_count", type: "radio", q: function () { return "How many software tools are involved?"; }, options: O.tools_count },
+    { id: "ai_tasks", type: "checkbox", q: function () { return "Which of these take up your team's time?"; },
+      help: function () { return "Choose all that apply. These are the kinds of tasks where AI (not just automation) can help."; }, options: O.ai_tasks },
+    { id: "priority", type: "radio", q: function () { return "What matters most to you right now?"; }, options: O.priority },
+    { id: "disliked_task", type: "custom", q: function () { return "Is there one task your team really dislikes doing?"; },
+      help: function () { return "Optional. Something everyone groans about is often the best place to start."; }, render: renderDisliked, fields: [], last: true }
+  ];
+
+  function activeSteps() { return STEPS.filter(function (s) { return !(s.skip && s.skip()); }); }
+
+  // ---- Rendering -----------------------------------------------------------
+  var host = document.getElementById("step-host");
+  var errEl = document.getElementById("step-error");
+  var nextBtn = document.getElementById("next-btn");
+
+  function esc(s) { return AC.escapeHtml(s); }
+  function choiceHtml(name, type, opts, cols) {
+    var selected = state.answers[name];
+    return '<div class="choices' + (cols === 2 ? " two" : "") + '" role="' + (type === "radio" ? "radiogroup" : "group") + '">' +
+      Object.keys(opts).map(function (k) {
+        var on = type === "checkbox" ? (selected || []).indexOf(k) !== -1 : selected === k;
+        return '<label class="choice"><input type="' + type + '" name="' + name + '" value="' + esc(k) + '"' + (on ? " checked" : "") + '><span>' + esc(opts[k]) + "</span></label>";
+      }).join("") + "</div>";
+  }
+
+  function renderFrequency() {
+    return choiceHtml("frequency", "radio", O.frequency, 2) +
+      '<div class="field" id="opd-field"' + (state.answers.frequency === "several_daily" ? "" : " hidden") + '>' +
+      '<label for="occurrences_per_day">About how many times a day?</label>' +
+      '<input type="number" inputmode="numeric" min="1" max="200" step="1" id="occurrences_per_day" name="occurrences_per_day" value="' + esc(state.answers.occurrences_per_day == null ? "" : state.answers.occurrences_per_day) + '" placeholder="3">' +
+      '<p class="hint">If you leave this blank, we\'ll assume 3 times a day and say so in your results.</p></div>';
+  }
+  function renderDuration() {
+    var unit = state.answers.duration_unit || "minutes";
+    return '<div class="field"><label for="duration">Time per occurrence</label><div class="inline">' +
+      '<input type="number" inputmode="decimal" min="0" step="any" id="duration" name="duration" value="' + esc(state.answers.duration == null ? "" : state.answers.duration) + '" placeholder="e.g. 20">' +
+      '<div class="seg" role="radiogroup" aria-label="Unit">' +
+      '<label><input type="radio" name="duration_unit" value="minutes"' + (unit === "minutes" ? " checked" : "") + '><span>minutes</span></label>' +
+      '<label><input type="radio" name="duration_unit" value="hours"' + (unit === "hours" ? " checked" : "") + '><span>hours</span></label>' +
+      "</div></div></div>";
+  }
+  function renderPeople() {
+    return '<div class="field"><label for="people">Number of people</label>' +
+      '<input type="number" inputmode="numeric" min="1" step="1" id="people" name="people" value="' + esc(state.answers.people == null ? "" : state.answers.people) + '" placeholder="1">' +
+      '<p class="hint">If two people each spend the time every time it happens, enter 2.</p></div>';
+  }
+  function renderCost() {
+    return '<div class="field"><label for="hourly_cost">Cost per hour (£)</label>' +
+      '<input type="number" inputmode="decimal" min="0" step="any" id="hourly_cost" name="hourly_cost" value="' + esc(state.answers.hourly_cost == null ? "" : state.answers.hourly_cost) + '" placeholder="e.g. 20">' +
+      '<p class="hint">As a rough guide, admin roles are often £15–25 an hour and specialist roles £30–60. Leave it blank to skip.</p></div>';
+  }
+  function renderDisliked() {
+    return '<div class="field"><label for="disliked_task">The task (optional)</label>' +
+      '<textarea id="disliked_task" name="disliked_task" maxlength="500" placeholder="e.g. chasing clients for missing paperwork">' + esc(state.answers.disliked_task || "") + "</textarea></div>";
+  }
+
+  function renderStep() {
+    var steps = activeSteps();
+    if (state.stepIndex >= steps.length) state.stepIndex = steps.length - 1;
+    var s = steps[state.stepIndex];
+    var html = '<div class="step"><h2 tabindex="-1" id="step-title">' + esc(s.q()) + "</h2>" +
+      (s.help ? '<p class="help">' + esc(s.help()) + "</p>" : "");
+    if (s.type === "radio" || s.type === "checkbox") {
+      var opts = typeof s.options === "function" ? s.options() : s.options;
+      html += choiceHtml(s.id, s.type, opts, s.cols);
+    } else html += s.render();
+    html += "</div>";
+    host.innerHTML = html;
+    errEl.textContent = "";
+    nextBtn.textContent = s.last ? "See my results →" : "Next →";
+    document.querySelector('[data-action="back"]').style.visibility = state.stepIndex === 0 ? "hidden" : "visible";
+    var pct = Math.round((state.stepIndex) / steps.length * 100);
+    document.getElementById("bar").style.width = pct + "%";
+    document.getElementById("progress-label").textContent = "Question " + (state.stepIndex + 1) + " of " + steps.length;
+    var t = document.getElementById("step-title"); if (t) t.focus({ preventScroll: true });
+  }
+
+  // ---- Reading + validating the current step -------------------------------
+  function readStep(s) {
+    var form = document.getElementById("quiz");
+    if (s.type === "radio") {
+      var r = form.querySelector('input[name="' + s.id + '"]:checked');
+      state.answers[s.id] = r ? r.value : "";
+    } else if (s.type === "checkbox") {
+      state.answers[s.id] = Array.prototype.map.call(form.querySelectorAll('input[name="' + s.id + '"]:checked'), function (i) { return i.value; });
+      if (s.id === "processes" && state.answers.processes.indexOf(state.answers.primary_process) === -1) state.answers.primary_process = "";
+      if (s.id === "processes" && state.answers.processes.length === 1) state.answers.primary_process = state.answers.processes[0];
+    } else {
+      Array.prototype.forEach.call(form.querySelectorAll("input:not([type=radio]), textarea"), function (el) { state.answers[el.name] = el.value.trim(); });
+      Array.prototype.forEach.call(form.querySelectorAll("input[type=radio]:checked"), function (el) { state.answers[el.name] = el.value; });
+      if (state.answers.frequency !== "several_daily") state.answers.occurrences_per_day = "";
+    }
+  }
+
+  function stepError(s) {
+    if (s.id === "disliked_task") return "";
+    var v = AC.validate(state.answers);
+    var fields = s.fields || [s.id];
+    for (var i = 0; i < fields.length; i++) if (v.errors[fields[i]]) return v.errors[fields[i]];
+    return "";
+  }
+
+  function next() {
+    var steps = activeSteps();
+    var s = steps[state.stepIndex];
+    readStep(s);
+    var err = stepError(s);
+    if (err) { errEl.textContent = err; return; }
+    if (state.stepIndex === steps.length - 1) return finish();
+    state.stepIndex++;
+    renderStep();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function finish() {
+    var out = AC.run(state.answers);
+    if (!out.ok) {
+      // Jump back to the first step that has an error.
+      var steps = activeSteps();
+      for (var i = 0; i < steps.length; i++) {
+        var f = steps[i].fields || [steps[i].id];
+        if (f.some(function (x) { return out.errors[x]; })) { state.stepIndex = i; renderStep(); errEl.textContent = out.errors[f.filter(function (x) { return out.errors[x]; })[0]]; return; }
+      }
+      errEl.textContent = "Please check your answers.";
+      return;
+    }
+    state.output = out;
+    track("calculator_completed", { process: out.answers.primary_process });
+    showResult(out);
+  }
+
+  // ---- Result --------------------------------------------------------------
+  function show(id) {
+    ["landing", "assessment", "result"].forEach(function (s) { document.getElementById(s).hidden = s !== id; });
+    window.scrollTo({ top: 0 });
+  }
+
+  function showResult(out) {
+    var r = out.results, a = out.answers, top = out.recommendations[0];
+    document.getElementById("r-title").textContent = AC.labelOf("processes", a.primary_process) + " takes about " + AC.fmt(r.weekly_hours) + " hours a week";
+    document.getElementById("r-weekly").textContent = AC.fmt(r.weekly_hours);
+    document.getElementById("r-annual").textContent = AC.fmt(r.annual_hours, 0);
+    var val = document.getElementById("r-value"), vl = document.getElementById("r-value-label");
+    if (r.annual_time_value !== null) { val.textContent = AC.money(r.annual_time_value); vl.textContent = "estimated labour-time value per year"; }
+    else { val.textContent = "–"; vl.textContent = "time value (no hourly cost entered)"; }
+    document.getElementById("r-recoverable").textContent =
+      "Illustrative scenario: if automation took over " + AC.CONFIG.scenarioLow * 100 + "–" + AC.CONFIG.scenarioHigh * 100 + "% of this work, that would free up roughly " +
+      AC.fmt(r.recoverable_hours_low, 0) + "–" + AC.fmt(r.recoverable_hours_high, 0) + " hours a year. This is an estimate, not a prediction. Real results depend on a review of the process.";
+    document.getElementById("r-assumptions").innerHTML = r.assumptions.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
+    document.getElementById("r-opp-title").textContent = top.title;
+    document.getElementById("r-opp-problem").textContent = top.symptoms;
+    document.getElementById("r-opp-flow").textContent = "Possible flow: " + top.workflow;
+    var ai = out.ai_recommendations[0];
+    document.getElementById("r-ai-title").textContent = ai.title;
+    document.getElementById("r-ai-what").textContent = ai.what_ai_does;
+    document.getElementById("r-ai-human").textContent = "A person stays in charge: " + ai.human_role;
+    document.getElementById("r-locked").innerHTML = out.recommendations.slice(1).map(function (x) {
+      return "<div>Automation: " + esc(x.title) + " · full details in your report</div>";
+    }).concat(out.ai_recommendations.slice(1).map(function (x) {
+      return "<div>AI: " + esc(x.title) + " · full details in your report</div>";
+    })).join("");
+    document.getElementById("request").hidden = false;
+    document.getElementById("done").hidden = true;
+    document.getElementById("report").hidden = true;
+    show("result");
+  }
+
+  // ---- Report request ------------------------------------------------------
+  var reqForm = document.getElementById("request-form");
+  var sending = false;
+  reqForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (sending) return;
+    var errBox = document.getElementById("request-error");
+    var email = document.getElementById("email").value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { errBox.textContent = "Please enter a valid email address."; return; }
+    errBox.textContent = "";
+    var contact = {
+      email: email,
+      name: document.getElementById("name").value.trim(),
+      company: document.getElementById("company").value.trim()
+    };
+    var payload = {
+      submission_id: state.submissionId,
+      submitted_at: new Date().toISOString(),
+      answers: state.answers,
+      contact: contact,
+      report_requested: true,
+      review_requested: document.getElementById("review_requested").checked,
+      marketing_opt_in: document.getElementById("marketing_opt_in").checked,
+      consent_version: CONSENT_VERSION,
+      page_url: location.href.split("?")[0]
+    };
+    track("report_requested", { review: payload.review_requested });
+    if (payload.review_requested) track("review_requested");
+
+    var btn = document.getElementById("request-btn");
+    if (!WEBHOOK_URL) { return renderDone(contact, payload, "demo"); }
+    sending = true; btn.disabled = true; btn.textContent = "Sending…";
+    fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json().catch(function () { return {}; }); })
+      .then(function () { renderDone(contact, payload, "sent"); })
+      .catch(function () {
+        errBox.textContent = "Sorry, we couldn't send that just now. Please try again in a moment. Your full report is shown below either way.";
+        renderReportOnPage(contact);
+      })
+      .then(function () { sending = false; btn.disabled = false; btn.textContent = "Email me my report"; });
+  });
+
+  function renderReportOnPage(contact) {
+    var rep = document.getElementById("report");
+    rep.innerHTML = AC.renderReportHtml(state.output, contact, { reviewUrl: REVIEW_URL, submissionId: state.submissionId });
+    rep.hidden = false;
+  }
+
+  function renderDone(contact, payload, mode) {
+    var done = document.getElementById("done");
+    var msg = mode === "demo"
+      ? "<strong>Demo mode:</strong> no webhook is set up, so nothing was sent. Your full report is shown below."
+      : "<strong>Done.</strong> Your report is on its way to " + esc(contact.email) + ". It usually arrives within a minute, so check your spam folder if it hasn't. There's also a copy below.";
+    if (payload.review_requested && mode !== "demo") msg += " We've had your review request and will email you to arrange a time.";
+    done.innerHTML = msg;
+    done.hidden = false;
+    document.getElementById("request").hidden = true;
+    renderReportOnPage(contact);
+    done.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  // ---- Wiring --------------------------------------------------------------
+  document.getElementById("quiz").addEventListener("submit", function (e) { e.preventDefault(); next(); });
+  host.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.name === "ai_tasks" && t.checked) {
+      // "None of these" is exclusive.
+      Array.prototype.forEach.call(host.querySelectorAll('input[name="ai_tasks"]'), function (el) {
+        if (el !== t && (t.value === "none" || el.value === "none")) el.checked = false;
+      });
+    }
+    if (t.name === "frequency") {
+      var f = document.getElementById("opd-field");
+      if (f) f.hidden = t.value !== "several_daily";
+      if (t.value === "several_daily") { var o = document.getElementById("occurrences_per_day"); if (o) o.focus(); return; }
+    }
+    // Auto-advance on single-choice steps (not inside custom steps).
+    var s = activeSteps()[state.stepIndex];
+    if (t.type === "radio" && s.type === "radio") setTimeout(next, 180);
+    if (t.name === "frequency" && t.value !== "several_daily") setTimeout(next, 180);
+  });
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-action]");
+    if (!a) return;
+    var act = a.getAttribute("data-action");
+    if (act === "start") {
+      if (!state.started) { track("calculator_started"); state.started = true; }
+      state.stepIndex = 0; show("assessment"); renderStep();
+    } else if (act === "back") {
+      readStep(activeSteps()[state.stepIndex]);
+      if (state.stepIndex > 0) { state.stepIndex--; renderStep(); }
+    } else if (act === "restart") {
+      state = { answers: {}, stepIndex: 0, submissionId: uuid(), output: null, started: true };
+      reqForm.reset();
+      show("assessment"); renderStep();
+    }
+  });
+  track("calculator_viewed");
+})();
+</script>
+</body>
+</html>
