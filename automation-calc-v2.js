@@ -14,7 +14,7 @@ var AutomationCalc = (function () {
   "use strict";
 
   var CONFIG = {
-    version: "2.4",
+    version: "2.5",
     weeksPerYear: 46,
     workingDaysPerWeek: 5,
     defaultOccurrencesPerDay: 3,
@@ -702,9 +702,38 @@ var AutomationCalc = (function () {
         "<strong>Real example:</strong> " + escapeHtml(cs.line) + "</p>";
     }
 
+    function box(inner) { return '<div style="background:' + C.tint + ';border-radius:10px;padding:14px 18px;">' + inner + "</div>"; }
+    function button(href, text) {
+      return '<p style="margin:14px 0 4px;"><a href="' + escapeHtml(href) + '" style="' + F + 'display:inline-block;background:' + C.accent + ';color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-weight:bold;font-size:15px;">' + text + "</a></p>";
+    }
+    if (opts.pdf) {
+      // PDF is made by Google Docs, which keeps table/cell styling but turns div/p backgrounds into
+      // text highlights, so every shaded or bordered block is a one-cell table here.
+      var cellOnly = function (style, inner) { return '<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 12px;"><tr><td style="' + style + '">' + inner + "</td></tr></table>"; };
+      stat = function (big, small) {
+        return '<td valign="top" style="border:3px solid #ffffff;background:' + C.soft + ';padding:12px 14px;width:33%;">' +
+          '<p style="' + F + 'font-size:22px;font-weight:bold;color:' + C.ink + ';margin:0;">' + big + '</p><p style="' + F + 'font-size:11px;color:' + C.muted + ';margin:2px 0 0;">' + small + "</p></td>";
+      };
+      card = function (inner) { return cellOnly("border:1px solid " + C.line + ";padding:12px 16px;", inner); };
+      box = function (inner) { return cellOnly("border:1px solid " + C.tint + ";background:" + C.tint + ";padding:12px 16px;", inner); };
+      proof = function (key) {
+        var cs = key && CASE_STUDIES[key];
+        if (!cs || shown[key]) return "";
+        shown[key] = true;
+        return cellOnly("border:1px solid " + C.soft + ";border-left:3px solid " + C.accent + ";background:" + C.soft + ";padding:8px 12px;",
+          '<p style="' + F + 'font-size:12px;line-height:1.5;color:' + C.muted + ';margin:0;"><strong>Real example:</strong> ' + escapeHtml(cs.line) + "</p>");
+      };
+      button = function (href, text) {
+        return cellOnly("border:1px solid " + C.accent + ";background:" + C.accent + ";padding:10px 16px;",
+          '<p style="' + F + 'margin:0;font-size:14px;font-weight:bold;"><a href="' + escapeHtml(href) + '" style="color:#ffffff;text-decoration:none;">' + text + "</a></p>");
+      };
+    }
+
     var html = '<div style="max-width:620px;margin:0 auto;background:#ffffff;padding:26px 24px;' +
       (opts.email ? 'border-radius:0 0 16px 16px;' : '') + '">';
-    html += '<p style="' + F + 'font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:' + C.accent + ';margin:0 0 6px;font-weight:bold;">Your Automation &amp; AI Report</p>';
+    if (opts.pdf) html += '<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 18px;"><tr><td style="border:1px solid ' + C.accent + ';background:' + C.accent + ';padding:14px 18px;">' +
+      '<p style="' + F + 'margin:0;font-size:18px;font-weight:bold;color:#ffffff;">Meliorix AI</p><p style="' + F + 'margin:2px 0 0;font-size:11px;color:#D7EDE3;">Your Automation &amp; AI Report · meliorixai.com</p></td></tr></table>';
+    else html += '<p style="' + F + 'font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:' + C.accent + ';margin:0 0 6px;font-weight:bold;">Your Automation &amp; AI Report</p>';
     html += '<h1 style="' + F + 'font-size:24px;line-height:1.25;color:' + C.ink + ';margin:0 0 6px;">' +
       (contact.company ? escapeHtml(contact.company) + ": " : "") + escapeHtml(labelOf("processes", a.primary_process)) + "</h1>";
     if (opts.email) html += p((contact.name ? "Hi " + escapeHtml(contact.name) + ", here" : "Here") + "'s your personalised report. It takes about 3 minutes to read.", "color:" + C.muted + ";");
@@ -732,13 +761,13 @@ var AutomationCalc = (function () {
     });
 
     html += h2("Your first step this week");
-    html += '<div style="background:' + C.tint + ';border-radius:10px;padding:14px 18px;">' + p(escapeHtml(c.first_step), "margin:0;") + "</div>";
+    html += box(p(escapeHtml(c.first_step), "margin:0;"));
 
     html += h2("Want a second pair of eyes?");
     html += p("Book a free 15-minute call and we'll look at this one task together, and whether it's worth automating. No obligation.");
-    if (opts.reviewUrl) html += '<p style="margin:14px 0 4px;"><a href="' + escapeHtml(opts.reviewUrl) + '" style="' + F + 'display:inline-block;background:' + C.accent + ';color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-weight:bold;font-size:15px;">Book my free 15-minute review</a></p>';
+    if (opts.reviewUrl) html += button(opts.reviewUrl, "Book my free 15-minute review");
 
-    if (opts.email) html += '<p style="' + F + 'font-size:12px;color:' + C.muted + ';margin:26px 0 0;border-top:1px solid ' + C.line + ';padding-top:12px;">Figures are estimates based on your answers.</p>';
+    if (opts.email || opts.pdf) html += '<p style="' + F + 'font-size:12px;color:' + C.muted + ';margin:26px 0 0;border-top:1px solid ' + C.line + ';padding-top:12px;">Figures are estimates based on your answers.</p>';
     html += "</div>";
     if (!opts.email) return html;
 

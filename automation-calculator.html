@@ -300,6 +300,7 @@
           </form>
         </div>
         <div class="done" id="done" hidden></div>
+        <div class="links" id="pdf-row" hidden><button type="button" class="btn btn-go" id="pdf-btn">&#8681; Download PDF</button></div>
         <div class="report" id="report" hidden></div>
 
         <div class="links">
@@ -619,11 +620,36 @@
     var rep = document.getElementById("report");
     rep.innerHTML = AC.renderReportHtml(state.out, contact, { reviewUrl: REVIEW_URL, submissionId: state.sid });
     rep.hidden = false;
+    document.getElementById("pdf-row").hidden = false;
   }
+
+  // ---- PDF download (html2pdf loaded only when needed) -----------------------
+  var PDF_LIB = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+  function loadScript(src) {
+    return new Promise(function (ok, fail) {
+      if (window.html2pdf) return ok();
+      var s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = fail; document.head.appendChild(s);
+    });
+  }
+  document.getElementById("pdf-btn").addEventListener("click", function () {
+    var btn = this, label = btn.innerHTML;
+    btn.disabled = true; btn.textContent = "Preparing PDF…";
+    track("report_pdf_downloaded");
+    var name = (AC.labelOf("processes", state.out.answers.primary_process) || "plan").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    loadScript(PDF_LIB).then(function () {
+      return window.html2pdf().set({
+        margin: [8, 0, 10, 0], filename: "automation-ai-plan-" + name + ".pdf",
+        image: { type: "jpeg", quality: 0.95 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, pagebreak: { mode: ["avoid-all"] }
+      }).from(document.getElementById("report")).save();
+    }).catch(function () {
+      window.print();   // fallback: the browser's own "Save as PDF"
+    }).then(function () { btn.disabled = false; btn.innerHTML = label; });
+  });
   function done(contact, payload, mode) {
     var d = document.getElementById("done");
     d.innerHTML = mode === "demo" ? "<strong>Demo mode:</strong> nothing was sent. Your full plan is below."
-      : "<strong>Done.</strong> Your plan is on its way to " + esc(contact.email) + ". If it's not there in a couple of minutes, check your spam folder. There's also a copy below." +
+      : "<strong>Done.</strong> Your plan is on its way to " + esc(contact.email) + ", with a PDF attached. If it's not there in a couple of minutes, check your spam folder. You can also download it below." +
         (payload.review_requested ? " We'll be in touch to arrange your call." : "");
     d.hidden = false;
     document.getElementById("request").hidden = true;
@@ -645,6 +671,7 @@
     document.getElementById("request").hidden = false;
     document.getElementById("done").hidden = true;
     document.getElementById("report").hidden = true;
+    document.getElementById("pdf-row").hidden = true;
     document.getElementById("request-form").reset();
     document.getElementById("fb-thanks").hidden = true;
     document.querySelectorAll("#feedback button").forEach(function (x) { x.setAttribute("aria-pressed", false); });
