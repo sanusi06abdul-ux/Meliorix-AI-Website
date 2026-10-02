@@ -14,7 +14,7 @@ var AutomationCalc = (function () {
   "use strict";
 
   var CONFIG = {
-    version: "2.5",
+    version: "2.6",
     weeksPerYear: 46,
     workingDaysPerWeek: 5,
     defaultOccurrencesPerDay: 3,
@@ -751,13 +751,13 @@ var AutomationCalc = (function () {
     html += h2("3 things you could automate");
     out.recommendations.forEach(function (x, i) {
       html += card(title(i + 1, x.title) + line("The problem:", x.problem) + line("The fix:", x.fix) +
-        line("Why it fits you:", c.why[x.id]) + line("Good to know:", x.good_to_know) + proof(x.case_study));
+        line("Why it fits you:", c.why[x.id]) + line("Good to know:", x.good_to_know));
     });
 
     html += h2("Where AI could help");
     out.ai_recommendations.forEach(function (x, i) {
       html += card(title(i + 1, x.title) + line("What it does:", x.what) + line("Why it fits you:", c.why[x.id]) +
-        line("You stay in charge:", x.in_charge) + proof(x.case_study));
+        line("You stay in charge:", x.in_charge));
     });
 
     html += h2("Your first step this week");
