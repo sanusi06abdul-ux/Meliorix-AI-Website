@@ -4,165 +4,162 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Automation &amp; AI Opportunity Calculator | Meliorix AI</title>
-<meta name="description" content="A free 3–5 minute assessment that estimates the time spent on one repetitive process and shows where automation and AI could help your business.">
+<meta name="description" content="A free 3-minute assessment that shows how much time one repetitive task costs your business, and where automation and AI could help.">
 <link rel="icon" href="Images%20-%20for%20Website/files/m-caret-favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="Images%20-%20for%20Website/files/m-caret-favicon-32.png">
 <link rel="apple-touch-icon" href="Images%20-%20for%20Website/files/m-caret-favicon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #111211;
-    --paper: #FAFAF8;
-    --paper-2: #F1F0EA;
-    --green: #0F6E56;
-    --green-deep: #085041;
-    --mint: #5DCAA5;
-    --line: #DEDCD3;
-    --line-ink: rgba(250,250,248,0.16);
-    --muted: #5F5F59;
-    --muted-ink: #B8B7B1;
-    --muted-ink-2: #8B8B85;
-    --error: #B42318;
+    --ink: #111211; --paper: #FAFAF8; --paper-2: #F1F0EA; --wash: #EEF3EF;
+    --green: #0F6E56; --green-deep: #085041; --mint: #5DCAA5; --tint: #EAF4EF;
+    --line: #DEDCD3; --line-soft: #E9E7E0; --muted: #5F5F59; --muted-2: #8B8B85; --error: #B42318;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
   body { background: var(--paper); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
-  h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: -0.01em; }
+  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: -0.01em; }
   a { color: inherit; }
-  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible, .choice input:focus-visible + span { outline: 2px solid var(--green); outline-offset: 3px; }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
-  .narrow { max-width: 720px; margin: 0 auto; }
-  @media (max-width: 600px) { .wrap { padding: 0 16px; } }
+  button { font: inherit; }
+  :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
   [hidden] { display: none !important; }
-
-  /* Nav (matches index.html) */
-  nav { position: sticky; top: 0; z-index: 20; background: rgba(250,250,248,0.92); backdrop-filter: blur(6px); padding: 20px 0; border-bottom: 1px solid var(--line); }
-  nav .wrap { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
-  .logo { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; text-decoration: none; }
-  .mark { width: 28px; height: 26px; }
-  nav .contact-link { font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
-
-  .btn-primary { background: var(--ink); color: var(--paper); text-decoration: none; padding: 14px 26px; border-radius: 4px; font-size: 15px; font-weight: 500; display: inline-block; border: none; cursor: pointer; font-family: inherit; }
-  .btn-primary:hover { background: var(--green-deep); }
-  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
-  .btn-ghost { background: none; border: none; font: inherit; font-size: 14px; color: var(--muted); cursor: pointer; padding: 10px 4px; }
-  .btn-ghost:hover { color: var(--ink); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 600px) { .wrap { padding: 0 16px; } }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-2); }
   .eyebrow { font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--green); font-weight: 500; }
 
+  nav { position: sticky; top: 0; z-index: 20; background: rgba(250,250,248,.92); backdrop-filter: blur(6px); padding: 18px 0; border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .logo { display: flex; align-items: center; gap: 10px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; text-decoration: none; }
+  .mark { width: 28px; height: 26px; }
+  nav .link { font-size: 14px; font-weight: 500; text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 10px; padding: 13px 22px; font-size: 15px; font-weight: 600; cursor: pointer; border: 1px solid transparent; text-decoration: none; transition: background 150ms, border-color 150ms; }
+  .btn-go { background: var(--green); color: #fff; }
+  .btn-go:hover { background: var(--green-deep); }
+  .btn-go:disabled { opacity: .55; cursor: not-allowed; }
+  .btn-back { background: #fff; color: var(--ink); border-color: var(--line); }
+  .btn-back:hover { border-color: var(--ink); }
+  .btn-dark { background: var(--ink); color: var(--paper); }
+  .btn-dark:hover { background: var(--green-deep); }
+
   /* Landing */
-  .hero { padding: 80px 0 72px; border-bottom: 1px solid var(--line); }
+  .hero { padding: 72px 0 64px; border-bottom: 1px solid var(--line); }
   .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; }
-  .hero h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.08; margin-top: 14px; }
-  .hero h1 .accent { color: var(--green); }
-  .hero .sub { margin-top: 22px; font-size: 18px; color: #4A4A46; max-width: 540px; }
-  .ticks { list-style: none; margin-top: 26px; display: grid; gap: 10px; }
+  .hero h1 { font-size: clamp(34px, 5vw, 54px); line-height: 1.08; margin-top: 12px; }
+  .hero h1 span { color: var(--green); }
+  .hero .sub { margin-top: 20px; font-size: 18px; color: #4A4A46; max-width: 540px; }
+  .ticks { list-style: none; margin-top: 24px; display: grid; gap: 10px; }
   .ticks li { padding-left: 28px; position: relative; font-size: 15.5px; }
   .ticks li::before { content: ""; position: absolute; left: 0; top: 4px; width: 18px; height: 18px; border-radius: 50%; background: var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 11.2 3.3 8l1-1 2.2 2.2 5.2-5.2 1 1z' fill='%23fff'/%3E%3C/svg%3E") center/14px no-repeat; }
-  .cta-row { margin-top: 32px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .cta-row { margin-top: 30px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
   .cta-note { font-size: 13.5px; color: var(--muted); }
-  .trust { margin-top: 26px; font-size: 13px; color: var(--muted); max-width: 540px; border-left: 2px solid var(--line); padding-left: 12px; }
-  .sample { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 22px; box-shadow: 0 18px 40px -24px rgba(17,18,17,.25); transform: rotate(.6deg); }
-  .sample .tag { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-ink-2); }
-  .sample h3 { font-size: 18px; margin: 4px 0 14px; }
-  .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .stat { background: var(--paper-2); border-radius: 8px; padding: 12px; }
-  .stat b { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 500; }
-  .stat span { font-size: 12px; color: var(--muted); }
-  .sample .opp { margin-top: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13px; }
-  .sample .opp b { font-weight: 500; }
-  .pill { display: inline-block; font-size: 10.5px; letter-spacing: .06em; font-weight: 500; color: #8a5a00; background: #fff4dc; padding: 2px 8px; border-radius: 10px; vertical-align: 1px; margin-left: 6px; }
-  .how { padding: 64px 0; }
-  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 28px; }
-  .how-grid div { border-top: 1px solid var(--ink); padding-top: 16px; }
+  .sample { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: 0 20px 44px -26px rgba(17,18,17,.28); }
+  .sample h3 { font-size: 17px; margin: 6px 0 14px; }
+  .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .mini-stats div { background: var(--paper-2); border-radius: 10px; padding: 12px; }
+  .mini-stats b { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 500; }
+  .mini-stats span { font-size: 12px; color: var(--muted); }
+  .sample .idea { margin-top: 10px; border: 1px solid var(--line-soft); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; }
+  .tag { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: .04em; color: var(--green); background: var(--tint); padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: 1px; white-space: nowrap; }
+  .how { padding: 56px 0; }
+  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 24px; }
+  .how-grid div { border-top: 1px solid var(--ink); padding-top: 14px; }
   .how-grid h3 { font-size: 18px; margin-bottom: 6px; }
   .how-grid p { font-size: 14.5px; color: var(--muted); }
-  @media (max-width: 860px) { .hero-grid, .how-grid { grid-template-columns: 1fr; } .sample { transform: none; } .hero { padding: 48px 0; } }
+  @media (max-width: 860px) { .hero-grid, .how-grid { grid-template-columns: 1fr; } .hero { padding: 44px 0; } }
 
-  /* Assessment */
-  .app { padding: 48px 0 80px; min-height: 70vh; }
-  .progress { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
-  .bar { flex: 1; height: 4px; background: var(--line); border-radius: 4px; overflow: hidden; }
-  .bar i { display: block; height: 100%; background: var(--green); width: 0; transition: width 250ms ease; }
-  .progress span { font-size: 13px; color: var(--muted); white-space: nowrap; }
-  .step h2 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.2; }
-  .step .help { margin-top: 8px; color: var(--muted); font-size: 15px; }
-  .choices { display: grid; gap: 10px; margin-top: 24px; }
-  .choices.two { grid-template-columns: 1fr 1fr; }
-  @media (max-width: 600px) { .choices.two { grid-template-columns: 1fr; } }
-  .choice { position: relative; display: block; cursor: pointer; }
-  .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  .choice > span { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); background: #fff; border-radius: 6px; padding: 14px 16px; font-size: 15.5px; transition: border-color 120ms, background 120ms; }
-  .choice > span::before { content: ""; width: 18px; height: 18px; flex-shrink: 0; border: 1.5px solid var(--muted-ink-2); border-radius: 50%; background: #fff; }
-  .choice input[type=checkbox] + span::before { border-radius: 4px; }
-  .choice:hover > span { border-color: var(--ink); }
-  .choice input:checked + span { border-color: var(--green); background: #EEF6F2; }
-  .choice input:checked + span::before { border-color: var(--green); background: var(--green); box-shadow: inset 0 0 0 3px #fff; }
-  .choice input[type=checkbox]:checked + span::before { box-shadow: none; background: var(--green) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M6.5 11.2 3.3 8l1-1 2.2 2.2 5.2-5.2 1 1z' fill='%23fff'/%3E%3C/svg%3E") center/14px no-repeat; }
-  .field { margin-top: 24px; }
-  .field label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
-  .field .hint { font-size: 13px; color: var(--muted); margin-top: 6px; }
-  input[type=number], input[type=email], input[type=text], textarea { width: 100%; font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: var(--ink); }
-  input:focus, textarea:focus { border-color: var(--green); outline: none; }
-  textarea { min-height: 96px; resize: vertical; }
-  .inline { display: flex; gap: 10px; }
-  .inline input { flex: 1; }
-  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: #fff; }
-  .seg label { margin: 0; }
-  .seg input { position: absolute; opacity: 0; }
-  .seg span { display: block; padding: 12px 16px; font-size: 15px; cursor: pointer; }
-  .seg input:checked + span { background: var(--ink); color: var(--paper); }
-  .error { color: var(--error); font-size: 14px; margin-top: 10px; }
-  .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; gap: 12px; }
+  /* Assessment card */
+  .stage { background: var(--wash); padding: 40px 0 72px; min-height: 80vh; }
+  .stage-head { text-align: center; margin-bottom: 18px; color: var(--muted); font-size: 15px; }
+  .card { background: #fff; max-width: 700px; margin: 0 auto; border-radius: 20px; box-shadow: 0 24px 60px -36px rgba(17,18,17,.35); overflow: hidden; }
+  .card-bar { height: 4px; background: var(--line-soft); }
+  .card-bar i { display: block; height: 100%; background: var(--green); width: 0; transition: width 300ms ease; }
+  .card-body { padding: 34px 40px 30px; }
+  @media (max-width: 600px) { .card-body { padding: 24px 18px 22px; } .stage { padding: 20px 0 48px; } }
+  .card h2 { font-size: clamp(24px, 3.4vw, 30px); margin-top: 10px; line-height: 1.2; }
+  .card .lede { color: var(--muted); margin-top: 6px; font-size: 15.5px; }
+  .group { margin-top: 28px; }
+  .group-label { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; }
+  .group-label svg { width: 18px; height: 18px; color: var(--muted-2); flex-shrink: 0; }
+  .group-label .opt { font-weight: 400; color: var(--muted-2); font-size: 13.5px; }
+  .group-hint { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+  .group .err { color: var(--error); font-size: 13.5px; margin-top: 8px; }
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .tiles.one { grid-template-columns: 1fr; }
+  .tiles.three { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 600px) { .tiles, .tiles.three { grid-template-columns: 1fr; } }
+  .tile { text-align: left; background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 15px; cursor: pointer; color: var(--ink); transition: border-color 120ms, background 120ms; }
+  .tile:hover { border-color: var(--muted-2); }
+  .tile[aria-pressed="true"] { border-color: var(--green); background: var(--tint); font-weight: 500; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .chip { background: #fff; border: 1.5px solid var(--line); border-radius: 999px; padding: 9px 16px; font-size: 14.5px; cursor: pointer; color: var(--ink); transition: border-color 120ms, background 120ms; }
+  .chip:hover { border-color: var(--muted-2); }
+  .chip[aria-pressed="true"] { border-color: var(--green); background: var(--tint); color: var(--green-deep); font-weight: 500; }
+  .chip[aria-pressed="true"]::before { content: "✓ "; }
+  select, input[type=number], input[type=email], input[type=text], textarea {
+    width: 100%; font: inherit; font-size: 16px; padding: 13px 14px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); margin-top: 12px; }
+  select { appearance: none; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%235F5F59' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") right 14px center/16px no-repeat; padding-right: 40px; }
+  select:focus, input:focus, textarea:focus { border-color: var(--green); outline: none; }
+  textarea { min-height: 84px; resize: vertical; }
+  .row { display: flex; gap: 10px; align-items: stretch; }
+  .row input { flex: 1; }
+  .seg { display: inline-flex; border: 1.5px solid var(--line); border-radius: 12px; overflow: hidden; margin-top: 12px; flex-shrink: 0; }
+  .seg button { background: #fff; border: none; padding: 0 16px; font-size: 14.5px; cursor: pointer; color: var(--ink); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .card-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line-soft); }
+  .card-foot .spacer { flex: 1; }
 
   /* Results */
-  .result-head h2 { font-size: clamp(26px, 3.8vw, 36px); line-height: 1.15; margin-top: 10px; }
-  .big-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 26px; }
-  .big-stats .stat { background: #fff; border: 1px solid var(--line); padding: 18px; }
-  .big-stats .stat b { font-size: 30px; }
-  @media (max-width: 700px) { .big-stats { grid-template-columns: 1fr; } }
-  .est-note { margin-top: 12px; font-size: 13px; color: var(--muted); }
-  details.assume { margin-top: 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper-2); padding: 12px 16px; font-size: 14px; }
-  details.assume summary { cursor: pointer; font-weight: 500; }
-  details.assume ul { margin: 10px 0 0 18px; color: var(--muted); }
-  .opp-card { margin-top: 26px; background: #fff; border: 1px solid var(--line); border-left: 3px solid var(--green); border-radius: 8px; padding: 20px; }
-  .opp-card h3 { font-size: 20px; margin: 6px 0 8px; }
-  .opp-card p { font-size: 15px; color: #3A3A36; }
-  .opp-card .flow { margin-top: 10px; font-size: 14px; color: var(--muted); }
-  .locked { margin-top: 14px; display: grid; gap: 8px; }
-  .locked div { border: 1px dashed var(--line); border-radius: 8px; padding: 12px 16px; color: var(--muted-ink-2); font-size: 14px; }
-  .request { margin-top: 36px; background: var(--ink); color: var(--paper); border-radius: 10px; padding: 28px; }
-  .request h3 { font-size: 24px; }
-  .request p.lead { color: var(--muted-ink); margin-top: 6px; font-size: 15px; }
-  .request .field label { color: var(--paper); }
-  .request input[type=email], .request input[type=text] { border-color: transparent; }
-  .request .choice > span { background: transparent; border-color: var(--line-ink); color: var(--paper); font-size: 14.5px; align-items: flex-start; }
-  .request .choice > span::before { margin-top: 2px; background: transparent; border-color: var(--muted-ink); }
-  .request .choice input:checked + span { background: rgba(93,202,165,.1); border-color: var(--mint); }
-  .request .choice input:checked + span::before { background-color: var(--mint); border-color: var(--mint); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 22px; }
+  .stats div { background: var(--paper-2); border-radius: 12px; padding: 16px; }
+  .stats b { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 500; line-height: 1.1; }
+  .stats span { font-size: 12.5px; color: var(--muted); }
+  @media (max-width: 600px) { .stats { grid-template-columns: 1fr; } }
+  .basis { font-size: 12.5px; color: var(--muted-2); margin-top: 10px; }
+  .box { margin-top: 24px; border-radius: 14px; padding: 18px 20px; background: var(--tint); }
+  .box h3 { font-size: 17px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .box p { font-size: 15.5px; }
+  .ai-badge { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--green); background: #fff; border-radius: 10px; padding: 2px 8px; }
+  .skel { height: 14px; border-radius: 7px; margin: 9px 0; background: linear-gradient(90deg, #d9e8e0 25%, #eef6f1 50%, #d9e8e0 75%); background-size: 200% 100%; animation: sh 1.2s infinite linear; }
+  @keyframes sh { to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .skel { animation: none; } }
+  .idea-card { margin-top: 14px; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .idea-card .k { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-2); font-weight: 600; }
+  .idea-card h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 18px; margin: 4px 0 8px; }
+  .idea-card p { font-size: 14.5px; color: #3A3A36; margin-top: 4px; }
+  .idea-card p b { color: var(--ink); font-weight: 600; }
+  .more { margin-top: 12px; font-size: 14px; color: var(--muted); }
+  .more li { margin-left: 18px; }
+  .feedback { margin-top: 18px; display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); flex-wrap: wrap; }
+  .feedback button { background: #fff; border: 1.5px solid var(--line); border-radius: 999px; padding: 5px 14px; cursor: pointer; font-size: 15px; }
+  .feedback button[aria-pressed="true"] { border-color: var(--green); background: var(--tint); }
+  .request { margin-top: 26px; background: var(--ink); color: var(--paper); border-radius: 16px; padding: 24px; }
+  .request h3 { font-size: 22px; }
+  .request .lead { color: var(--muted-ink, #B8B7B1); margin-top: 4px; font-size: 15px; }
+  .request label.f { display: block; font-size: 14px; font-weight: 500; margin-top: 14px; }
+  .request input[type=email], .request input[type=text] { margin-top: 6px; border-color: transparent; }
   .request .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 600px) { .request .grid2 { grid-template-columns: 1fr; } .request { padding: 20px; } }
-  .request .btn-primary { background: var(--green); margin-top: 20px; }
-  .request .btn-primary:hover { background: var(--mint); color: var(--ink); }
-  .request .small { font-size: 12.5px; color: var(--muted-ink); margin-top: 14px; }
+  @media (max-width: 600px) { .request .grid2 { grid-template-columns: 1fr; } .request { padding: 20px 16px; } }
+  .check { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px; font-size: 14px; color: #E8E7E2; cursor: pointer; }
+  .check input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--mint); flex-shrink: 0; }
+  .request .btn-go { margin-top: 18px; }
+  .request .small { font-size: 12.5px; color: #B8B7B1; margin-top: 12px; }
   .request .small a { color: var(--mint); }
-  .request .error { color: #FDA29B; }
-  .done { margin-top: 28px; padding: 18px 20px; border-radius: 8px; background: #EEF6F2; border: 1px solid #BFE3D3; font-size: 15px; }
-  .report-wrap { margin-top: 28px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
-  .restart { margin-top: 20px; }
+  .request .err { color: #FDA29B; font-size: 14px; margin-top: 10px; }
+  .done { margin-top: 24px; padding: 16px 18px; border-radius: 12px; background: var(--tint); font-size: 15px; }
+  .report { margin-top: 20px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 22px; }
 
-  /* Privacy */
-  .privacy { padding: 0 0 64px; }
-  .privacy details { border-top: 1px solid var(--line); padding-top: 18px; font-size: 14px; color: var(--muted); }
+  .privacy { padding: 36px 0 56px; }
+  .privacy details { max-width: 700px; margin: 0 auto; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
   .privacy summary { cursor: pointer; color: var(--ink); font-weight: 500; }
   .privacy p, .privacy ul { margin-top: 10px; }
   .privacy ul { padding-left: 18px; }
-
-  footer { background: var(--ink); color: var(--paper); padding: 40px 0 28px; }
-  footer .row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: var(--muted-ink); }
+  footer { background: var(--ink); color: var(--paper); padding: 36px 0 26px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #B8B7B1; }
   footer a { color: var(--paper); text-decoration: none; }
-  footer a:hover { color: var(--mint); }
 </style>
 </head>
 <body>
@@ -173,7 +170,7 @@
       <img class="mark" src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="28" height="26">
       Meliorix AI
     </a>
-    <a class="contact-link" href="index.html#case-studies">Case studies</a>
+    <a class="link" href="index.html#case-studies">Case studies</a>
   </div>
 </nav>
 
@@ -182,32 +179,29 @@
   <header class="hero">
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow">Free assessment · 3–5 minutes</p>
-        <h1>Find your business's hidden <span class="accent">automation &amp; AI opportunities</span></h1>
-        <p class="sub">Answer a few plain-English questions to find your repetitive processes, estimate how much time they take, and see where automation and AI could help.</p>
+        <p class="eyebrow">Free · takes about 3 minutes</p>
+        <h1>Find where <span>automation &amp; AI</span> could save your team time</h1>
+        <p class="sub">Answer a few quick questions about one task that eats up your week. You'll see how much time it really costs, and practical ways to fix it.</p>
         <ul class="ticks">
-          <li>Estimate the time spent on one of your processes</li>
-          <li>Get three automation ideas that fit how you work</li>
-          <li>See three practical places AI could help your team, with a person still in charge</li>
-          <li>See suggested integrations and a practical place to start</li>
+          <li>See how many hours one task costs you each year</li>
+          <li>Get 3 automation ideas that fit how you work</li>
+          <li>See where AI could help, with you still in charge</li>
+          <li>Leave with one clear first step</li>
         </ul>
         <div class="cta-row">
-          <button class="btn-primary" type="button" data-action="start">Find my automation &amp; AI opportunities &rarr;</button>
-          <span class="cta-note">No email needed to see your result.</span>
+          <button class="btn btn-dark" type="button" data-action="start">Start the free assessment &rarr;</button>
+          <span class="cta-note">No email needed to see your results.</span>
         </div>
-        <p class="trust">Results are estimates based on your answers, not guaranteed savings. Any automation or AI use needs to be checked against your existing processes, tools and requirements.</p>
       </div>
       <aside class="sample" aria-label="Example result">
-        <p class="tag">Example result</p>
-        <h3>Client onboarding · agency, 6–20 people</h3>
-        <div class="stat-row">
-          <div class="stat"><b>5 hrs</b><span>estimated per week</span></div>
-          <div class="stat"><b>230 hrs</b><span>estimated per year</span></div>
+        <p class="mono">Example result</p>
+        <h3>Onboarding new clients · agency, 6–20 people</h3>
+        <div class="mini-stats">
+          <div><b>5 hrs</b><span>a week</span></div>
+          <div><b>230 hrs</b><span>a year</span></div>
         </div>
-        <div class="opp"><b>1. Client onboarding with automatic chasing</b><span class="pill">EXPLORE</span><br><span style="color:var(--muted)">Signed → welcome pack → checklist → reminders when forms are late</span></div>
-        <div class="opp"><b>2. Deadline and follow-up tracking</b><span class="pill">EXPLORE</span></div>
-        <p class="tag" style="margin-top:14px">Where AI could help</p>
-        <div class="opp"><b>AI document reader</b><span class="pill">AI</span><br><span style="color:var(--muted)">Pulls key terms and deadlines out of long documents and flags anything that rules you out</span></div>
+        <div class="idea"><b>Hands-free client onboarding</b><span class="tag">No AI needed</span><br><span style="color:var(--muted)">Welcome email, forms and reminders go out automatically when a client signs.</span></div>
+        <div class="idea"><b>AI that reads documents for you</b><span class="tag">AI</span><br><span style="color:var(--muted)">Pulls the key terms and dates out of long documents.</span></div>
       </aside>
     </div>
   </header>
@@ -215,442 +209,446 @@
     <div class="wrap">
       <p class="eyebrow">How it works</p>
       <div class="how-grid">
-        <div><h3>1. Pick one process</h3><p>Choose the repetitive work that takes up your team's time, then answer a few questions about one of those processes.</p></div>
-        <div><h3>2. See the estimate</h3><p>Get your weekly and yearly hours straight away, using simple formulas you can check. All the assumptions are shown.</p></div>
-        <div><h3>3. Get your report</h3><p>If you'd like, get the full report by email, with three automation ideas, three uses for AI, the risks, and what to do first.</p></div>
+        <div><h3>1. Answer 4 quick steps</h3><p>Tell us about your business and the task that takes up the most time.</p></div>
+        <div><h3>2. See your results</h3><p>Hours per week and per year, plus a short, personalised explanation of what it means.</p></div>
+        <div><h3>3. Get your plan</h3><p>Automation ideas, where AI could help, and one first step you can take this week.</p></div>
       </div>
     </div>
   </section>
 </section>
 
 <!-- ============ ASSESSMENT ============ -->
-<section id="assessment" class="app" hidden>
-  <div class="wrap narrow">
-    <div class="progress" aria-hidden="true"><div class="bar"><i id="bar"></i></div><span id="progress-label"></span></div>
-    <form id="quiz" novalidate>
-      <div id="step-host" aria-live="polite"></div>
-      <p class="error" id="step-error" role="alert"></p>
-      <div class="nav-row">
-        <button type="button" class="btn-ghost" data-action="back">&larr; Back</button>
-        <button type="submit" class="btn-primary" id="next-btn">Next &rarr;</button>
-      </div>
-    </form>
-  </div>
-</section>
-
-<!-- ============ RESULT ============ -->
-<section id="result" class="app" hidden>
-  <div class="wrap narrow">
-    <div class="result-head">
-      <p class="eyebrow">Your initial result</p>
-      <h2 id="r-title"></h2>
-    </div>
-    <div class="big-stats">
-      <div class="stat"><b id="r-weekly"></b><span>estimated hours per week</span></div>
-      <div class="stat"><b id="r-annual"></b><span>estimated hours per year</span></div>
-      <div class="stat"><b id="r-value"></b><span id="r-value-label">estimated labour-time value per year</span></div>
-    </div>
-    <p class="est-note" id="r-recoverable"></p>
-    <details class="assume"><summary>How this was calculated</summary><ul id="r-assumptions"></ul></details>
-
-    <div class="opp-card">
-      <p class="eyebrow">Your top opportunity <span class="pill">EXPLORE</span></p>
-      <h3 id="r-opp-title"></h3>
-      <p id="r-opp-problem"></p>
-      <p class="flow" id="r-opp-flow"></p>
-    </div>
-    <div class="opp-card">
-      <p class="eyebrow">Where AI could help <span class="pill">AI · EXPLORE</span></p>
-      <h3 id="r-ai-title"></h3>
-      <p id="r-ai-what"></p>
-      <p class="flow" id="r-ai-human"></p>
-    </div>
-    <div class="locked" id="r-locked"></div>
-
-    <div class="request" id="request">
-      <h3>Get your full report</h3>
-      <p class="lead">Your full report includes three automation ideas and three uses for AI. For each one, you'll see example tools, what you'd need, the risks, where a person stays in charge, and what to do first.</p>
-      <form id="request-form" novalidate>
-        <div class="field">
-          <label for="email">Email (to send your report)</label>
-          <input type="email" id="email" name="email" autocomplete="email" required>
+<section id="assessment" class="stage" hidden>
+  <div class="wrap">
+    <p class="stage-head">Find where automation &amp; AI could save your team time</p>
+    <div class="card">
+      <div class="card-bar"><i id="bar"></i></div>
+      <form class="card-body" id="quiz" novalidate>
+        <div id="step-host"></div>
+        <div class="card-foot">
+          <button type="button" class="btn btn-back" id="back-btn" data-action="back">&larr; Back</button>
+          <span class="spacer"></span>
+          <button type="submit" class="btn btn-go" id="next-btn">Next step &rsaquo;</button>
         </div>
-        <div class="grid2">
-          <div class="field"><label for="name">First name <span style="opacity:.6">(optional)</span></label><input type="text" id="name" name="name" autocomplete="given-name" maxlength="80"></div>
-          <div class="field"><label for="company">Company <span style="opacity:.6">(optional)</span></label><input type="text" id="company" name="company" autocomplete="organization" maxlength="120"></div>
-        </div>
-        <div class="choices">
-          <label class="choice"><input type="checkbox" name="review_requested" id="review_requested"><span>I'd like a free 15-minute review of this workflow. Meliorix AI will email me to arrange a time.</span></label>
-          <label class="choice"><input type="checkbox" name="marketing_opt_in" id="marketing_opt_in"><span>Send me occasional automation ideas and case studies by email. I can unsubscribe at any time. (Optional, and not needed to get your report.)</span></label>
-        </div>
-        <p class="error" id="request-error" role="alert"></p>
-        <button type="submit" class="btn-primary" id="request-btn">Email me my report</button>
-        <p class="small">We use your email only to send this report and, if you tick the boxes above, to arrange a review or send updates. See the <a href="#privacy">privacy notice</a>.</p>
       </form>
     </div>
-
-    <div class="done" id="done" hidden></div>
-    <div class="report-wrap" id="report" hidden></div>
-    <div class="restart"><button type="button" class="btn-ghost" data-action="restart">&#8635; Start a new assessment</button></div>
   </div>
 </section>
 
-<!-- ============ PRIVACY ============ -->
+<!-- ============ RESULTS ============ -->
+<section id="result" class="stage" hidden>
+  <div class="wrap">
+    <div class="card">
+      <div class="card-bar"><i style="width:100%"></i></div>
+      <div class="card-body">
+        <p class="mono">Your results</p>
+        <h2 id="r-title"></h2>
+        <div class="stats">
+          <div><b id="r-weekly"></b><span>hours a week</span></div>
+          <div><b id="r-annual"></b><span>hours a year</span></div>
+          <div><b id="r-value"></b><span id="r-value-label">of staff time a year</span></div>
+        </div>
+        <p class="basis" id="r-basis"></p>
+
+        <div class="box">
+          <h3>What this means for you <span class="ai-badge" id="r-ai-badge" hidden>Personalised</span></h3>
+          <div id="r-summary"><div class="skel"></div><div class="skel" style="width:85%"></div><div class="skel" style="width:60%"></div></div>
+        </div>
+
+        <div class="idea-card">
+          <p class="k">Top automation idea</p>
+          <h4 id="r-auto-title"></h4>
+          <p><b>Fixes:</b> <span id="r-auto-fixes"></span></p>
+          <p><b>How it works:</b> <span id="r-auto-how"></span></p>
+          <p><b>Why it fits you:</b> <span id="r-auto-why"></span></p>
+        </div>
+        <div class="idea-card">
+          <p class="k">Where AI could help</p>
+          <h4 id="r-ai-title"></h4>
+          <p><b>What it does:</b> <span id="r-ai-what"></span></p>
+          <p><b>Why it fits you:</b> <span id="r-ai-why"></span></p>
+          <p><b>You stay in charge:</b> <span id="r-ai-charge"></span></p>
+        </div>
+        <div class="box" style="background:var(--paper-2)">
+          <h3>Your first step this week</h3>
+          <p id="r-first"></p>
+        </div>
+        <div class="more" id="r-more"></div>
+
+        <div class="feedback" id="feedback">
+          <span>Was this useful?</span>
+          <button type="button" data-fb="up" aria-pressed="false" aria-label="Yes, useful">👍</button>
+          <button type="button" data-fb="down" aria-pressed="false" aria-label="Not useful">👎</button>
+          <span id="fb-thanks" hidden>Thanks, that helps us improve it.</span>
+        </div>
+
+        <div class="request" id="request">
+          <h3>Get your full plan by email</h3>
+          <p class="lead">All 3 automation ideas, both AI ideas, and your first step, in a short email you can come back to.</p>
+          <form id="request-form" novalidate>
+            <label class="f" for="email">Your email</label>
+            <input type="email" id="email" autocomplete="email" required>
+            <div class="grid2">
+              <div><label class="f" for="name">First name <span style="opacity:.6">(optional)</span></label><input type="text" id="name" autocomplete="given-name" maxlength="80"></div>
+              <div><label class="f" for="company">Company <span style="opacity:.6">(optional)</span></label><input type="text" id="company" autocomplete="organization" maxlength="120"></div>
+            </div>
+            <label class="check"><input type="checkbox" id="review_requested"><span>I'd like a free 15-minute call to look at this task together.</span></label>
+            <label class="check"><input type="checkbox" id="marketing_opt_in"><span>Send me occasional automation tips by email. (Optional. You'll get your plan either way.)</span></label>
+            <p class="err" id="request-error" role="alert"></p>
+            <button type="submit" class="btn btn-go" id="request-btn">Email me my plan</button>
+            <p class="small">We only use your email to send this plan, plus anything you've ticked above. <a href="#privacy">Privacy notice</a>.</p>
+          </form>
+        </div>
+        <div class="done" id="done" hidden></div>
+        <div class="report" id="report" hidden></div>
+
+        <div class="links">
+          <button type="button" class="btn btn-back" data-action="edit">&larr; Edit my answers</button>
+          <button type="button" class="btn btn-back" data-action="restart">Start again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="privacy" id="privacy">
-  <div class="wrap narrow">
+  <div class="wrap">
     <details>
-      <summary>Privacy notice for this calculator</summary>
-      <p><strong>Who we are:</strong> Meliorix AI (abdul@meliorixai.com) is responsible for the information you submit here.</p>
-      <p><strong>What we collect:</strong> your answers to the assessment. If you ask for the report, we also collect your email address and, if you choose to give them, your first name and company. Please don't enter confidential customer records or sensitive personal information.</p>
-      <p><strong>Why:</strong></p>
+      <summary>Privacy notice</summary>
+      <p><strong>Who we are:</strong> Meliorix AI (abdul@meliorixai.com) is responsible for the information you share here.</p>
+      <p><strong>When you see your results:</strong> your answers (but no name, email or contact details) are sent to us anonymously. We use them to work out your results, write a short personalised summary using an AI service (Anthropic's Claude), and improve this tool. Please don't type names, client details or anything confidential into the free-text box.</p>
+      <p><strong>If you ask for your plan by email:</strong> we also store your email address and, if you give them, your first name and company. We use your email only to:</p>
       <ul>
-        <li>To calculate your results and email you the report you asked for.</li>
-        <li>To contact you about a workflow review, but only if you tick that box.</li>
-        <li>To send occasional automation ideas, but only if you tick that separate box. Asking for a report does not sign you up for marketing.</li>
+        <li>send the plan you asked for,</li>
+        <li>arrange a free call, only if you tick that box,</li>
+        <li>send occasional tips, only if you tick that separate box. Asking for your plan doesn't sign you up.</li>
       </ul>
-      <p><strong>Storage and retention:</strong> your answers are stored in a private, access-restricted Google Sheet and processed using n8n and our email provider. We keep them for 12 months, then delete them, unless we're working together. You can ask us to see, correct or delete your data at any time by emailing abdul@meliorixai.com.</p>
-      <p><strong>Your result before you give your email:</strong> it is calculated in your browser, and nothing is sent to us until you ask for the report.</p>
+      <p><strong>Storage:</strong> answers are kept in a private, access-restricted Google Sheet and processed using n8n, Anthropic and our email provider (Resend). We delete them after 12 months unless we're working together. To see, correct or delete your data, email abdul@meliorixai.com.</p>
     </details>
   </div>
 </section>
 
 <footer>
-  <div class="wrap row">
+  <div class="wrap">
     <span>&copy; <span id="year"></span> Meliorix AI</span>
     <span><a href="index.html">Home</a> · <a href="https://www.linkedin.com/company/meliorix-ai/" target="_blank" rel="noopener">LinkedIn</a> · abdul@meliorixai.com</span>
   </div>
 </footer>
 
-<script src="automation-calc.js"></script>
+<script src="automation-calc-v2.js"></script>
 <script>
 (function () {
   "use strict";
 
   // ---- Configuration -------------------------------------------------------
-  // Paste the n8n production webhook URL here. Left empty, the page runs in demo mode:
-  // the full report is shown on screen but nothing is sent or stored.
   var WEBHOOK_URL = "https://abdulrahmanbusiness.app.n8n.cloud/webhook/automation-calculator";
+  var INSIGHT_URL = "https://abdulrahmanbusiness.app.n8n.cloud/webhook/automation-calculator-insight";
   var REVIEW_URL = "https://calendly.com/abdul-meliorixai/30min";
-  var CONSENT_VERSION = "2026-10-02";
+  var CONSENT_VERSION = "2026-10-03";
+  var INSIGHT_TIMEOUT_MS = 12000;
 
-  var AC = window.AutomationCalc;
-  var O = AC.OPTIONS;
+  var AC = window.AutomationCalc, O = AC.OPTIONS, esc = AC.escapeHtml;
   document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Optional analytics hook: works with Plausible or a GTM dataLayer if either is added to the site.
   function track(event, props) {
     try {
       if (window.plausible) window.plausible(event, { props: props || {} });
       if (window.dataLayer) window.dataLayer.push(Object.assign({ event: event }, props || {}));
-    } catch (e) { /* analytics must never break the page */ }
+    } catch (e) {}
   }
-
   function uuid() {
     if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16);
-    });
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) { var r = Math.random() * 16 | 0; return (c === "x" ? r : (r & 3 | 8)).toString(16); });
   }
 
-  var EXAMPLES = {
-    professional_services: "e.g. chasing clients for documents, re-typing details into your practice software, sending deadline reminders.",
-    agency: "e.g. setting up new clients, pulling campaign reports, following up on proposals.",
-    ecommerce: "e.g. answering order enquiries, updating stock or customer records, weekly sales reports.",
-    construction_trades: "e.g. following up on quotes, booking jobs, chasing invoices, sorting tender documents.",
-    other: "e.g. following up on enquiries, copying data between systems, compiling reports."
+  var ICON = {
+    building: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 9h4a1 1 0 0 1 1 1v11M8 8h3M8 12h3M8 16h3M3 21h18"/></svg>',
+    people: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6M16 5.2a3 3 0 0 1 0 5.6M17.5 14.6c1.6.5 2.7 1.9 3 4.4"/></svg>',
+    list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>',
+    target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".6" fill="currentColor"/></svg>',
+    spark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+    repeat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 3l3 3-3 3M4 11V9a3 3 0 0 1 3-3h13M7 21l-3-3 3-3M20 13v2a3 3 0 0 1-3 3H4"/></svg>',
+    pound: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M16 6.5A3.8 3.8 0 0 0 9 8.7V19M6.5 13h7M6 19h11"/></svg>',
+    hand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11m0-1V4.5a1.5 1.5 0 0 1 3 0V11m0-1V6.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-.6a6 6 0 0 1-4.6-2.2L4.6 14.3a1.5 1.5 0 0 1 2.3-1.9L8 13.6"/></svg>',
+    alert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3.5L21.5 20h-19z"/><path d="M12 10v4M12 17h.01"/></svg>',
+    tools: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>',
+    flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
+    chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v11H9l-5 4z"/></svg>'
   };
 
   // ---- State ---------------------------------------------------------------
-  var state = { answers: {}, stepIndex: 0, submissionId: uuid(), output: null, started: false };
+  var state = { a: { duration_unit: "minutes" }, step: 0, sid: uuid(), out: null, started: false, insightFor: null, aiStatus: "" };
+  var A = function () { return state.a; };
+  function T() { return AC.tailor(A().primary_process || (A().processes || [])[0]); }
 
-  function procName() { return (O.processes[state.answers.primary_process] || "this process").toLowerCase(); }
+  // ---- Field builders ------------------------------------------------------
+  function group(id, icon, label, inner, opts) {
+    opts = opts || {};
+    return '<div class="group" id="g-' + id + '"' + (opts.hidden ? " hidden" : "") + '>' +
+      '<div class="group-label">' + ICON[icon] + "<span>" + esc(label) + (opts.optional ? ' <span class="opt">(optional)</span>' : "") + "</span></div>" +
+      (opts.hint ? '<p class="group-hint">' + esc(opts.hint) + "</p>" : "") + inner +
+      '<p class="err" data-err="' + id + '" role="alert"></p></div>';
+  }
+  function tiles(field, options, cls) {
+    return '<div class="tiles ' + (cls || "") + '" role="radiogroup">' + Object.keys(options).map(function (k) {
+      return '<button type="button" class="tile" role="radio" data-field="' + field + '" data-value="' + esc(k) + '" aria-pressed="' + (A()[field] === k) + '" aria-checked="' + (A()[field] === k) + '">' + esc(options[k]) + "</button>";
+    }).join("") + "</div>";
+  }
+  function chips(field, options) {
+    var sel = A()[field] || [];
+    return '<div class="chips" role="group">' + Object.keys(options).map(function (k) {
+      return '<button type="button" class="chip" data-multi="' + field + '" data-value="' + esc(k) + '" aria-pressed="' + (sel.indexOf(k) !== -1) + '">' + esc(options[k]) + "</button>";
+    }).join("") + "</div>";
+  }
+  function numberInput(field, placeholder, step) {
+    var v = A()[field]; return '<input type="number" inputmode="decimal" min="0" step="' + (step || "any") + '" data-input="' + field + '" id="f-' + field + '" value="' + esc(v == null ? "" : v) + '" placeholder="' + esc(placeholder) + '" aria-label="' + field + '">';
+  }
 
-  // ---- Step definitions ----------------------------------------------------
-  // type: radio | checkbox | custom. Radio steps auto-advance.
+  // ---- Steps ----------------------------------------------------------------
   var STEPS = [
-    { id: "business_type", type: "radio", q: function () { return "What type of business do you run?"; }, options: O.business_type },
-    { id: "team_size", type: "radio", q: function () { return "How many people work in the business?"; }, options: O.team_size, cols: 2 },
-    { id: "processes", type: "checkbox", q: function () { return "Which processes involve the most repetitive manual work?"; },
-      help: function () { return "Choose all that apply. " + (EXAMPLES[state.answers.business_type] || ""); }, options: O.processes },
-    { id: "primary_process", type: "radio", q: function () { return "Which one should we estimate?"; },
-      help: function () { return "Pick the one that takes up the most time. We'll still use the others when choosing your recommendations."; },
-      options: function () { var o = {}; (state.answers.processes || []).forEach(function (k) { o[k] = O.processes[k]; }); return o; },
-      skip: function () { return (state.answers.processes || []).length === 1; } },
-    { id: "frequency", type: "custom", q: function () { return "How often does " + procName() + " happen?"; }, render: renderFrequency, fields: ["frequency", "occurrences_per_day"] },
-    { id: "duration", type: "custom", q: function () { return "Roughly how long does it take each time?"; },
-      help: function () { return "Count the hands-on time for one occurrence, including copying, checking and chasing."; }, render: renderDuration, fields: ["duration"] },
-    { id: "people", type: "custom", q: function () { return "How many people are involved each time it happens?"; }, render: renderPeople, fields: ["people"] },
-    { id: "hourly_cost", type: "custom", q: function () { return "What does an hour of their time roughly cost?"; },
-      help: function () { return "This is optional. Use the approximate hourly cost of employing them, including on-costs. It's only used to put a value on the time, and isn't a cash saving."; },
-      render: renderCost, fields: ["hourly_cost"] },
-    { id: "manual_level", type: "radio", q: function () { return "How automated is it today?"; }, options: O.manual_level },
-    { id: "error_frequency", type: "radio", q: function () { return "How often do errors, delays or missed follow-ups happen?"; }, options: O.error_frequency, cols: 2 },
-    { id: "problem_type", type: "radio", q: function () { return "When it goes wrong, what's the main problem?"; },
-      help: function () { return "Slow and dropped problems need different fixes."; }, options: O.problem_type },
-    { id: "tools_count", type: "radio", q: function () { return "How many software tools are involved?"; }, options: O.tools_count },
-    { id: "ai_tasks", type: "checkbox", q: function () { return "Which of these take up your team's time?"; },
-      help: function () { return "Choose all that apply. These are the kinds of tasks where AI (not just automation) can help."; }, options: O.ai_tasks },
-    { id: "priority", type: "radio", q: function () { return "What matters most to you right now?"; }, options: O.priority },
-    { id: "disliked_task", type: "custom", q: function () { return "Is there one task your team really dislikes doing?"; },
-      help: function () { return "Optional. Something everyone groans about is often the best place to start."; }, render: renderDisliked, fields: [], last: true }
+    { title: "Your business", lede: "A little context so we can tailor everything to you.",
+      fields: ["business_type", "team_size"],
+      render: function () {
+        var opts = '<option value="">Select your industry…</option>' + Object.keys(O.business_type).map(function (k) {
+          return '<option value="' + k + '"' + (A().business_type === k ? " selected" : "") + ">" + esc(O.business_type[k] + " (" + AC.INDUSTRY_EXAMPLES[k] + ")") + "</option>";
+        }).join("");
+        var sizes = {}; Object.keys(O.team_size).forEach(function (k) { sizes[k] = O.team_size[k] + " people"; });
+        return group("business_type", "building", "Industry", '<select data-input="business_type" aria-label="Industry">' + opts + "</select>") +
+               group("team_size", "people", "How many people work in the business?", tiles("team_size", sizes));
+      } },
+    { title: "Where your time goes", lede: "Pick the tasks that eat up your team's week.",
+      fields: ["processes", "primary_process", "ai_tasks"],
+      render: function () {
+        var procs = A().processes || [], prim = {};
+        procs.forEach(function (k) { prim[k] = O.processes[k]; });
+        return group("processes", "list", "Which tasks take up the most time?", chips("processes", O.processes), { hint: AC.INDUSTRY_HINT[A().business_type] || "Pick all that apply." }) +
+               group("primary_process", "target", "Which one should we work out the numbers for?", tiles("primary_process", prim), { hidden: procs.length < 2, hint: "Pick the one that takes the most time. We'll still use the others." }) +
+               group("ai_tasks", "spark", "Does your team spend time on any of these?", chips("ai_tasks", O.ai_tasks), { hint: "These are the jobs AI is good at helping with." });
+      } },
+    { title: "Volume & time", lede: "Rough numbers are fine. We'll show exactly how we worked it out.",
+      fields: ["frequency", "occurrences_per_day", "duration", "people", "hourly_cost"],
+      render: function () {
+        var noun = T().noun, unit = A().duration_unit || "minutes";
+        return group("frequency", "repeat", "How often does " + noun + " come up?", tiles("frequency", O.frequency) +
+                 '<div id="opd"' + (A().frequency === "several_daily" ? "" : " hidden") + ">" + numberInput("occurrences_per_day", "About how many times a day? (e.g. 3)", "1") + "</div>") +
+               group("duration", "clock", "Roughly how long does it take each time?",
+                 '<div class="row">' + numberInput("duration", "e.g. 20") + '<div class="seg" role="radiogroup" aria-label="Unit">' +
+                 '<button type="button" data-unit="minutes" aria-pressed="' + (unit === "minutes") + '">min</button><button type="button" data-unit="hours" aria-pressed="' + (unit === "hours") + '">hours</button></div></div>',
+                 { hint: "Include the copying, checking and chasing." }) +
+               group("people", "people", "How many people are involved each time?", numberInput("people", "e.g. 1", "1")) +
+               group("hourly_cost", "pound", "Roughly what does an hour of their time cost?", numberInput("hourly_cost", "e.g. 20"),
+                 { optional: true, hint: "Admin roles are often £15–25, specialists £30–60. Leave blank to skip." });
+      } },
+    { title: "How it runs today", lede: "Last step. This helps us pick the right fixes.",
+      fields: ["manual_level", "error_frequency", "problem_type", "tools_count", "priority", "disliked_task"],
+      render: function () {
+        var t = T(), probs = { slow: t.slow, dropped: t.dropped, both: "Both", not_sure: "Not sure" };
+        return group("manual_level", "hand", "How is " + t.noun + " done today?", tiles("manual_level", O.manual_level, "one")) +
+               group("error_frequency", "alert", t.issue_q, tiles("error_frequency", O.error_frequency)) +
+               group("problem_type", "flag", "When it goes wrong, what's the bigger problem?", tiles("problem_type", probs)) +
+               group("tools_count", "tools", "How many software tools are involved?", tiles("tools_count", O.tools_count, "three")) +
+               group("priority", "target", "What matters most to you right now?", tiles("priority", O.priority, "one")) +
+               group("disliked_task", "chat", "Is there one task your team really dislikes?",
+                 '<textarea data-input="disliked_task" maxlength="300" placeholder="e.g. chasing clients for missing paperwork">' + esc(A().disliked_task || "") + "</textarea>",
+                 { optional: true, hint: "Please don't include names or client details." });
+      } }
   ];
 
-  function activeSteps() { return STEPS.filter(function (s) { return !(s.skip && s.skip()); }); }
-
-  // ---- Rendering -----------------------------------------------------------
   var host = document.getElementById("step-host");
-  var errEl = document.getElementById("step-error");
-  var nextBtn = document.getElementById("next-btn");
-
-  function esc(s) { return AC.escapeHtml(s); }
-  function choiceHtml(name, type, opts, cols) {
-    var selected = state.answers[name];
-    return '<div class="choices' + (cols === 2 ? " two" : "") + '" role="' + (type === "radio" ? "radiogroup" : "group") + '">' +
-      Object.keys(opts).map(function (k) {
-        var on = type === "checkbox" ? (selected || []).indexOf(k) !== -1 : selected === k;
-        return '<label class="choice"><input type="' + type + '" name="' + name + '" value="' + esc(k) + '"' + (on ? " checked" : "") + '><span>' + esc(opts[k]) + "</span></label>";
-      }).join("") + "</div>";
-  }
-
-  function renderFrequency() {
-    return choiceHtml("frequency", "radio", O.frequency, 2) +
-      '<div class="field" id="opd-field"' + (state.answers.frequency === "several_daily" ? "" : " hidden") + '>' +
-      '<label for="occurrences_per_day">About how many times a day?</label>' +
-      '<input type="number" inputmode="numeric" min="1" max="200" step="1" id="occurrences_per_day" name="occurrences_per_day" value="' + esc(state.answers.occurrences_per_day == null ? "" : state.answers.occurrences_per_day) + '" placeholder="3">' +
-      '<p class="hint">If you leave this blank, we\'ll assume 3 times a day and say so in your results.</p></div>';
-  }
-  function renderDuration() {
-    var unit = state.answers.duration_unit || "minutes";
-    return '<div class="field"><label for="duration">Time per occurrence</label><div class="inline">' +
-      '<input type="number" inputmode="decimal" min="0" step="any" id="duration" name="duration" value="' + esc(state.answers.duration == null ? "" : state.answers.duration) + '" placeholder="e.g. 20">' +
-      '<div class="seg" role="radiogroup" aria-label="Unit">' +
-      '<label><input type="radio" name="duration_unit" value="minutes"' + (unit === "minutes" ? " checked" : "") + '><span>minutes</span></label>' +
-      '<label><input type="radio" name="duration_unit" value="hours"' + (unit === "hours" ? " checked" : "") + '><span>hours</span></label>' +
-      "</div></div></div>";
-  }
-  function renderPeople() {
-    return '<div class="field"><label for="people">Number of people</label>' +
-      '<input type="number" inputmode="numeric" min="1" step="1" id="people" name="people" value="' + esc(state.answers.people == null ? "" : state.answers.people) + '" placeholder="1">' +
-      '<p class="hint">If two people each spend the time every time it happens, enter 2.</p></div>';
-  }
-  function renderCost() {
-    return '<div class="field"><label for="hourly_cost">Cost per hour (£)</label>' +
-      '<input type="number" inputmode="decimal" min="0" step="any" id="hourly_cost" name="hourly_cost" value="' + esc(state.answers.hourly_cost == null ? "" : state.answers.hourly_cost) + '" placeholder="e.g. 20">' +
-      '<p class="hint">As a rough guide, admin roles are often £15–25 an hour and specialist roles £30–60. Leave it blank to skip.</p></div>';
-  }
-  function renderDisliked() {
-    return '<div class="field"><label for="disliked_task">The task (optional)</label>' +
-      '<textarea id="disliked_task" name="disliked_task" maxlength="500" placeholder="e.g. chasing clients for missing paperwork">' + esc(state.answers.disliked_task || "") + "</textarea></div>";
-  }
-
   function renderStep() {
-    var steps = activeSteps();
-    if (state.stepIndex >= steps.length) state.stepIndex = steps.length - 1;
-    var s = steps[state.stepIndex];
-    var html = '<div class="step"><h2 tabindex="-1" id="step-title">' + esc(s.q()) + "</h2>" +
-      (s.help ? '<p class="help">' + esc(s.help()) + "</p>" : "");
-    if (s.type === "radio" || s.type === "checkbox") {
-      var opts = typeof s.options === "function" ? s.options() : s.options;
-      html += choiceHtml(s.id, s.type, opts, s.cols);
-    } else html += s.render();
-    html += "</div>";
-    host.innerHTML = html;
-    errEl.textContent = "";
-    nextBtn.textContent = s.last ? "See my results →" : "Next →";
-    document.querySelector('[data-action="back"]').style.visibility = state.stepIndex === 0 ? "hidden" : "visible";
-    var pct = Math.round((state.stepIndex) / steps.length * 100);
-    document.getElementById("bar").style.width = pct + "%";
-    document.getElementById("progress-label").textContent = "Question " + (state.stepIndex + 1) + " of " + steps.length;
+    var s = STEPS[state.step];
+    host.innerHTML = '<p class="mono">Step ' + (state.step + 1) + " of " + STEPS.length + "</p><h2 tabindex=\"-1\" id=\"step-title\">" + esc(s.title) + '</h2><p class="lede">' + esc(s.lede) + "</p>" + s.render();
+    document.getElementById("bar").style.width = (state.step / STEPS.length * 100) + "%";
+    document.getElementById("back-btn").style.visibility = state.step === 0 ? "hidden" : "visible";
+    document.getElementById("next-btn").innerHTML = state.step === STEPS.length - 1 ? "Get my results &rsaquo;" : "Next step &rsaquo;";
     var t = document.getElementById("step-title"); if (t) t.focus({ preventScroll: true });
   }
 
-  // ---- Reading + validating the current step -------------------------------
-  function readStep(s) {
-    var form = document.getElementById("quiz");
-    if (s.type === "radio") {
-      var r = form.querySelector('input[name="' + s.id + '"]:checked');
-      state.answers[s.id] = r ? r.value : "";
-    } else if (s.type === "checkbox") {
-      state.answers[s.id] = Array.prototype.map.call(form.querySelectorAll('input[name="' + s.id + '"]:checked'), function (i) { return i.value; });
-      if (s.id === "processes" && state.answers.processes.indexOf(state.answers.primary_process) === -1) state.answers.primary_process = "";
-      if (s.id === "processes" && state.answers.processes.length === 1) state.answers.primary_process = state.answers.processes[0];
-    } else {
-      Array.prototype.forEach.call(form.querySelectorAll("input:not([type=radio]), textarea"), function (el) { state.answers[el.name] = el.value.trim(); });
-      Array.prototype.forEach.call(form.querySelectorAll("input[type=radio]:checked"), function (el) { state.answers[el.name] = el.value; });
-      if (state.answers.frequency !== "several_daily") state.answers.occurrences_per_day = "";
+  // ---- Input handling (live into state) ------------------------------------
+  host.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.field) {
+      A()[b.dataset.field] = b.dataset.value;
+      b.parentNode.querySelectorAll(".tile").forEach(function (x) { var on = x === b; x.setAttribute("aria-pressed", on); x.setAttribute("aria-checked", on); });
+      clearErr(b.dataset.field);
+      if (b.dataset.field === "frequency") {
+        var opd = document.getElementById("opd"); if (opd) opd.hidden = b.dataset.value !== "several_daily";
+        if (b.dataset.value !== "several_daily") A().occurrences_per_day = "";
+      }
+    } else if (b.dataset.multi) {
+      var f = b.dataset.multi, v = b.dataset.value, list = (A()[f] || []).slice(), i = list.indexOf(v);
+      if (i === -1) { list.push(v); if (f === "ai_tasks") list = v === "none" ? ["none"] : list.filter(function (x) { return x !== "none"; }); }
+      else list.splice(i, 1);
+      A()[f] = list;
+      b.parentNode.querySelectorAll(".chip").forEach(function (x) { x.setAttribute("aria-pressed", list.indexOf(x.dataset.value) !== -1); });
+      clearErr(f);
+      if (f === "processes") {
+        if (list.indexOf(A().primary_process) === -1) A().primary_process = list.length === 1 ? list[0] : "";
+        if (list.length === 1) A().primary_process = list[0];
+        var g = document.getElementById("g-primary_process"), prim = {};
+        list.forEach(function (k) { prim[k] = O.processes[k]; });
+        g.outerHTML = group("primary_process", "target", "Which one should we work out the numbers for?", tiles("primary_process", prim), { hidden: list.length < 2, hint: "Pick the one that takes the most time. We'll still use the others." });
+      }
+    } else if (b.dataset.unit) {
+      A().duration_unit = b.dataset.unit;
+      b.parentNode.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
     }
+  });
+  host.addEventListener("input", function (e) { var f = e.target.dataset.input; if (f) { A()[f] = e.target.value.trim(); clearErr(f); } });
+  host.addEventListener("change", function (e) { var f = e.target.dataset.input; if (f) { A()[f] = e.target.value.trim(); clearErr(f); } });
+
+  function clearErr(f) { var el = host.querySelector('[data-err="' + f + '"]'); if (el) el.textContent = ""; }
+
+  function stepErrors(i) {
+    var v = AC.validate(A()), errs = {};
+    STEPS[i].fields.forEach(function (f) { if (v.errors[f]) errs[f] = v.errors[f]; });
+    if (i === 2 && v.errors.occurrences_per_day) errs.frequency = v.errors.occurrences_per_day;
+    return errs;
+  }
+  function showErrors(errs) {
+    var first = null;
+    Object.keys(errs).forEach(function (f) {
+      var el = host.querySelector('[data-err="' + f + '"]');
+      if (el) { el.textContent = errs[f]; if (!first) first = el.closest(".group"); }
+    });
+    if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  function stepError(s) {
-    if (s.id === "disliked_task") return "";
-    var v = AC.validate(state.answers);
-    var fields = s.fields || [s.id];
-    for (var i = 0; i < fields.length; i++) if (v.errors[fields[i]]) return v.errors[fields[i]];
-    return "";
-  }
+  document.getElementById("quiz").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var errs = stepErrors(state.step);
+    if (Object.keys(errs).length) return showErrors(errs);
+    if (state.step < STEPS.length - 1) { state.step++; renderStep(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+    finish();
+  });
 
-  function next() {
-    var steps = activeSteps();
-    var s = steps[state.stepIndex];
-    readStep(s);
-    var err = stepError(s);
-    if (err) { errEl.textContent = err; return; }
-    if (state.stepIndex === steps.length - 1) return finish();
-    state.stepIndex++;
-    renderStep();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+  // ---- Results -------------------------------------------------------------
+  function show(id) { ["landing", "assessment", "result"].forEach(function (s) { document.getElementById(s).hidden = s !== id; }); window.scrollTo({ top: 0 }); }
+  function setText(id, t) { document.getElementById(id).textContent = t; }
 
   function finish() {
-    var out = AC.run(state.answers);
+    var out = AC.run(A());
     if (!out.ok) {
-      // Jump back to the first step that has an error.
-      var steps = activeSteps();
-      for (var i = 0; i < steps.length; i++) {
-        var f = steps[i].fields || [steps[i].id];
-        if (f.some(function (x) { return out.errors[x]; })) { state.stepIndex = i; renderStep(); errEl.textContent = out.errors[f.filter(function (x) { return out.errors[x]; })[0]]; return; }
-      }
-      errEl.textContent = "Please check your answers.";
+      for (var i = 0; i < STEPS.length; i++) { var e = stepErrors(i); if (Object.keys(e).length) { state.step = i; renderStep(); showErrors(e); return; } }
       return;
     }
-    state.output = out;
     track("calculator_completed", { process: out.answers.primary_process });
-    showResult(out);
-  }
-
-  // ---- Result --------------------------------------------------------------
-  function show(id) {
-    ["landing", "assessment", "result"].forEach(function (s) { document.getElementById(s).hidden = s !== id; });
-    window.scrollTo({ top: 0 });
-  }
-
-  function showResult(out) {
-    var r = out.results, a = out.answers, top = out.recommendations[0];
-    document.getElementById("r-title").textContent = AC.labelOf("processes", a.primary_process) + " takes about " + AC.fmt(r.weekly_hours) + " hours a week";
-    document.getElementById("r-weekly").textContent = AC.fmt(r.weekly_hours);
-    document.getElementById("r-annual").textContent = AC.fmt(r.annual_hours, 0);
-    var val = document.getElementById("r-value"), vl = document.getElementById("r-value-label");
-    if (r.annual_time_value !== null) { val.textContent = AC.money(r.annual_time_value); vl.textContent = "estimated labour-time value per year"; }
-    else { val.textContent = "–"; vl.textContent = "time value (no hourly cost entered)"; }
-    document.getElementById("r-recoverable").textContent =
-      "Illustrative scenario: if automation took over " + AC.CONFIG.scenarioLow * 100 + "–" + AC.CONFIG.scenarioHigh * 100 + "% of this work, that would free up roughly " +
-      AC.fmt(r.recoverable_hours_low, 0) + "–" + AC.fmt(r.recoverable_hours_high, 0) + " hours a year. This is an estimate, not a prediction. Real results depend on a review of the process.";
-    document.getElementById("r-assumptions").innerHTML = r.assumptions.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("");
-    document.getElementById("r-opp-title").textContent = top.title;
-    document.getElementById("r-opp-problem").textContent = top.symptoms;
-    document.getElementById("r-opp-flow").textContent = "Possible flow: " + top.workflow;
-    var ai = out.ai_recommendations[0];
-    document.getElementById("r-ai-title").textContent = ai.title;
-    document.getElementById("r-ai-what").textContent = ai.what_ai_does;
-    document.getElementById("r-ai-human").textContent = "A person stays in charge: " + ai.human_role;
-    document.getElementById("r-locked").innerHTML = out.recommendations.slice(1).map(function (x) {
-      return "<div>Automation: " + esc(x.title) + " · full details in your report</div>";
-    }).concat(out.ai_recommendations.slice(1).map(function (x) {
-      return "<div>AI: " + esc(x.title) + " · full details in your report</div>";
-    })).join("");
-    document.getElementById("request").hidden = false;
-    document.getElementById("done").hidden = true;
-    document.getElementById("report").hidden = true;
+    state.out = out;
+    paintResult(out, true);
     show("result");
+    fetchInsight();
   }
+
+  function paintResult(out, loading) {
+    var r = out.results, a = out.answers, top = out.recommendations[0], ai = out.ai_recommendations[0], c = out.copy;
+    setText("r-title", AC.labelOf("processes", a.primary_process) + " takes about " + AC.fmt(r.weekly_hours) + " hours a week");
+    setText("r-weekly", AC.fmt(r.weekly_hours));
+    setText("r-annual", AC.fmt(r.annual_hours, 0));
+    var hasVal = r.annual_time_value !== null;
+    setText("r-value", hasVal ? AC.money(r.annual_time_value) : AC.fmt(r.recoverable_hours_low, 0) + "–" + AC.fmt(r.recoverable_hours_high, 0));
+    setText("r-value-label", hasVal ? "of staff time a year" : "hours a year you could get back if automation took on a fifth to a third of it");
+    setText("r-basis", r.basis);
+    document.getElementById("r-summary").innerHTML = loading
+      ? '<div class="skel"></div><div class="skel" style="width:85%"></div><div class="skel" style="width:60%"></div><p class="group-hint">Personalising your results…</p>'
+      : "<p>" + esc(c.summary) + "</p>";
+    document.getElementById("r-ai-badge").hidden = loading || c.source !== "ai";
+    setText("r-auto-title", top.title); setText("r-auto-fixes", top.fixes); setText("r-auto-how", top.how); setText("r-auto-why", c.why[top.id]);
+    setText("r-ai-title", ai.title); setText("r-ai-what", ai.what); setText("r-ai-why", c.why[ai.id]); setText("r-ai-charge", ai.in_charge);
+    setText("r-first", c.first_step);
+    document.getElementById("r-more").innerHTML = "<p>Also in your full plan:</p><ul>" +
+      out.recommendations.slice(1).map(function (x) { return "<li>" + esc(x.title) + "</li>"; }).join("") +
+      out.ai_recommendations.slice(1).map(function (x) { return "<li>" + esc(x.title) + " (AI)</li>"; }).join("") + "</ul>";
+  }
+
+  function fetchInsight() {
+    var sid = state.sid, answers = JSON.parse(JSON.stringify(A()));
+    state.insightFor = sid; state.aiStatus = "";
+    if (!INSIGHT_URL) { paintResult(state.out, false); return; }
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, INSIGHT_TIMEOUT_MS);
+    fetch(INSIGHT_URL, { method: "POST", headers: { "Content-Type": "application/json" }, signal: ctrl ? ctrl.signal : undefined,
+      body: JSON.stringify({ submission_id: sid, answers: answers, page_url: location.href.split("?")[0] }) })
+      .then(function (res) { return res.ok ? res.json() : {}; })
+      .catch(function () { return {}; })
+      .then(function (data) {
+        clearTimeout(timer);
+        if (state.insightFor !== sid) return;            // answers changed meanwhile
+        // Re-check on the client too: AI text is only used if it passes the same fact-checks.
+        var checked = data && data.ai ? AC.sanitiseAI(data.ai, state.out) : { ai: null, status: "fallback:none" };
+        state.aiStatus = checked.status;
+        state.out = AC.run(answers, checked.ai);
+        paintResult(state.out, false);
+      });
+  }
+
+  // ---- Feedback ------------------------------------------------------------
+  document.getElementById("feedback").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-fb]"); if (!b) return;
+    this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+    document.getElementById("fb-thanks").hidden = false;
+    track("calculator_feedback", { value: b.dataset.fb });
+    if (INSIGHT_URL) fetch(INSIGHT_URL, { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ submission_id: state.sid, feedback: b.dataset.fb }) }).catch(function () {});
+  });
 
   // ---- Report request ------------------------------------------------------
-  var reqForm = document.getElementById("request-form");
   var sending = false;
-  reqForm.addEventListener("submit", function (e) {
+  document.getElementById("request-form").addEventListener("submit", function (e) {
     e.preventDefault();
     if (sending) return;
     var errBox = document.getElementById("request-error");
     var email = document.getElementById("email").value.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { errBox.textContent = "Please enter a valid email address."; return; }
     errBox.textContent = "";
-    var contact = {
-      email: email,
-      name: document.getElementById("name").value.trim(),
-      company: document.getElementById("company").value.trim()
-    };
-    var payload = {
-      submission_id: state.submissionId,
-      submitted_at: new Date().toISOString(),
-      answers: state.answers,
-      contact: contact,
-      report_requested: true,
-      review_requested: document.getElementById("review_requested").checked,
-      marketing_opt_in: document.getElementById("marketing_opt_in").checked,
-      consent_version: CONSENT_VERSION,
-      page_url: location.href.split("?")[0]
-    };
+    var contact = { email: email, name: document.getElementById("name").value.trim(), company: document.getElementById("company").value.trim() };
+    var payload = { submission_id: state.sid, submitted_at: new Date().toISOString(), answers: A(), contact: contact, report_requested: true,
+      review_requested: document.getElementById("review_requested").checked, marketing_opt_in: document.getElementById("marketing_opt_in").checked,
+      consent_version: CONSENT_VERSION, page_url: location.href.split("?")[0] };
     track("report_requested", { review: payload.review_requested });
-    if (payload.review_requested) track("review_requested");
-
     var btn = document.getElementById("request-btn");
-    if (!WEBHOOK_URL) { return renderDone(contact, payload, "demo"); }
+    if (!WEBHOOK_URL) return done(contact, payload, "demo");
     sending = true; btn.disabled = true; btn.textContent = "Sending…";
     fetch(WEBHOOK_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json().catch(function () { return {}; }); })
-      .then(function () { renderDone(contact, payload, "sent"); })
-      .catch(function () {
-        errBox.textContent = "Sorry, we couldn't send that just now. Please try again in a moment. Your full report is shown below either way.";
-        renderReportOnPage(contact);
-      })
-      .then(function () { sending = false; btn.disabled = false; btn.textContent = "Email me my report"; });
+      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); })
+      .then(function () { done(contact, payload, "sent"); })
+      .catch(function () { errBox.textContent = "Sorry, that didn't send. Please try again in a moment. Your full plan is below either way."; showReport(contact); })
+      .then(function () { sending = false; btn.disabled = false; btn.textContent = "Email me my plan"; });
   });
-
-  function renderReportOnPage(contact) {
+  function showReport(contact) {
     var rep = document.getElementById("report");
-    rep.innerHTML = AC.renderReportHtml(state.output, contact, { reviewUrl: REVIEW_URL, submissionId: state.submissionId });
+    rep.innerHTML = AC.renderReportHtml(state.out, contact, { reviewUrl: REVIEW_URL, submissionId: state.sid });
     rep.hidden = false;
   }
-
-  function renderDone(contact, payload, mode) {
-    var done = document.getElementById("done");
-    var msg = mode === "demo"
-      ? "<strong>Demo mode:</strong> no webhook is set up, so nothing was sent. Your full report is shown below."
-      : "<strong>Done.</strong> Your report is on its way to " + esc(contact.email) + ". It usually arrives within a minute, so check your spam folder if it hasn't. There's also a copy below.";
-    if (payload.review_requested && mode !== "demo") msg += " We've had your review request and will email you to arrange a time.";
-    done.innerHTML = msg;
-    done.hidden = false;
+  function done(contact, payload, mode) {
+    var d = document.getElementById("done");
+    d.innerHTML = mode === "demo" ? "<strong>Demo mode:</strong> nothing was sent. Your full plan is below."
+      : "<strong>Done.</strong> Your plan is on its way to " + esc(contact.email) + ". If it's not there in a couple of minutes, check your spam folder. There's also a copy below." +
+        (payload.review_requested ? " We'll be in touch to arrange your call." : "");
+    d.hidden = false;
     document.getElementById("request").hidden = true;
-    renderReportOnPage(contact);
-    done.scrollIntoView({ behavior: "smooth", block: "start" });
+    showReport(contact);
+    d.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  // ---- Wiring --------------------------------------------------------------
-  document.getElementById("quiz").addEventListener("submit", function (e) { e.preventDefault(); next(); });
-  host.addEventListener("change", function (e) {
-    var t = e.target;
-    if (t.name === "ai_tasks" && t.checked) {
-      // "None of these" is exclusive.
-      Array.prototype.forEach.call(host.querySelectorAll('input[name="ai_tasks"]'), function (el) {
-        if (el !== t && (t.value === "none" || el.value === "none")) el.checked = false;
-      });
-    }
-    if (t.name === "frequency") {
-      var f = document.getElementById("opd-field");
-      if (f) f.hidden = t.value !== "several_daily";
-      if (t.value === "several_daily") { var o = document.getElementById("occurrences_per_day"); if (o) o.focus(); return; }
-    }
-    // Auto-advance on single-choice steps (not inside custom steps).
-    var s = activeSteps()[state.stepIndex];
-    if (t.type === "radio" && s.type === "radio") setTimeout(next, 180);
-    if (t.name === "frequency" && t.value !== "several_daily") setTimeout(next, 180);
-  });
+  // ---- Navigation ----------------------------------------------------------
   document.addEventListener("click", function (e) {
-    var a = e.target.closest("[data-action]");
-    if (!a) return;
-    var act = a.getAttribute("data-action");
-    if (act === "start") {
-      if (!state.started) { track("calculator_started"); state.started = true; }
-      state.stepIndex = 0; show("assessment"); renderStep();
-    } else if (act === "back") {
-      readStep(activeSteps()[state.stepIndex]);
-      if (state.stepIndex > 0) { state.stepIndex--; renderStep(); }
-    } else if (act === "restart") {
-      state = { answers: {}, stepIndex: 0, submissionId: uuid(), output: null, started: true };
-      reqForm.reset();
-      show("assessment"); renderStep();
-    }
+    var b = e.target.closest("[data-action]"); if (!b) return;
+    var act = b.getAttribute("data-action");
+    if (act === "start") { if (!state.started) { track("calculator_started"); state.started = true; } state.step = 0; show("assessment"); renderStep(); }
+    else if (act === "back") { if (state.step > 0) { state.step--; renderStep(); window.scrollTo({ top: 0, behavior: "smooth" }); } }
+    else if (act === "edit") { state.sid = uuid(); state.step = STEPS.length - 1; resetResult(); show("assessment"); renderStep(); }
+    else if (act === "restart") { state.a = { duration_unit: "minutes" }; state.sid = uuid(); state.step = 0; resetResult(); show("assessment"); renderStep(); }
   });
+  function resetResult() {
+    state.out = null; state.insightFor = null;
+    document.getElementById("request").hidden = false;
+    document.getElementById("done").hidden = true;
+    document.getElementById("report").hidden = true;
+    document.getElementById("request-form").reset();
+    document.getElementById("fb-thanks").hidden = true;
+    document.querySelectorAll("#feedback button").forEach(function (x) { x.setAttribute("aria-pressed", false); });
+  }
   track("calculator_viewed");
 })();
 </script>

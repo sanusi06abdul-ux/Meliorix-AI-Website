@@ -14,7 +14,7 @@ var AutomationCalc = (function () {
   "use strict";
 
   var CONFIG = {
-    version: "2.0",
+    version: "2.1",
     weeksPerYear: 46,
     workingDaysPerWeek: 5,
     defaultOccurrencesPerDay: 3,
@@ -200,12 +200,12 @@ var AutomationCalc = (function () {
     {
       id: "reporting_monitoring", title: "Reports that build themselves",
       processes: ["reporting", "marketing_ops"], priorities: ["better_reporting", "save_time"], problem_types: ["slow"],
-      revenue_linked: false, complexity: "Simple to medium", approach: "No AI needed",
-      fixes: "Pulling numbers from several places and pasting them into a report.",
-      how: "On a schedule, the numbers are collected from each system, put together, and sent to you as a report or dashboard, with anything unusual flagged.",
+      revenue_linked: false, complexity: "Simple to medium", approach: "Uses AI for one step",
+      fixes: "Pulling numbers from several places, often messy ones, and pasting them into a report.",
+      how: "On a schedule, the numbers are collected from each system into one place. AI pulls figures out of emails, PDFs and messy exports, then writes a short plain-English summary with anything unusual flagged.",
       first_step: "Take your last report and list each number and where it came from.",
-      good_to_know: "Check the first few automated reports against your manual ones before relying on them.",
-      tools: "Google Sheets, Looker Studio, Google Analytics, Shopify, Xero, Gmail, n8n", case_study: "partnership_radar"
+      good_to_know: "Check the first few reports against your manual ones. Where a tool can export clean data, no AI is needed for that part.",
+      tools: "Google Sheets, Looker Studio, Google Analytics, Shopify, Xero, Gmail, n8n, Claude, ChatGPT", case_study: "partnership_radar"
     },
     {
       id: "enquiry_handling", title: "A tidy, fast inbox",
