@@ -14,7 +14,7 @@ var AutomationCalc = (function () {
   "use strict";
 
   var CONFIG = {
-    version: "2.3",
+    version: "2.4",
     weeksPerYear: 46,
     workingDaysPerWeek: 5,
     defaultOccurrencesPerDay: 3,
@@ -510,16 +510,24 @@ var AutomationCalc = (function () {
     var summary = "Your team spends about " + fmt(r.weekly_hours) + " hours a week on " + t.noun + ", which is around " +
       fmt(r.annual_hours, 0) + " hours a year. " + PROBLEM_LINE[a.problem_type];
     var why = {};
+    var primarySeen = 0;
     recs.forEach(function (x) {
+      var onPrimary = x.match === "process" && x.processes.indexOf(a.primary_process) !== -1;
+      if (onPrimary) primarySeen++;
       why[x.id] = x.match === "process"
-        ? (x.processes.indexOf(a.primary_process) !== -1
-            ? "This goes straight at " + t.noun + ", the task you said takes the most time."
+        ? (onPrimary
+            ? (primarySeen === 1 ? "This goes straight at " + t.noun + ", the task you said takes the most time."
+                                 : "Another way to take pressure off " + t.noun + ", alongside the idea above.")
             : "You also picked " + labelOf("processes", x.processes.filter(function (p) { return a.processes.indexOf(p) !== -1; })[0]).toLowerCase() + ", and this helps there.")
         : "This fits your main goal: " + labelOf("priority", a.priority).toLowerCase() + ".";
     });
-    ais.forEach(function (x) {
-      var task = x.ai_tasks.filter(function (k) { return a.ai_tasks.indexOf(k) !== -1; })[0];
-      why[x.id] = task ? "You said " + labelOf("ai_tasks", task).toLowerCase() + " takes up your team's time." : "This fits the kind of work you described.";
+    var usedTasks = [];
+    ais.forEach(function (x, i) {
+      var tasks = x.ai_tasks.filter(function (k) { return a.ai_tasks.indexOf(k) !== -1; });
+      var fresh = tasks.filter(function (k) { return usedTasks.indexOf(k) === -1; })[0];
+      if (fresh) { usedTasks.push(fresh); why[x.id] = "You said " + labelOf("ai_tasks", fresh).toLowerCase() + " takes up your team's time."; }
+      else if (tasks.length) why[x.id] = "A second way AI could help with " + labelOf("ai_tasks", tasks[0]).toLowerCase() + ".";
+      else why[x.id] = i === 0 ? "This fits the kind of work you described." : "It also suits " + tailor(a.primary_process).noun + ", the task you said takes the most time.";
     });
     return { summary: summary, why: why, first_step: recs[0].first_step, source: "rules" };
   }
@@ -694,7 +702,8 @@ var AutomationCalc = (function () {
         "<strong>Real example:</strong> " + escapeHtml(cs.line) + "</p>";
     }
 
-    var html = '<div style="max-width:620px;margin:0 auto;background:#ffffff;padding:26px 24px;">';
+    var html = '<div style="max-width:620px;margin:0 auto;background:#ffffff;padding:26px 24px;' +
+      (opts.email ? 'border-radius:0 0 16px 16px;' : '') + '">';
     html += '<p style="' + F + 'font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:' + C.accent + ';margin:0 0 6px;font-weight:bold;">Your Automation &amp; AI Report</p>';
     html += '<h1 style="' + F + 'font-size:24px;line-height:1.25;color:' + C.ink + ';margin:0 0 6px;">' +
       (contact.company ? escapeHtml(contact.company) + ": " : "") + escapeHtml(labelOf("processes", a.primary_process)) + "</h1>";
@@ -729,9 +738,23 @@ var AutomationCalc = (function () {
     html += p("Book a free 15-minute call and we'll look at this one task together, and whether it's worth automating. No obligation.");
     if (opts.reviewUrl) html += '<p style="margin:14px 0 4px;"><a href="' + escapeHtml(opts.reviewUrl) + '" style="' + F + 'display:inline-block;background:' + C.accent + ';color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-weight:bold;font-size:15px;">Book my free 15-minute review</a></p>';
 
-    if (opts.email) html += '<p style="' + F + 'font-size:12px;color:' + C.muted + ';margin:26px 0 0;border-top:1px solid ' + C.line + ';padding-top:12px;">Figures are estimates based on your answers. Ref ' + escapeHtml(opts.submissionId || "") + "</p>";
+    if (opts.email) html += '<p style="' + F + 'font-size:12px;color:' + C.muted + ';margin:26px 0 0;border-top:1px solid ' + C.line + ';padding-top:12px;">Figures are estimates based on your answers.</p>';
     html += "</div>";
-    return html;
+    if (!opts.email) return html;
+
+    // Email frame: soft green surround, wordmark, rounded card with a green accent strip, small footer.
+    // Tables + bgcolor so Gmail/Outlook keep the look (they ignore <body> styles).
+    var wash = "#EAF2EE", edge = "#D5E5DC";
+    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + wash + '" style="background:' + wash + ';">' +
+      '<tr><td align="center" style="padding:28px 12px 32px;">' +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;">' +
+      '<tr><td align="center" style="' + F + 'padding:0 0 16px;font-size:18px;font-weight:bold;color:' + C.accent + ';letter-spacing:-.01em;">Meliorix AI</td></tr>' +
+      '<tr><td style="background:#ffffff;border:1px solid ' + edge + ';border-radius:16px;overflow:hidden;">' +
+      '<div style="height:5px;background:' + C.accent + ';border-radius:16px 16px 0 0;"></div>' + html + "</td></tr>" +
+      '<tr><td align="center" style="' + F + 'padding:18px 8px 0;font-size:12px;line-height:1.6;color:' + C.muted + ';">' +
+      'Meliorix AI · Custom automation for small and medium-sized businesses<br>' +
+      '<a href="https://meliorixai.com" style="color:' + C.accent + ';text-decoration:none;">meliorixai.com</a></td></tr>' +
+      "</table></td></tr></table>";
   }
 
   function renderReportText(out) {
