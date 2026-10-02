@@ -258,8 +258,8 @@
         <div class="idea-card">
           <p class="k">Top automation idea</p>
           <h4 id="r-auto-title"></h4>
-          <p><b>Fixes:</b> <span id="r-auto-fixes"></span></p>
-          <p><b>How it works:</b> <span id="r-auto-how"></span></p>
+          <p><b>The problem:</b> <span id="r-auto-problem"></span></p>
+          <p><b>The fix:</b> <span id="r-auto-fix"></span></p>
           <p><b>Why it fits you:</b> <span id="r-auto-why"></span></p>
         </div>
         <div class="idea-card">
@@ -553,7 +553,7 @@
       ? '<div class="skel"></div><div class="skel" style="width:85%"></div><div class="skel" style="width:60%"></div><p class="group-hint">Personalising your results…</p>'
       : "<p>" + esc(c.summary) + "</p>";
     document.getElementById("r-ai-badge").hidden = loading || c.source !== "ai";
-    setText("r-auto-title", top.title); setText("r-auto-fixes", top.fixes); setText("r-auto-how", top.how); setText("r-auto-why", c.why[top.id]);
+    setText("r-auto-title", top.title); setText("r-auto-problem", top.problem); setText("r-auto-fix", top.fix); setText("r-auto-why", c.why[top.id]);
     setText("r-ai-title", ai.title); setText("r-ai-what", ai.what); setText("r-ai-why", c.why[ai.id]); setText("r-ai-charge", ai.in_charge);
     setText("r-first", c.first_step);
     document.getElementById("r-more").innerHTML = "<p>Also in your full plan:</p><ul>" +

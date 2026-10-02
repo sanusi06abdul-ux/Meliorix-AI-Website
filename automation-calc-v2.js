@@ -14,7 +14,7 @@ var AutomationCalc = (function () {
   "use strict";
 
   var CONFIG = {
-    version: "2.1",
+    version: "2.3",
     weeksPerYear: 46,
     workingDaysPerWeek: 5,
     defaultOccurrencesPerDay: 3,
@@ -151,8 +151,8 @@ var AutomationCalc = (function () {
       id: "lead_followup", title: "Automatic lead follow-up",
       processes: ["lead_followup", "marketing_ops"], priorities: ["faster_leads", "more_customers"], problem_types: ["dropped", "slow"],
       revenue_linked: true, complexity: "Simple to medium", approach: "No AI needed",
-      fixes: "Leads waiting days for a reply, or being forgotten.",
-      how: "When someone enquires, they get an instant reply, the lead lands in your CRM, and your team gets reminders until it's followed up.",
+      problem: "Leads waiting days for a reply, or being forgotten.",
+      fix: "When someone enquires, they get an instant reply, the lead lands in your CRM, and your team gets reminders until it's followed up.",
       first_step: "Write down what happens in the first 48 hours after someone enquires, and where leads go quiet.",
       good_to_know: "Someone on your team still owns each lead. The automation just makes sure nothing is forgotten.",
       tools: "website forms, HubSpot, Pipedrive, Gmail, Outlook, Slack, n8n", case_study: null
@@ -161,8 +161,8 @@ var AutomationCalc = (function () {
       id: "onboarding", title: "Hands-free client onboarding",
       processes: ["onboarding"], priorities: ["more_customers", "save_time", "faster_leads"], problem_types: ["slow", "dropped"],
       revenue_linked: true, complexity: "Medium", approach: "No AI needed",
-      fixes: "Setting up every new client by hand, and waiting on forms nobody chases.",
-      how: "When a client signs, they get a welcome email and forms, your team gets a checklist, and reminders go out automatically if forms come back late.",
+      problem: "Setting up every new client by hand, and waiting on forms nobody chases.",
+      fix: "When a client signs, they get a welcome email and forms, your team gets a checklist, and reminders go out automatically if forms come back late.",
       first_step: "List every step from 'yes' to 'fully set up', and mark where you're waiting on the client.",
       good_to_know: "Some tools don't allow automatic account setup, so a person may still do one or two steps.",
       tools: "Tally, Typeform, CRM, Google Drive, e-signature, Gmail, Asana, ClickUp", case_study: null
@@ -171,8 +171,8 @@ var AutomationCalc = (function () {
       id: "crm_sync", title: "Stop typing the same details twice",
       processes: ["crm_data_entry", "invoicing_admin", "lead_followup"], priorities: ["save_time", "reduce_errors"], problem_types: ["slow", "dropped"],
       revenue_linked: false, universal: true, complexity: "Simple to medium", approach: "No AI needed",
-      fixes: "Copying the same information between forms, spreadsheets and systems.",
-      how: "Details entered once flow automatically into your other systems, with duplicates and missing fields flagged.",
+      problem: "Copying the same information between forms, spreadsheets and systems.",
+      fix: "Details entered once flow automatically into your other systems, with duplicates and missing fields flagged.",
       first_step: "Pick the one piece of information you copy most often, and list every place it gets typed.",
       good_to_know: "Tidy up messy data first, otherwise the automation just copies the mess faster.",
       tools: "CRM, Google Sheets, Airtable, Xero, QuickBooks, Shopify, n8n", case_study: null
@@ -181,8 +181,8 @@ var AutomationCalc = (function () {
       id: "doc_triage", title: "Faster document checks",
       processes: ["documents"], priorities: ["reduce_errors", "save_time"], problem_types: ["slow", "dropped"],
       revenue_linked: false, complexity: "Medium", approach: "Uses AI for one step",
-      fixes: "Reading long documents in full just to find the few details that matter.",
-      how: "Each document is read automatically, the key details are pulled out and checked against your rules, and you get a short summary with anything worth a closer look.",
+      problem: "Reading long documents ({documents}) in full just to find the few details that matter.",
+      fix: "Each document is read automatically, the key details are pulled out and checked against your rules, and you get a short summary with anything worth a closer look.",
       first_step: "Write down the 5–10 things you check every document for, and collect 3 recent examples.",
       good_to_know: "A person still makes the final call. The automation just does the first read.",
       tools: "Gmail, Outlook, Google Drive, SharePoint, Claude, ChatGPT, Slack", case_study: null
@@ -191,8 +191,8 @@ var AutomationCalc = (function () {
       id: "deadline_tracking", title: "Never miss a deadline or follow-up",
       processes: ["scheduling", "documents", "onboarding"], priorities: ["reduce_errors", "save_time"], problem_types: ["dropped"],
       revenue_linked: false, universal: true, complexity: "Simple to medium", approach: "No AI needed",
-      fixes: "Dates living in emails and people's heads, and things slipping through.",
-      how: "Key dates go straight into the right calendars and task lists, with reminders beforehand and a nudge if something is overdue.",
+      problem: "Dates living in emails and people's heads, and things slipping through.",
+      fix: "Key dates go straight into the right calendars and task lists, with reminders beforehand and a nudge if something is overdue.",
       first_step: "List the deadlines that slipped in the last 3 months, and where each one was written down.",
       good_to_know: "Reminders only work if it's clear who owns each deadline.",
       tools: "Google Calendar, Outlook, Asana, ClickUp, Trello, Slack, Teams", case_study: null
@@ -201,8 +201,8 @@ var AutomationCalc = (function () {
       id: "reporting_monitoring", title: "Reports that build themselves",
       processes: ["reporting", "marketing_ops"], priorities: ["better_reporting", "save_time"], problem_types: ["slow"],
       revenue_linked: false, complexity: "Simple to medium", approach: "Uses AI for one step",
-      fixes: "Pulling numbers from several places, often messy ones, and pasting them into a report.",
-      how: "On a schedule, the numbers are collected from each system into one place. AI pulls figures out of emails, PDFs and messy exports, then writes a short plain-English summary with anything unusual flagged.",
+      problem: "Pulling numbers from several places, often messy ones, and pasting them into a report.",
+      fix: "On a schedule, the numbers are collected from each system into one place. AI pulls figures out of emails, PDFs and messy exports, then writes a short plain-English summary with anything unusual flagged.",
       first_step: "Take your last report and list each number and where it came from.",
       good_to_know: "Check the first few reports against your manual ones. Where a tool can export clean data, no AI is needed for that part.",
       tools: "Google Sheets, Looker Studio, Google Analytics, Shopify, Xero, Gmail, n8n, Claude, ChatGPT", case_study: "partnership_radar"
@@ -211,8 +211,8 @@ var AutomationCalc = (function () {
       id: "enquiry_handling", title: "A tidy, fast inbox",
       processes: ["customer_support", "lead_followup"], priorities: ["faster_leads", "more_customers", "save_time"], problem_types: ["slow", "dropped"],
       revenue_linked: true, complexity: "Medium", approach: "Uses AI for one step",
-      fixes: "Emails piling up, slow replies, and details copied out by hand.",
-      how: "New emails are sorted by type, the key details are saved for you, they go to the right person, and a reply is drafted ready to check and send.",
+      problem: "Emails piling up, slow replies, and details copied out by hand.",
+      fix: "New emails are sorted by type, the key details are saved for you, they go to the right person, and a reply is drafted ready to check and send.",
       first_step: "Look at a week of incoming emails and group them by type to see where the volume is.",
       good_to_know: "Replies are drafted, not sent, so a person checks anything sensitive.",
       tools: "Gmail, Outlook, help desk, CRM, Google Sheets, Slack, Claude, ChatGPT", case_study: null
@@ -221,8 +221,8 @@ var AutomationCalc = (function () {
       id: "billing_lifecycle", title: "Renewals and invoices on autopilot",
       processes: ["invoicing_admin"], priorities: ["save_time", "reduce_errors", "more_customers"], problem_types: ["dropped", "slow"],
       revenue_linked: true, complexity: "Simple to medium", approach: "No AI needed",
-      fixes: "Chasing renewals, invoices and payments by hand across several systems.",
-      how: "Reminders go out before renewals and due dates, invoices are re-issued automatically, and cancellations update everywhere at once.",
+      problem: "Chasing renewals, invoices and payments by hand across several systems.",
+      fix: "Reminders go out before renewals and due dates, invoices are re-issued automatically, and cancellations update everywhere at once.",
       first_step: "Write down one customer's journey from first payment to cancelling, and every manual step along the way.",
       good_to_know: "Payment rules (refunds, pauses) need testing carefully before switching on.",
       tools: "Stripe, GoCardless, Xero, QuickBooks, Google Sheets, Gmail", case_study: "membership"
@@ -234,7 +234,7 @@ var AutomationCalc = (function () {
     {
       id: "ai_doc_reader", title: "AI that reads documents for you",
       ai_tasks: ["reading"], processes: ["documents", "onboarding", "invoicing_admin"], priorities: ["reduce_errors", "save_time"],
-      what: "Reads long documents (contracts, tenders, applications) and pulls out the key terms, dates and anything that rules you out.",
+      what: "Reads long documents ({documents}) and pulls out the key terms, dates and anything that rules you out.",
       in_charge: "You make the decision. The AI points to the exact line behind every flag.",
       first_step: "Collect 3 documents you turned down recently and note why. That becomes the AI's checklist.",
       good_to_know: "Don't upload confidential documents to any AI tool without a proper data agreement.",
@@ -279,7 +279,7 @@ var AutomationCalc = (function () {
     {
       id: "ai_research_monitoring", title: "AI that keeps an eye on your market",
       ai_tasks: ["researching", "reading"], processes: ["lead_followup", "reporting", "marketing_ops"], priorities: ["faster_leads", "better_reporting", "more_customers"],
-      what: "Watches news, websites or tender portals for you, filters out the noise, and sends a short daily summary of what matters.",
+      what: "Watches {sources} for you, filters out the noise, and sends a short daily summary of what matters.",
       in_charge: "You decide what to act on.",
       first_step: "List every website or source you check by hand each week, and what you're looking for.",
       good_to_know: "Every so often, check a few items it filtered out to make sure nothing useful was missed.",
@@ -288,7 +288,7 @@ var AutomationCalc = (function () {
     {
       id: "ai_insights", title: "AI that spots patterns in feedback",
       ai_tasks: ["analysing"], processes: ["reporting", "customer_support", "marketing_ops"], priorities: ["better_reporting", "reduce_errors", "more_customers"],
-      what: "Reads reviews, survey answers or support tickets, groups them into themes, and explains what's changing each week in plain English.",
+      what: "Reads {feedback}, groups them into themes, and explains what's changing each week in plain English.",
       in_charge: "You decide what to do about the themes.",
       first_step: "Export the last 3 months of reviews or tickets and write down the questions you want answered.",
       good_to_know: "Check what the AI says against the real numbers before making big decisions.",
@@ -304,6 +304,30 @@ var AutomationCalc = (function () {
       tools: "CRM, website forms, Claude, ChatGPT, n8n", complexity: "Simple to medium", case_study: null
     }
   ];
+
+
+  // Industry-specific examples, filled into library text ({sources}, {documents}, {feedback}) so ideas
+  // read right for each sector (e.g. a financial adviser isn't watching tender portals).
+  var INDUSTRY_CONTEXT = {
+    tech_saas: { sources: "competitor websites, product news and funding announcements", documents: "contracts, security questionnaires and RFPs", feedback: "support tickets, app reviews and cancellation reasons" },
+    professional_services: { sources: "regulation changes, industry news and news about your clients", documents: "engagement letters, contracts and client paperwork", feedback: "client feedback, reviews and complaints" },
+    agency: { sources: "brand news, campaign launches and new-business opportunities", documents: "briefs, RFPs and contracts", feedback: "client feedback and campaign results" },
+    healthcare: { sources: "health sector news, regulation updates and funding announcements", documents: "referral letters, patient forms and supplier contracts", feedback: "patient reviews and feedback forms" },
+    manufacturing_logistics: { sources: "supplier news, price changes and tender notices", documents: "purchase orders, delivery notes and supplier contracts", feedback: "customer complaints and delivery feedback" },
+    ecommerce: { sources: "competitor prices, product trends and marketplace updates", documents: "supplier invoices, purchase orders and returns", feedback: "product reviews, return reasons and customer emails" },
+    financial_services: { sources: "regulation updates, market news and rate changes", documents: "applications, policy documents and client fact-finds", feedback: "client feedback, reviews and complaints" },
+    education_training: { sources: "funding announcements, policy changes and sector news", documents: "applications, enrolment forms and course paperwork", feedback: "course evaluations and student feedback" },
+    construction_trades: { sources: "tender portals, planning applications and local project news", documents: "tenders, specifications and contracts", feedback: "customer reviews and snagging feedback" },
+    other: { sources: "industry news, competitor websites and market updates", documents: "contracts, forms and applications", feedback: "reviews, survey answers and customer emails" }
+  };
+  var TEXT_FIELDS = ["problem", "fix", "what", "in_charge", "first_step", "good_to_know"];
+  function personalise(rule, industry) {
+    var c = INDUSTRY_CONTEXT[industry] || INDUSTRY_CONTEXT.other, copy = Object.assign({}, rule);
+    TEXT_FIELDS.forEach(function (f) {
+      if (typeof copy[f] === "string") copy[f] = copy[f].replace(/\{(sources|documents|feedback)\}/g, function (_, k) { return c[k]; });
+    });
+    return copy;
+  }
 
   var PROBLEM_LINE = {
     slow: "The main issue is speed, which usually means hand-offs and manual steps that could run on their own.",
@@ -461,7 +485,7 @@ var AutomationCalc = (function () {
     var matched = scored.filter(function (x) { return x.matched; });
     var rest = scored.filter(function (x) { return !x.matched; });
     return matched.concat(rest).slice(0, 3).map(function (x) {
-      return Object.assign({ match: x.matched ? "process" : "priority" }, x.rule);
+      return Object.assign({ match: x.matched ? "process" : "priority" }, personalise(x.rule, a.business_type));
     });
   }
 
@@ -476,7 +500,7 @@ var AutomationCalc = (function () {
     });
     scored.sort(function (x, y) { return y.score - x.score || x.idx - y.idx; });
     return scored.slice(0, n || 2).map(function (x) {
-      return Object.assign({ match: x.score >= 100 ? "task" : "process" }, x.rule);
+      return Object.assign({ match: x.score >= 100 ? "task" : "process" }, personalise(x.rule, a.business_type));
     });
   }
 
@@ -561,7 +585,7 @@ var AutomationCalc = (function () {
       main_goal: labelOf("priority", a.priority),
       time_consuming_tasks: a.ai_tasks.map(function (t) { return labelOf("ai_tasks", t); }),
       disliked_task: a.disliked_task || "",
-      automation_ideas: out.recommendations.map(function (x) { return { id: x.id, title: x.title, how: x.how, first_step: x.first_step, tools: x.tools }; }),
+      automation_ideas: out.recommendations.map(function (x) { return { id: x.id, title: x.title, problem: x.problem, fix: x.fix, first_step: x.first_step, tools: x.tools }; }),
       ai_ideas: out.ai_recommendations.map(function (x) { return { id: x.id, title: x.title, what: x.what, tools: x.tools }; })
     };
     return {
@@ -654,14 +678,13 @@ var AutomationCalc = (function () {
     var F = "font-family:Inter,Arial,Helvetica,sans-serif;";
     function h2(t) { return '<h2 style="' + F + 'font-size:18px;line-height:1.3;color:' + C.ink + ';margin:30px 0 12px;">' + t + "</h2>"; }
     function p(t, extra) { return '<p style="' + F + 'font-size:15px;line-height:1.6;color:' + C.ink + ';margin:0 0 10px;' + (extra || "") + '">' + t + "</p>"; }
-    function tag(t) { return '<span style="' + F + 'display:inline-block;font-size:11px;font-weight:bold;letter-spacing:.04em;color:' + C.accent + ';background:' + C.tint + ';padding:3px 8px;border-radius:10px;">' + escapeHtml(t) + "</span>"; }
     function line(label, text) { return text ? p('<strong style="color:' + C.ink + ';">' + label + "</strong> " + escapeHtml(text), "font-size:14px;color:" + C.muted + ";margin:0 0 6px;") : ""; }
     function stat(big, small) {
       return '<td valign="top" style="padding:4px;"><div style="background:' + C.soft + ';border-radius:8px;padding:14px 12px;">' +
         '<div style="' + F + 'font-size:24px;font-weight:bold;color:' + C.ink + ';">' + big + '</div><div style="' + F + 'font-size:12px;color:' + C.muted + ';margin-top:2px;">' + small + "</div></div></td>";
     }
     function card(inner) { return '<div style="border:1px solid ' + C.line + ';border-radius:10px;padding:16px 18px;margin:0 0 12px;background:#ffffff;">' + inner + "</div>"; }
-    function title(n, t, tg) { return '<p style="' + F + 'font-size:16px;font-weight:bold;color:' + C.ink + ';margin:0 0 8px;">' + n + ". " + escapeHtml(t) + "&nbsp; " + tag(tg) + "</p>"; }
+    function title(n, t) { return '<p style="' + F + 'font-size:16px;font-weight:bold;color:' + C.ink + ';margin:0 0 8px;">' + n + ". " + escapeHtml(t) + "</p>"; }
     var shown = {};
     function proof(key) {
       var cs = key && CASE_STUDIES[key];
@@ -689,13 +712,13 @@ var AutomationCalc = (function () {
 
     html += h2("3 things you could automate");
     out.recommendations.forEach(function (x, i) {
-      html += card(title(i + 1, x.title, x.approach) + line("Fixes:", x.fixes) + line("How it works:", x.how) +
+      html += card(title(i + 1, x.title) + line("The problem:", x.problem) + line("The fix:", x.fix) +
         line("Why it fits you:", c.why[x.id]) + line("Good to know:", x.good_to_know) + proof(x.case_study));
     });
 
     html += h2("Where AI could help");
     out.ai_recommendations.forEach(function (x, i) {
-      html += card(title(i + 1, x.title, "AI") + line("What it does:", x.what) + line("Why it fits you:", c.why[x.id]) +
+      html += card(title(i + 1, x.title) + line("What it does:", x.what) + line("Why it fits you:", c.why[x.id]) +
         line("You stay in charge:", x.in_charge) + proof(x.case_study));
     });
 
@@ -719,7 +742,7 @@ var AutomationCalc = (function () {
         (r.annual_time_value !== null ? ", " + money(r.annual_time_value) + " of staff time a year" : "") + ".",
       r.basis, "", "What this means: " + c.summary, "", "3 things you could automate:"
     ];
-    out.recommendations.forEach(function (x, i) { L.push((i + 1) + ". " + x.title + " (" + x.approach + "): " + x.how + " Why it fits: " + c.why[x.id]); });
+    out.recommendations.forEach(function (x, i) { L.push((i + 1) + ". " + x.title + ": " + x.fix + " Why it fits: " + c.why[x.id]); });
     L.push("", "Where AI could help:");
     out.ai_recommendations.forEach(function (x, i) { L.push((i + 1) + ". " + x.title + ": " + x.what + " " + x.in_charge); });
     L.push("", "Your first step this week: " + c.first_step, "", "Figures are estimates based on your answers.");
@@ -729,7 +752,7 @@ var AutomationCalc = (function () {
   return {
     CONFIG: CONFIG, FREQUENCIES: FREQUENCIES, OPTIONS: OPTIONS, INDUSTRY_EXAMPLES: INDUSTRY_EXAMPLES, INDUSTRY_HINT: INDUSTRY_HINT,
     TAILOR: TAILOR, tailor: tailor, problemLabel: problemLabel,
-    LIBRARY: LIBRARY, AI_LIBRARY: AI_LIBRARY, CASE_STUDIES: CASE_STUDIES, AI_SCHEMA: AI_SCHEMA, AI_SYSTEM: AI_SYSTEM, BRANDS: BRANDS,
+    LIBRARY: LIBRARY, AI_LIBRARY: AI_LIBRARY, INDUSTRY_CONTEXT: INDUSTRY_CONTEXT, CASE_STUDIES: CASE_STUDIES, AI_SCHEMA: AI_SCHEMA, AI_SYSTEM: AI_SYSTEM, BRANDS: BRANDS,
     validate: validate, calculate: calculate, recommend: recommend, recommendAI: recommendAI, run: run,
     buildAIRequest: buildAIRequest, sanitiseAI: sanitiseAI,
     renderReportHtml: renderReportHtml, renderReportText: renderReportText,
