@@ -347,6 +347,7 @@
   var REVIEW_URL = "https://calendly.com/abdul-meliorixai/30min";
   var CONSENT_VERSION = "2026-10-03";
   var INSIGHT_TIMEOUT_MS = 12000;
+  var PDF_URL = "https://sanusi06abdul--meliorix-report-pdf-web.modal.run/render";
 
   var AC = window.AutomationCalc, O = AC.OPTIONS, esc = AC.escapeHtml;
   document.getElementById("year").textContent = new Date().getFullYear();
@@ -576,6 +577,7 @@
         clearTimeout(timer);
         if (state.insightFor !== sid) return;            // answers changed meanwhile
         // Re-check on the client too: AI text is only used if it passes the same fact-checks.
+        state.aiRaw = data && data.ai ? data.ai : null;
         var checked = data && data.ai ? AC.sanitiseAI(data.ai, state.out) : { ai: null, status: "fallback:none" };
         state.aiStatus = checked.status;
         state.out = AC.run(answers, checked.ai);
@@ -603,6 +605,7 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { errBox.textContent = "Please enter a valid email address."; return; }
     errBox.textContent = "";
     var contact = { email: email, name: document.getElementById("name").value.trim(), company: document.getElementById("company").value.trim() };
+    state.contact = { name: contact.name, company: contact.company };
     var payload = { submission_id: state.sid, submitted_at: new Date().toISOString(), answers: A(), contact: contact, report_requested: true,
       review_requested: document.getElementById("review_requested").checked, marketing_opt_in: document.getElementById("marketing_opt_in").checked,
       consent_version: CONSENT_VERSION, page_url: location.href.split("?")[0] };
@@ -623,29 +626,25 @@
     document.getElementById("pdf-row").hidden = false;
   }
 
-  // ---- PDF download (html2pdf loaded only when needed) -----------------------
-  var PDF_LIB = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
-  function loadScript(src) {
-    return new Promise(function (ok, fail) {
-      if (window.html2pdf) return ok();
-      var s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = fail; document.head.appendChild(s);
-    });
-  }
+  // ---- PDF download: same Chrome-rendered PDF as the email attachment ---------
+  // The service only takes answers (+ the AI text we received); it re-checks everything itself.
   document.getElementById("pdf-btn").addEventListener("click", function () {
     var btn = this, label = btn.innerHTML;
-    btn.disabled = true; btn.textContent = "Preparing PDF…";
+    btn.disabled = true; btn.textContent = "Preparing your PDF…";
     track("report_pdf_downloaded");
-    var name = (AC.labelOf("processes", state.out.answers.primary_process) || "plan").toLowerCase().replace(/[^a-z0-9]+/g, "-");
-    loadScript(PDF_LIB).then(function () {
-      return window.html2pdf().set({
-        margin: [8, 0, 10, 0], filename: "automation-ai-plan-" + name + ".pdf",
-        image: { type: "jpeg", quality: 0.95 }, html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, pagebreak: { mode: ["avoid-all"] }
-      }).from(document.getElementById("report")).save();
-    }).catch(function () {
-      window.print();   // fallback: the browser's own "Save as PDF"
-    }).then(function () { btn.disabled = false; btn.innerHTML = label; });
+    fetch(PDF_URL, { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ answers: A(), contact: state.contact || {}, ai: state.aiRaw || null }) })
+      .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.blob(); })
+      .then(function (blob) {
+        var url = URL.createObjectURL(blob), a = document.createElement("a");
+        a.href = url; a.download = "Meliorix-AI-Automation-Plan.pdf"; document.body.appendChild(a); a.click();
+        setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1000);
+      })
+      .catch(function () { alertBox("Sorry, the PDF didn't download. It's attached to your email instead."); })
+      .then(function () { btn.disabled = false; btn.innerHTML = label; });
   });
+  function alertBox(msg) { var d = document.getElementById("done"); d.innerHTML += "<br><br>" + esc(msg); }
+
   function done(contact, payload, mode) {
     var d = document.getElementById("done");
     d.innerHTML = mode === "demo" ? "<strong>Demo mode:</strong> nothing was sent. Your full plan is below."
@@ -667,7 +666,7 @@
     else if (act === "restart") { state.a = { duration_unit: "minutes" }; state.sid = uuid(); state.step = 0; resetResult(); show("assessment"); renderStep(); }
   });
   function resetResult() {
-    state.out = null; state.insightFor = null;
+    state.out = null; state.insightFor = null; state.aiRaw = null; state.contact = null;
     document.getElementById("request").hidden = false;
     document.getElementById("done").hidden = true;
     document.getElementById("report").hidden = true;
