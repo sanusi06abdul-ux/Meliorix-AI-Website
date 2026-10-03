@@ -14,7 +14,7 @@ var AutomationCalc = (function () {
   "use strict";
 
   var CONFIG = {
-    version: "2.6",
+    version: "2.7",
     weeksPerYear: 46,
     workingDaysPerWeek: 5,
     defaultOccurrencesPerDay: 3,
@@ -678,112 +678,202 @@ var AutomationCalc = (function () {
     return { ai: ai, status: issues.length ? "partial" : "ok", issues: issues };
   }
 
-  // ---------- report rendering (email-safe: tables + inline styles) ----------
+  // ---------- report rendering ----------
+  // Shared bits used by both designs.
+  var LOGO_PNG = "https://meliorixai.com/Images%20-%20for%20Website/files/m-caret-white-512.png";
+  var BOOK_TEXT = "Book a free 15-minute call and we'll look at this one task together, and whether it's worth automating. No obligation.";
+
+  function reportParts(out, contact) {
+    var a = out.answers, r = out.results, t = tailor(a.primary_process);
+    var low = CONFIG.scenarioLow, high = CONFIG.scenarioHigh;
+    var wLow = round(r.weekly_hours * low, 1), wHigh = round(r.weekly_hours * high, 1);
+    var savings = {
+      hours: "around " + fmt(wLow) + "–" + fmt(wHigh) + " hrs a week",
+      money: r.hourly_cost ? "save ~" + money(round(r.annual_hours * low * r.hourly_cost, -2)) + "–" + money(round(r.annual_hours * high * r.hourly_cost, -2)) + " a year" : ""
+    };
+    return {
+      title: labelOf("processes", a.primary_process),
+      hero: r.annual_time_value !== null
+        ? { big: money(r.annual_time_value), small: "of staff time a year spent on " + t.noun + (a.manual_level === "manual" ? " by hand" : "") }
+        : { big: fmt(r.annual_hours, 0) + " hrs", small: "a year spent on " + t.noun + (a.manual_level === "manual" ? " by hand" : "") },
+      savings: savings,
+      basis: "How we worked this out: " + r.basis.replace(/^Based on /, ""),
+      greeting: (contact.name ? "Hi " + contact.name + ", here's" : "Here's") + " your personalised report, based on what you told us about your team."
+    };
+  }
+
+  // Email + on-page design (tables and inline styles so Gmail/Outlook keep it).
   function renderReportHtml(out, contact, opts) {
     opts = opts || {}; contact = contact || {};
-    var a = out.answers, r = out.results, c = out.copy;
-    var C = { ink: "#111211", muted: "#5F5F59", line: "#E4E2DA", soft: "#F4F3EE", accent: "#0F6E56", tint: "#EAF4EF" };
-    var F = "font-family:Inter,Arial,Helvetica,sans-serif;";
-    function h2(t) { return '<h2 style="' + F + 'font-size:18px;line-height:1.3;color:' + C.ink + ';margin:30px 0 12px;">' + t + "</h2>"; }
-    function p(t, extra) { return '<p style="' + F + 'font-size:15px;line-height:1.6;color:' + C.ink + ';margin:0 0 10px;' + (extra || "") + '">' + t + "</p>"; }
-    function line(label, text) { return text ? p('<strong style="color:' + C.ink + ';">' + label + "</strong> " + escapeHtml(text), "font-size:14px;color:" + C.muted + ";margin:0 0 6px;") : ""; }
-    function stat(big, small) {
-      return '<td valign="top" style="padding:4px;"><div style="background:' + C.soft + ';border-radius:8px;padding:14px 12px;">' +
-        '<div style="' + F + 'font-size:24px;font-weight:bold;color:' + C.ink + ';">' + big + '</div><div style="' + F + 'font-size:12px;color:' + C.muted + ';margin-top:2px;">' + small + "</div></div></td>";
+    var c = out.copy, P = reportParts(out, contact);
+    var C = { ink: "#111211", muted: "#5F5F59", faint: "#8B8B85", line: "#E4E2DA", soft: "#F1F0EA", paper: "#FAFAF8", green: "#0F6E56", mint: "#5DCAA5" };
+    var F = "font-family:Inter,Arial,Helvetica,sans-serif;", G = "font-family:'Space Grotesk',Inter,Arial,Helvetica,sans-serif;";
+    var e = escapeHtml;
+    function T(inner, style) { return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;' + (style || "") + '">' + inner + "</table>"; }
+    function eyebrow(t, color) { return '<p style="' + F + 'font-size:11px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase;color:' + (color || C.green) + ';margin:0 0 8px;">' + t + "</p>"; }
+    function h2(t) { return '<h2 style="' + G + 'font-size:22px;line-height:1.25;font-weight:600;color:' + C.ink + ';margin:0 0 14px;">' + t + "</h2>"; }
+    function para(t, extra) { return '<p style="' + F + 'font-size:15px;line-height:1.6;color:' + C.ink + ';margin:0;' + (extra || "") + '">' + t + "</p>"; }
+    function btn(href, text, bg, fg) {
+      return '<a href="' + e(href) + '" style="' + F + 'display:inline-block;background:' + bg + ';color:' + fg + ';text-decoration:none;padding:12px 20px;border-radius:8px;font-weight:bold;font-size:14px;">' + text + "</a>";
     }
-    function card(inner) { return '<div style="border:1px solid ' + C.line + ';border-radius:10px;padding:16px 18px;margin:0 0 12px;background:#ffffff;">' + inner + "</div>"; }
-    function title(n, t) { return '<p style="' + F + 'font-size:16px;font-weight:bold;color:' + C.ink + ';margin:0 0 8px;">' + n + ". " + escapeHtml(t) + "</p>"; }
-    var shown = {};
-    function proof(key) {
-      var cs = key && CASE_STUDIES[key];
-      if (!cs || shown[key]) return "";
-      shown[key] = true;
-      return '<p style="' + F + 'font-size:13px;line-height:1.5;color:' + C.muted + ';margin:8px 0 0;padding:8px 12px;border-left:3px solid ' + C.accent + ';background:' + C.soft + ';">' +
-        "<strong>Real example:</strong> " + escapeHtml(cs.line) + "</p>";
+    function num(n, bg) {
+      return '<td width="34" valign="middle" style="padding:0 10px 0 0;"><div style="' + F + 'width:26px;height:26px;line-height:26px;border-radius:13px;background:' + bg + ';color:#ffffff;font-size:13px;font-weight:bold;text-align:center;">' + n + "</div></td>";
     }
-
-    function box(inner) { return '<div style="background:' + C.tint + ';border-radius:10px;padding:14px 18px;">' + inner + "</div>"; }
-    function button(href, text) {
-      return '<p style="margin:14px 0 4px;"><a href="' + escapeHtml(href) + '" style="' + F + 'display:inline-block;background:' + C.accent + ';color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;font-weight:bold;font-size:15px;">' + text + "</a></p>";
+    function row(label, text) {
+      return text ? '<tr><td valign="top" width="96" style="' + F + 'padding:0 12px 10px 0;font-size:13px;font-weight:bold;color:' + C.green + ';">' + label + '</td><td valign="top" style="' + F + 'padding:0 0 10px;font-size:14px;line-height:1.55;color:' + C.ink + ';">' + e(text) + "</td></tr>" : "";
     }
-    if (opts.pdf) {
-      // PDF is made by Google Docs, which keeps table/cell styling but turns div/p backgrounds into
-      // text highlights, so every shaded or bordered block is a one-cell table here.
-      var cellOnly = function (style, inner) { return '<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 12px;"><tr><td style="' + style + '">' + inner + "</td></tr></table>"; };
-      stat = function (big, small) {
-        return '<td valign="top" style="border:3px solid #ffffff;background:' + C.soft + ';padding:12px 14px;width:33%;">' +
-          '<p style="' + F + 'font-size:22px;font-weight:bold;color:' + C.ink + ';margin:0;">' + big + '</p><p style="' + F + 'font-size:11px;color:' + C.muted + ';margin:2px 0 0;">' + small + "</p></td>";
-      };
-      card = function (inner) { return cellOnly("border:1px solid " + C.line + ";padding:12px 16px;", inner); };
-      box = function (inner) { return cellOnly("border:1px solid " + C.tint + ";background:" + C.tint + ";padding:12px 16px;", inner); };
-      proof = function (key) {
-        var cs = key && CASE_STUDIES[key];
-        if (!cs || shown[key]) return "";
-        shown[key] = true;
-        return cellOnly("border:1px solid " + C.soft + ";border-left:3px solid " + C.accent + ";background:" + C.soft + ";padding:8px 12px;",
-          '<p style="' + F + 'font-size:12px;line-height:1.5;color:' + C.muted + ';margin:0;"><strong>Real example:</strong> ' + escapeHtml(cs.line) + "</p>");
-      };
-      button = function (href, text) {
-        return cellOnly("border:1px solid " + C.accent + ";background:" + C.accent + ";padding:10px 16px;",
-          '<p style="' + F + 'margin:0;font-size:14px;font-weight:bold;"><a href="' + escapeHtml(href) + '" style="color:#ffffff;text-decoration:none;">' + text + "</a></p>");
-      };
-    }
+    function card(inner) { return T('<tr><td style="background:#ffffff;border:1px solid ' + C.line + ';border-radius:14px;padding:18px 20px;">' + inner + "</td></tr>", "margin:0 0 12px;"); }
+    var review = opts.reviewUrl;
 
-    var html = '<div style="max-width:620px;margin:0 auto;background:#ffffff;padding:26px 24px;' +
-      (opts.email ? 'border-radius:0 0 16px 16px;' : '') + '">';
-    if (opts.pdf) html += '<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:0 0 18px;"><tr><td style="border:1px solid ' + C.accent + ';background:' + C.accent + ';padding:14px 18px;">' +
-      '<p style="' + F + 'margin:0;font-size:18px;font-weight:bold;color:#ffffff;">Meliorix AI</p><p style="' + F + 'margin:2px 0 0;font-size:11px;color:#D7EDE3;">Your Automation &amp; AI Report · meliorixai.com</p></td></tr></table>';
-    else html += '<p style="' + F + 'font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:' + C.accent + ';margin:0 0 6px;font-weight:bold;">Your Automation &amp; AI Report</p>';
-    html += '<h1 style="' + F + 'font-size:24px;line-height:1.25;color:' + C.ink + ';margin:0 0 6px;">' +
-      (contact.company ? escapeHtml(contact.company) + ": " : "") + escapeHtml(labelOf("processes", a.primary_process)) + "</h1>";
-    if (opts.email) html += p((contact.name ? "Hi " + escapeHtml(contact.name) + ", here" : "Here") + "'s your personalised report. It takes about 3 minutes to read.", "color:" + C.muted + ";");
+    var body = "";
+    // Cost section
+    body += eyebrow("What this task costs you");
+    body += T('<tr><td style="background:' + C.green + ';border-radius:14px;padding:20px 22px;">' +
+      '<p style="' + G + 'font-size:38px;line-height:1.1;font-weight:bold;color:#ffffff;margin:0;">' + e(P.hero.big) + "</p>" +
+      '<p style="' + F + 'font-size:14px;color:#D7EDE3;margin:6px 0 0;">' + e(P.hero.small) + "</p></td></tr>", "margin:0 0 10px;");
+    body += T('<tr><td width="50%" style="padding:0 5px 0 0;"><div style="background:' + C.soft + ';border-radius:14px;padding:16px 18px;">' +
+        '<p style="' + G + 'font-size:24px;font-weight:bold;color:' + C.ink + ';margin:0;">' + fmt(out.results.weekly_hours) + ' hrs</p><p style="' + F + 'font-size:13px;color:' + C.muted + ';margin:2px 0 0;">every week</p></div></td>' +
+      '<td width="50%" style="padding:0 0 0 5px;"><div style="background:' + C.soft + ';border-radius:14px;padding:16px 18px;">' +
+        '<p style="' + G + 'font-size:24px;font-weight:bold;color:' + C.ink + ';margin:0;">' + fmt(out.results.annual_hours, 0) + ' hrs</p><p style="' + F + 'font-size:13px;color:' + C.muted + ';margin:2px 0 0;">every year</p></div></td></tr>', "margin:0 0 10px;");
+    body += T('<tr><td style="border:1px dashed ' + C.green + ';border-radius:12px;padding:12px 16px;">' + T('<tr>' +
+      '<td style="' + F + 'font-size:14px;color:' + C.ink + ';"><strong>With automation:</strong> ' + e(P.savings.hours) + "</td>" +
+      (P.savings.money ? '<td align="right" style="' + F + 'font-size:14px;font-weight:bold;color:' + C.green + ';white-space:nowrap;">' + e(P.savings.money) + "</td>" : "") +
+      "</tr>") + "</td></tr>", "margin:0 0 8px;");
+    body += '<p style="' + F + 'font-size:12px;color:' + C.faint + ';margin:0 0 26px;">' + e(P.basis) + "</p>";
 
-    html += h2("Your results at a glance");
-    html += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
-      stat(fmt(r.weekly_hours) + " hrs", "a week on " + escapeHtml(tailor(a.primary_process).noun)) +
-      stat(fmt(r.annual_hours, 0) + " hrs", "a year") +
-      (r.annual_time_value !== null ? stat(money(r.annual_time_value), "of staff time a year") : "") + "</tr></table>";
-    html += p(escapeHtml(r.basis), "font-size:12px;color:" + C.muted + ";margin-top:8px;");
+    // Meaning + soft CTA
+    body += h2("What this means for you") + para(e(c.summary), "margin:0 0 18px;");
+    if (review) body += T('<tr><td style="background:' + C.soft + ';border-radius:14px;padding:16px 18px;">' + T('<tr>' +
+      '<td style="' + G + 'font-size:16px;font-weight:600;color:' + C.ink + ';padding-right:12px;">Want to see how much of this you could get back?</td>' +
+      '<td align="right" style="white-space:nowrap;">' + btn(review, "Book a free 15-min call", C.green, "#ffffff") + "</td></tr>") + "</td></tr>", "margin:0 0 30px;");
 
-    html += h2("What this means for you");
-    html += p(escapeHtml(c.summary));
-
-    html += h2("3 things you could automate");
+    // Part 1
+    body += eyebrow("Part 1") + h2("3 things you could automate");
     out.recommendations.forEach(function (x, i) {
-      html += card(title(i + 1, x.title) + line("The problem:", x.problem) + line("The fix:", x.fix) +
-        line("Why it fits you:", c.why[x.id]) + line("Good to know:", x.good_to_know));
+      body += card(T('<tr>' + num(i + 1, C.green) + '<td style="' + G + 'font-size:17px;font-weight:600;color:' + C.ink + ';">' + e(x.title) + "</td></tr>", "margin:0 0 14px;") +
+        T(row("The problem", x.problem) + row("The fix", x.fix) + row("Why you", c.why[x.id])) +
+        (x.good_to_know ? T('<tr><td style="background:' + C.soft + ';border-radius:10px;padding:10px 14px;' + F + 'font-size:13px;line-height:1.5;color:' + C.ink + ';"><strong>Good to know:</strong> ' + e(x.good_to_know) + "</td></tr>", "margin:4px 0 0;") : ""));
     });
 
-    html += h2("Where AI could help");
+    // Part 2
+    body += '<div style="height:18px;line-height:18px;">&nbsp;</div>' + eyebrow("Part 2") + h2("Where AI could help");
     out.ai_recommendations.forEach(function (x, i) {
-      html += card(title(i + 1, x.title) + line("What it does:", x.what) + line("Why it fits you:", c.why[x.id]) +
-        line("You stay in charge:", x.in_charge));
+      body += card(T('<tr>' + num(i + 1, C.ink) + '<td style="' + G + 'font-size:17px;font-weight:600;color:' + C.ink + ';">' + e(x.title) + "</td></tr>", "margin:0 0 12px;") +
+        para(e(x.what), "font-size:14px;margin:0 0 10px;") +
+        para("<strong>Why it fits you:</strong> " + e(c.why[x.id]), "font-size:14px;margin:0 0 10px;") +
+        para("<strong>You stay in charge:</strong> " + e(x.in_charge), "font-size:14px;color:" + C.green + ";"));
     });
 
-    html += h2("Your first step this week");
-    html += box(p(escapeHtml(c.first_step), "margin:0;"));
+    // First step
+    body += T('<tr><td style="background:' + C.soft + ';border-radius:14px;padding:18px 20px;">' + eyebrow("Your first step this week") +
+      '<p style="' + G + 'font-size:17px;line-height:1.45;font-weight:500;color:' + C.ink + ';margin:0;">' + e(c.first_step) + "</p></td></tr>", "margin:12px 0 14px;");
 
-    html += h2("Want a second pair of eyes?");
-    html += p("Book a free 15-minute call and we'll look at this one task together, and whether it's worth automating. No obligation.");
-    if (opts.reviewUrl) html += button(opts.reviewUrl, "Book my free 15-minute review");
+    // Dark CTA
+    if (review) body += T('<tr><td align="center" style="background:' + C.ink + ';border-radius:16px;padding:28px 24px;">' +
+      '<p style="' + G + 'font-size:24px;font-weight:600;color:#ffffff;margin:0 0 8px;">Want a second pair of eyes?</p>' +
+      '<p style="' + F + 'font-size:14px;line-height:1.55;color:#C9C8C2;margin:0 0 18px;">' + BOOK_TEXT + "</p>" +
+      btn(review, "Book my free 15-minute review", C.mint, C.ink) + "</td></tr>", "margin:0 0 6px;");
 
-    if (opts.email || opts.pdf) html += '<p style="' + F + 'font-size:12px;color:' + C.muted + ';margin:26px 0 0;border-top:1px solid ' + C.line + ';padding-top:12px;">Figures are estimates based on your answers.</p>';
-    html += "</div>";
-    if (!opts.email) return html;
+    if (opts.email) body += '<p style="' + F + 'font-size:12px;color:' + C.faint + ';margin:18px 0 0;">Figures are estimates based on your answers.</p>';
 
-    // Email frame: soft green surround, wordmark, rounded card with a green accent strip, small footer.
-    // Tables + bgcolor so Gmail/Outlook keep the look (they ignore <body> styles).
-    var wash = "#EAF2EE", edge = "#D5E5DC";
-    return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + wash + '" style="background:' + wash + ';">' +
-      '<tr><td align="center" style="padding:28px 12px 32px;">' +
-      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;">' +
-      '<tr><td align="center" style="' + F + 'padding:0 0 16px;font-size:18px;font-weight:bold;color:' + C.accent + ';letter-spacing:-.01em;">Meliorix AI</td></tr>' +
-      '<tr><td style="background:#ffffff;border:1px solid ' + edge + ';border-radius:16px;overflow:hidden;">' +
-      '<div style="height:5px;background:' + C.accent + ';border-radius:16px 16px 0 0;"></div>' + html + "</td></tr>" +
-      '<tr><td align="center" style="' + F + 'padding:18px 8px 0;font-size:12px;line-height:1.6;color:' + C.muted + ';">' +
-      'Meliorix AI · Custom automation for small and medium-sized businesses<br>' +
-      '<a href="https://meliorixai.com" style="color:' + C.accent + ';text-decoration:none;">meliorixai.com</a></td></tr>' +
-      "</table></td></tr></table>";
+    // Dark header
+    var header = '<tr><td style="background:' + C.ink + ';padding:22px 26px 26px;' + (opts.email ? "border-radius:16px 16px 0 0;" : "") + '">' +
+      T('<tr><td style="' + F + 'font-size:15px;font-weight:bold;color:#ffffff;"><img src="' + LOGO_PNG + '" width="22" height="20" alt="" style="vertical-align:-4px;margin-right:8px;border:0;">Meliorix AI</td>' +
+        '<td align="right" style="' + F + 'font-size:12px;color:#B8B7B1;">3 min read</td></tr>', "margin:0 0 22px;") +
+      eyebrow("Your Automation &amp; AI Report", C.mint) +
+      '<h1 style="' + G + 'font-size:30px;line-height:1.15;font-weight:bold;color:#ffffff;margin:0 0 10px;">' + e(P.title) + "</h1>" +
+      '<p style="' + F + 'font-size:14px;line-height:1.55;color:#C9C8C2;margin:0;">' + e(P.greeting) + "</p></td></tr>";
+    var main = '<tr><td style="background:' + C.paper + ';padding:26px 26px 28px;' + (opts.email ? "border-radius:0 0 16px 16px;" : "") + '">' + body + "</td></tr>";
+    var report = T(header + main, "max-width:640px;margin:0 auto;");
+    if (!opts.email) return report;
+
+    // Email frame + our footer (no unsubscribe: this is a requested, one-off report).
+    return T('<tr><td align="center" style="background:' + C.soft + ';padding:24px 10px 28px;">' + report +
+      '<p style="' + F + 'font-size:12px;line-height:1.6;color:' + C.muted + ';margin:16px 0 0;text-align:center;">Meliorix AI · Custom automation for small and medium-sized businesses<br>' +
+      '<a href="https://meliorixai.com" style="color:' + C.green + ';text-decoration:none;">meliorixai.com</a></p></td></tr>', "background:" + C.soft + ";");
+  }
+
+  // A4 PDF design (rendered by Chrome on the Modal PDF service; page footers come from the print template).
+  function renderReportPdfHtml(out, contact, opts) {
+    opts = opts || {}; contact = contact || {};
+    var c = out.copy, P = reportParts(out, contact), e = escapeHtml, review = opts.reviewUrl || "https://meliorixai.com";
+    var shield = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>';
+    var css = [
+      "@page{size:A4;margin:0 0 16mm 0}",
+      "*{box-sizing:border-box;margin:0;padding:0}",
+      "body{font-family:Inter,Arial,sans-serif;color:#111211;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:12.5px;line-height:1.6}",
+      "h1,h2,h3,.g{font-family:'Space Grotesk',Inter,Arial,sans-serif}",
+      ".hd{background:#111211;color:#fff;padding:20mm 18mm 13mm}",
+      ".top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14mm}",
+      ".brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}.brand img{width:24px;height:22px}",
+      ".meta{color:#B8B7B1;font-size:11px}",
+      ".eb{font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#0F6E56;margin-bottom:8px}",
+      ".hd .eb{color:#5DCAA5}",
+      "h1{font-size:34px;line-height:1.1;margin-bottom:10px}",
+      ".hd p{color:#C9C8C2;font-size:13px;max-width:125mm}",
+      ".sec{padding:11mm 18mm 0}",
+      ".hero{background:#0F6E56;color:#fff;border-radius:12px;padding:20px 26px;margin-bottom:9px}",
+      ".hero .big{font-size:40px;font-weight:700;line-height:1.1}.hero .sm{color:#D7EDE3;font-size:12.5px;margin-top:4px}",
+      ".tiles{display:flex;gap:9px;margin-bottom:9px}.tile{flex:1;background:#F1F0EA;border-radius:12px;padding:15px 22px}",
+      ".tile b{display:block;font-size:22px}.tile span{color:#5F5F59;font-size:11.5px}",
+      ".save{border:1.5px dashed #0F6E56;border-radius:12px;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12.5px}",
+      ".save .m{color:#0F6E56;font-weight:700;font-size:13px}",
+      ".basis{color:#8B8B85;font-size:10px;margin-bottom:12mm}",
+      "h2{font-size:21px;line-height:1.2;margin-bottom:10px}",
+      ".lead{font-size:13px;margin-bottom:9mm}",
+      ".cta{background:#F1F0EA;border-radius:12px;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:14px}",
+      ".cta .q{font-size:15px;font-weight:600}",
+      ".btn{display:inline-block;background:#0F6E56;color:#fff;text-decoration:none;font-weight:600;border-radius:8px;padding:10px 18px;font-size:12px;white-space:nowrap}",
+      ".part{break-before:page;padding-top:14mm}",
+      ".card{border:1px solid #E4E2DA;border-radius:12px;padding:16px 20px;margin-bottom:9px;break-inside:avoid;background:#fff}",
+      ".ct{display:flex;align-items:center;gap:10px;margin-bottom:10px}.ct h3{font-size:16px;font-weight:600}",
+      ".n{width:24px;height:24px;border-radius:12px;background:#0F6E56;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}",
+      ".n.k{background:#111211}",
+      ".r{display:flex;gap:12px;margin-bottom:7px;font-size:12px}.r .l{width:72px;flex:none;color:#0F6E56;font-weight:600;font-size:11px;padding-top:1px}",
+      ".gtk{background:#F1F0EA;border-radius:8px;padding:9px 14px;font-size:11.5px;margin-top:6px}",
+      ".ai p{font-size:12px;margin-bottom:8px}.charge{display:flex;gap:8px;align-items:flex-start;color:#0F6E56;font-size:12px}.charge svg{flex:none;margin-top:3px}",
+      ".first{background:#F1F0EA;border-radius:12px;padding:16px 22px;margin:14px 0 12px;break-inside:avoid}",
+      ".first p{font-size:16px;font-weight:500;line-height:1.45}",
+      ".dark{background:#111211;color:#fff;border-radius:14px;padding:26px 30px;text-align:center;break-inside:avoid}",
+      ".dark h2{color:#fff;font-size:24px;margin-bottom:8px}.dark p{color:#C9C8C2;font-size:12.5px;max-width:120mm;margin:0 auto 16px}",
+      ".dark .btn{background:#5DCAA5;color:#111211;padding:12px 26px;font-size:13px}",
+      ".fine{color:#8B8B85;font-size:9.5px;margin-top:10px}"
+    ].join("");
+
+    var h = '<!doctype html><html><head><meta charset="utf-8">' +
+      '<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=block" rel="stylesheet">' +
+      "<style>" + css + "</style></head><body>";
+    h += '<div class="hd"><div class="top"><div class="brand"><img src="' + LOGO_PNG + '" alt="">Meliorix AI</div><div class="meta">' +
+      (contact.name ? "Prepared for " + e(contact.name) + " · " : "") + "3 min read</div></div>" +
+      '<div class="eb">Your Automation &amp; AI Report</div><h1>' + e(P.title) + "</h1><p>" + e(P.greeting) + "</p></div>";
+    h += '<div class="sec"><div class="eb">What this task costs you</div>' +
+      '<div class="hero"><div class="big g">' + e(P.hero.big) + '</div><div class="sm">' + e(P.hero.small) + "</div></div>" +
+      '<div class="tiles"><div class="tile"><b class="g">' + fmt(out.results.weekly_hours) + ' hrs</b><span>every week</span></div><div class="tile"><b class="g">' + fmt(out.results.annual_hours, 0) + ' hrs</b><span>every year</span></div></div>' +
+      '<div class="save"><div><strong>With automation:</strong> ' + e(P.savings.hours) + "</div>" + (P.savings.money ? '<div class="m g">' + e(P.savings.money) + "</div>" : "") + "</div>" +
+      '<div class="basis">' + e(P.basis) + "</div>" +
+      "<h2>What this means for you</h2><p class=\"lead\">" + e(c.summary) + "</p>" +
+      '<div class="cta"><div class="q g">Want to see how much of this you could get back?</div><a class="btn" href="' + e(review) + '">Book a free 15-min call</a></div></div>';
+
+    h += '<div class="sec part"><div class="eb">Part 1</div><h2>3 things you could automate</h2>';
+    out.recommendations.forEach(function (x, i) {
+      h += '<div class="card"><div class="ct"><div class="n">' + (i + 1) + "</div><h3>" + e(x.title) + "</h3></div>" +
+        '<div class="r"><div class="l">The problem</div><div>' + e(x.problem) + "</div></div>" +
+        '<div class="r"><div class="l">The fix</div><div>' + e(x.fix) + "</div></div>" +
+        '<div class="r"><div class="l">Why you</div><div>' + e(c.why[x.id]) + "</div></div>" +
+        (x.good_to_know ? '<div class="gtk"><strong>Good to know:</strong> ' + e(x.good_to_know) + "</div>" : "") + "</div>";
+    });
+    h += "</div>";
+
+    h += '<div class="sec part"><div class="eb">Part 2</div><h2>Where AI could help</h2>';
+    out.ai_recommendations.forEach(function (x, i) {
+      h += '<div class="card ai"><div class="ct"><div class="n k">' + (i + 1) + "</div><h3>" + e(x.title) + "</h3></div>" +
+        "<p>" + e(x.what) + "</p><p><strong>Why it fits you:</strong> " + e(c.why[x.id]) + "</p>" +
+        '<div class="charge">' + shield + "<div><strong>You stay in charge:</strong> " + e(x.in_charge) + "</div></div></div>";
+    });
+    h += '<div class="first"><div class="eb">Your first step this week</div><p class="g">' + e(c.first_step) + "</p></div>" +
+      '<div class="dark"><h2>Want a second pair of eyes?</h2><p>' + BOOK_TEXT + '</p><a class="btn" href="' + e(review) + '">Book my free 15-minute review</a></div>' +
+      '<p class="fine">Figures are estimates based on your answers.</p></div>';
+    return h + "</body></html>";
   }
 
   function renderReportText(out) {
@@ -807,7 +897,7 @@ var AutomationCalc = (function () {
     LIBRARY: LIBRARY, AI_LIBRARY: AI_LIBRARY, INDUSTRY_CONTEXT: INDUSTRY_CONTEXT, CASE_STUDIES: CASE_STUDIES, AI_SCHEMA: AI_SCHEMA, AI_SYSTEM: AI_SYSTEM, BRANDS: BRANDS,
     validate: validate, calculate: calculate, recommend: recommend, recommendAI: recommendAI, run: run,
     buildAIRequest: buildAIRequest, sanitiseAI: sanitiseAI,
-    renderReportHtml: renderReportHtml, renderReportText: renderReportText,
+    renderReportHtml: renderReportHtml, renderReportPdfHtml: renderReportPdfHtml, renderReportText: renderReportText,
     labelOf: labelOf, fmt: fmt, money: money, escapeHtml: escapeHtml
   };
 })();
