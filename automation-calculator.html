@@ -621,7 +621,7 @@
   });
   function showReport(contact) {
     var rep = document.getElementById("report");
-    rep.innerHTML = AC.renderReportHtml(state.out, contact, { reviewUrl: REVIEW_URL, submissionId: state.sid });
+    rep.innerHTML = "<style>" + AC.EMAIL_CSS + "</style>" + AC.renderReportHtml(state.out, contact, { reviewUrl: REVIEW_URL, submissionId: state.sid });
     rep.hidden = false;
     document.getElementById("pdf-row").hidden = false;
   }

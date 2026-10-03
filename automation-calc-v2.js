@@ -14,7 +14,7 @@ var AutomationCalc = (function () {
   "use strict";
 
   var CONFIG = {
-    version: "2.7",
+    version: "2.9",
     weeksPerYear: 46,
     workingDaysPerWeek: 5,
     defaultOccurrencesPerDay: 3,
@@ -720,32 +720,32 @@ var AutomationCalc = (function () {
       return '<td width="34" valign="middle" style="padding:0 10px 0 0;"><div style="' + F + 'width:26px;height:26px;line-height:26px;border-radius:13px;background:' + bg + ';color:#ffffff;font-size:13px;font-weight:bold;text-align:center;">' + n + "</div></td>";
     }
     function row(label, text) {
-      return text ? '<tr><td valign="top" width="96" style="' + F + 'padding:0 12px 10px 0;font-size:13px;font-weight:bold;color:' + C.green + ';">' + label + '</td><td valign="top" style="' + F + 'padding:0 0 10px;font-size:14px;line-height:1.55;color:' + C.ink + ';">' + e(text) + "</td></tr>" : "";
+      return text ? '<tr><td class="m-lbl" valign="top" width="96" style="' + F + 'padding:0 12px 10px 0;font-size:13px;font-weight:bold;color:' + C.green + ';">' + label + '</td><td class="m-val" valign="top" style="' + F + 'padding:0 0 10px;font-size:14px;line-height:1.55;color:' + C.ink + ';">' + e(text) + "</td></tr>" : "";
     }
-    function card(inner) { return T('<tr><td style="background:#ffffff;border:1px solid ' + C.line + ';border-radius:14px;padding:18px 20px;">' + inner + "</td></tr>", "margin:0 0 12px;"); }
+    function card(inner) { return T('<tr><td class="m-card" style="background:#ffffff;border:1px solid ' + C.line + ';border-radius:14px;padding:18px 20px;">' + inner + "</td></tr>", "margin:0 0 12px;"); }
     var review = opts.reviewUrl;
 
     var body = "";
     // Cost section
     body += eyebrow("What this task costs you");
     body += T('<tr><td style="background:' + C.green + ';border-radius:14px;padding:20px 22px;">' +
-      '<p style="' + G + 'font-size:38px;line-height:1.1;font-weight:bold;color:#ffffff;margin:0;">' + e(P.hero.big) + "</p>" +
+      '<p class="m-big" style="' + G + 'font-size:38px;line-height:1.1;font-weight:bold;color:#ffffff;margin:0;">' + e(P.hero.big) + "</p>" +
       '<p style="' + F + 'font-size:14px;color:#D7EDE3;margin:6px 0 0;">' + e(P.hero.small) + "</p></td></tr>", "margin:0 0 10px;");
     body += T('<tr><td width="50%" style="padding:0 5px 0 0;"><div style="background:' + C.soft + ';border-radius:14px;padding:16px 18px;">' +
         '<p style="' + G + 'font-size:24px;font-weight:bold;color:' + C.ink + ';margin:0;">' + fmt(out.results.weekly_hours) + ' hrs</p><p style="' + F + 'font-size:13px;color:' + C.muted + ';margin:2px 0 0;">every week</p></div></td>' +
       '<td width="50%" style="padding:0 0 0 5px;"><div style="background:' + C.soft + ';border-radius:14px;padding:16px 18px;">' +
         '<p style="' + G + 'font-size:24px;font-weight:bold;color:' + C.ink + ';margin:0;">' + fmt(out.results.annual_hours, 0) + ' hrs</p><p style="' + F + 'font-size:13px;color:' + C.muted + ';margin:2px 0 0;">every year</p></div></td></tr>', "margin:0 0 10px;");
     body += T('<tr><td style="border:1px dashed ' + C.green + ';border-radius:12px;padding:12px 16px;">' + T('<tr>' +
-      '<td style="' + F + 'font-size:14px;color:' + C.ink + ';"><strong>With automation:</strong> ' + e(P.savings.hours) + "</td>" +
-      (P.savings.money ? '<td align="right" style="' + F + 'font-size:14px;font-weight:bold;color:' + C.green + ';white-space:nowrap;">' + e(P.savings.money) + "</td>" : "") +
+      '<td class="m-blk" style="' + F + 'font-size:14px;color:' + C.ink + ';"><strong>With automation:</strong> ' + e(P.savings.hours) + "</td>" +
+      (P.savings.money ? '<td class="m-blk m-mt" align="right" style="' + F + 'font-size:14px;font-weight:bold;color:' + C.green + ';white-space:nowrap;">' + e(P.savings.money) + "</td>" : "") +
       "</tr>") + "</td></tr>", "margin:0 0 8px;");
     body += '<p style="' + F + 'font-size:12px;color:' + C.faint + ';margin:0 0 26px;">' + e(P.basis) + "</p>";
 
     // Meaning + soft CTA
     body += h2("What this means for you") + para(e(c.summary), "margin:0 0 18px;");
     if (review) body += T('<tr><td style="background:' + C.soft + ';border-radius:14px;padding:16px 18px;">' + T('<tr>' +
-      '<td style="' + G + 'font-size:16px;font-weight:600;color:' + C.ink + ';padding-right:12px;">Want to see how much of this you could get back?</td>' +
-      '<td align="right" style="white-space:nowrap;">' + btn(review, "Book a free 15-min call", C.green, "#ffffff") + "</td></tr>") + "</td></tr>", "margin:0 0 30px;");
+      '<td class="m-blk" style="' + G + 'font-size:16px;font-weight:600;color:' + C.ink + ';padding-right:12px;">Want to see how much of this you could get back?</td>' +
+      '<td class="m-blk m-mt" align="right" style="white-space:nowrap;">' + btn(review, "Book a free 15-min call", C.green, "#ffffff") + "</td></tr>") + "</td></tr>", "margin:0 0 30px;");
 
     // Part 1
     body += eyebrow("Part 1") + h2("3 things you could automate");
@@ -769,7 +769,7 @@ var AutomationCalc = (function () {
       '<p style="' + G + 'font-size:17px;line-height:1.45;font-weight:500;color:' + C.ink + ';margin:0;">' + e(c.first_step) + "</p></td></tr>", "margin:12px 0 14px;");
 
     // Dark CTA
-    if (review) body += T('<tr><td align="center" style="background:' + C.ink + ';border-radius:16px;padding:28px 24px;">' +
+    if (review) body += T('<tr><td class="m-cta" align="center" style="background:' + C.ink + ';border-radius:16px;padding:28px 24px;">' +
       '<p style="' + G + 'font-size:24px;font-weight:600;color:#ffffff;margin:0 0 8px;">Want a second pair of eyes?</p>' +
       '<p style="' + F + 'font-size:14px;line-height:1.55;color:#C9C8C2;margin:0 0 18px;">' + BOOK_TEXT + "</p>" +
       btn(review, "Book my free 15-minute review", C.mint, C.ink) + "</td></tr>", "margin:0 0 6px;");
@@ -777,20 +777,40 @@ var AutomationCalc = (function () {
     if (opts.email) body += '<p style="' + F + 'font-size:12px;color:' + C.faint + ';margin:18px 0 0;">Figures are estimates based on your answers.</p>';
 
     // Dark header
-    var header = '<tr><td style="background:' + C.ink + ';padding:22px 26px 26px;' + (opts.email ? "border-radius:16px 16px 0 0;" : "") + '">' +
-      T('<tr><td style="' + F + 'font-size:15px;font-weight:bold;color:#ffffff;"><img src="' + LOGO_PNG + '" width="22" height="20" alt="" style="vertical-align:-4px;margin-right:8px;border:0;">Meliorix AI</td>' +
-        '<td align="right" style="' + F + 'font-size:12px;color:#B8B7B1;">3 min read</td></tr>', "margin:0 0 22px;") +
+    var header = '<tr><td class="m-hd" style="background:' + C.ink + ';padding:22px 26px 26px;' + (opts.email ? "border-radius:16px 16px 0 0;" : "") + '">' +
+      T('<tr><td style="' + F + 'font-size:15px;font-weight:bold;color:#ffffff;white-space:nowrap;"><img src="' + LOGO_PNG + '" width="22" height="20" alt="" style="vertical-align:-4px;margin-right:8px;border:0;">Meliorix AI</td>' +
+        '<td align="right" style="' + F + 'font-size:12px;color:#B8B7B1;white-space:nowrap;padding-left:24px;">3 min read</td></tr>', "margin:0 0 22px;") +
       eyebrow("Your Automation &amp; AI Report", C.mint) +
-      '<h1 style="' + G + 'font-size:30px;line-height:1.15;font-weight:bold;color:#ffffff;margin:0 0 10px;">' + e(P.title) + "</h1>" +
+      '<h1 class="m-h1" style="' + G + 'font-size:30px;line-height:1.15;font-weight:bold;color:#ffffff;margin:0 0 10px;">' + e(P.title) + "</h1>" +
       '<p style="' + F + 'font-size:14px;line-height:1.55;color:#C9C8C2;margin:0;">' + e(P.greeting) + "</p></td></tr>";
-    var main = '<tr><td style="background:' + C.paper + ';padding:26px 26px 28px;' + (opts.email ? "border-radius:0 0 16px 16px;" : "") + '">' + body + "</td></tr>";
+    var main = '<tr><td class="m-pad" style="background:' + C.paper + ';padding:26px 26px 28px;' + (opts.email ? "border-radius:0 0 16px 16px;" : "") + '">' + body + "</td></tr>";
     var report = T(header + main, "max-width:640px;margin:0 auto;");
     if (!opts.email) return report;
+    // Thin light-grey border (on a wrapper cell, so it never makes the card wider than the screen).
+    report = T('<tr><td style="border:1px solid ' + C.line + ';border-radius:16px;">' + report + "</td></tr>", "max-width:642px;margin:0 auto;");
 
     // Email frame + our footer (no unsubscribe: this is a requested, one-off report).
-    return T('<tr><td align="center" style="background:' + C.soft + ';padding:24px 10px 28px;">' + report +
+    return T('<tr><td class="m-frame" align="center" bgcolor="#FFFFFF" style="background:#FFFFFF;padding:16px 8px 24px;">' + report +
       '<p style="' + F + 'font-size:12px;line-height:1.6;color:' + C.muted + ';margin:16px 0 0;text-align:center;">Meliorix AI · Custom automation for small and medium-sized businesses<br>' +
-      '<a href="https://meliorixai.com" style="color:' + C.green + ';text-decoration:none;">meliorixai.com</a></p></td></tr>', "background:" + C.soft + ";");
+      '<a href="https://meliorixai.com" style="color:' + C.green + ';text-decoration:none;">meliorixai.com</a></p></td></tr>', "background:#FFFFFF;").replace("<table ", '<table bgcolor="#FFFFFF" ');
+  }
+
+
+  // Phone styles for the email/on-page report (Gmail, Apple Mail and most phone apps honour these).
+  var EMAIL_CSS = "@media only screen and (max-width:480px){" +
+    ".m-frame{padding:8px 4px 18px !important}" +
+    ".m-hd{padding:18px 18px 22px !important}.m-pad{padding:20px 14px 22px !important}" +
+    ".m-h1{font-size:25px !important}.m-big{font-size:32px !important}" +
+    ".m-card{padding:16px 14px !important}.m-cta{padding:22px 16px !important}" +
+    ".m-blk{display:block !important;width:100% !important;text-align:left !important;padding:0 !important}" +
+    ".m-mt{padding-top:10px !important}" +
+    ".m-lbl{display:block !important;width:auto !important;padding:0 0 2px !important}.m-val{display:block !important;padding:0 0 10px !important}}";
+
+  // Complete email document (n8n sends this as the email HTML).
+  function renderEmailDocument(out, contact, opts) {
+    return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<style>' + EMAIL_CSS + '</style></head><body style="margin:0;padding:0;background:#FFFFFF;">' +
+      renderReportHtml(out, contact, Object.assign({}, opts, { email: true })) + "</body></html>";
   }
 
   // A4 PDF design (rendered by Chrome on the Modal PDF service; page footers come from the print template).
@@ -897,7 +917,7 @@ var AutomationCalc = (function () {
     LIBRARY: LIBRARY, AI_LIBRARY: AI_LIBRARY, INDUSTRY_CONTEXT: INDUSTRY_CONTEXT, CASE_STUDIES: CASE_STUDIES, AI_SCHEMA: AI_SCHEMA, AI_SYSTEM: AI_SYSTEM, BRANDS: BRANDS,
     validate: validate, calculate: calculate, recommend: recommend, recommendAI: recommendAI, run: run,
     buildAIRequest: buildAIRequest, sanitiseAI: sanitiseAI,
-    renderReportHtml: renderReportHtml, renderReportPdfHtml: renderReportPdfHtml, renderReportText: renderReportText,
+    renderReportHtml: renderReportHtml, renderReportPdfHtml: renderReportPdfHtml, renderEmailDocument: renderEmailDocument, EMAIL_CSS: EMAIL_CSS, renderReportText: renderReportText,
     labelOf: labelOf, fmt: fmt, money: money, escapeHtml: escapeHtml
   };
 })();
