@@ -262,6 +262,82 @@
     .cmp-col + .cmp-col { border-left: 0; border-top: 1px solid var(--line); }
     .cmp-col li { font-size: 15px; }
   }
+  /* ---------- Workflow block (after 21st.dev n8n-workflow-block) ---------- */
+  .wf { margin: 36px 0; background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(17,18,17,0.06); }
+  .wf-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 2px 4px 16px; }
+  .wf-live { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); background: rgba(15,110,86,0.08); border: 1px solid rgba(15,110,86,0.25); padding: 5px 12px; border-radius: 999px; }
+  .wf-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: wf-blink 2s ease-in-out infinite; }
+  @keyframes wf-blink { 50% { opacity: 0.3; } }
+  .wf-name { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 15px; color: var(--ink); }
+  .wf-since { margin-left: auto; font-size: 13px; color: #6B6B65; }
+  .wf-canvas {
+    position: relative; height: 404px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    background: radial-gradient(rgba(17,18,17,0.10) 1px, transparent 1px) 0 0 / 18px 18px, var(--paper);
+  }
+  .wf-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .wf-lines path { fill: none; stroke: var(--green); stroke-width: 1.6; stroke-dasharray: 6 6; stroke-linecap: round; opacity: 0.55; animation: wf-flow 1.2s linear infinite; }
+  .wf-lines circle { fill: var(--green); }
+  @keyframes wf-flow { to { stroke-dashoffset: -24; } }
+  .wf-node {
+    position: absolute; width: 184px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+    box-shadow: 0 6px 16px rgba(17,18,17,0.06); cursor: grab; user-select: none; touch-action: none; transition: box-shadow 160ms ease;
+  }
+  .wf-node.dragging { cursor: grabbing; box-shadow: 0 14px 28px rgba(17,18,17,0.14); z-index: 3; }
+  .wf-node { --col: 0; left: calc((100% - 212px) * var(--col) / 3 + 14px); }
+  .wf-node[data-id="n1"] { top: 24px; }                .wf-node[data-id="n2"] { --col: 1; top: 24px; }
+  .wf-node[data-id="n3"] { top: 220px; }               .wf-node[data-id="n4"] { --col: 1; top: 220px; }
+  .wf-node[data-id="n5"] { --col: 2; top: 128px; }
+  .wf-node[data-id="n6"] { --col: 3; top: 24px; }      .wf-node[data-id="n7"] { --col: 3; top: 220px; }
+  .wf-node.trigger { border-color: rgba(15,110,86,0.35); }
+  .wf-node.ai { border-color: rgba(93,202,165,0.7); background: linear-gradient(160deg, #F2FAF6, #fff 70%); }
+  .wf-node.output { border-color: rgba(17,18,17,0.3); }
+  .wf-node-head { display: flex; align-items: center; gap: 10px; }
+  .wf-icon { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: var(--paper-2); color: var(--green); }
+  .wf-node.trigger .wf-icon, .wf-node.merge .wf-icon { background: rgba(15,110,86,0.09); }
+  .wf-icon svg, .wf-icon img { width: 18px; height: 18px; }
+  .wf-type { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6B65; }
+  .wf-title { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14.5px; line-height: 1.25; color: var(--ink); }
+  .wf-node p { margin: 8px 0 0 !important; font-size: 12.5px !important; line-height: 1.45 !important; color: #4A4A46 !important; }
+  .wf-status { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); }
+  .wf-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--mint); }
+  .wf-foot { display: flex; align-items: center; gap: 20px; padding: 14px 4px 2px; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #4A4A46; }
+  .wf-foot i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); margin-right: 8px; vertical-align: 1px; }
+  .wf-foot i.g { background: var(--green); }
+  .wf-hint { margin-left: auto; color: #6B6B65; }
+  .wf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 900px) {
+    .wf { padding: 14px; }
+    .wf-since { margin-left: 0; width: 100%; }
+    .wf-canvas { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 34px 14px; padding: 18px 14px; }
+    .wf-node { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0; cursor: default; touch-action: auto; }
+    .wf-node[data-id="n1"] { grid-area: 1 / 1; } .wf-node[data-id="n3"] { grid-area: 1 / 2; }
+    .wf-node[data-id="n2"] { grid-area: 2 / 1; } .wf-node[data-id="n4"] { grid-area: 2 / 2; }
+    .wf-node[data-id="n5"], .wf-node[data-id="n6"], .wf-node[data-id="n7"] { grid-column: 1 / -1; width: min(100%, 300px); justify-self: center; }
+    .wf-hint { display: none; }
+  }
+  @media (max-width: 420px) {
+    .wf-canvas { gap: 30px 10px; padding: 14px 10px; }
+    .wf-node { padding: 10px 11px; }
+    .wf-icon { width: 28px; height: 28px; }
+    .wf-title { font-size: 13.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .wf-lines path, .wf-live i { animation: none; } }
+
+
+  /* Workflow: just the flow, no card, header or footer around it */
+  .wf { margin: 40px 0; background: none; border: 0; border-radius: 0; box-shadow: none; padding: 0; }
+  .wf-canvas { border: 0; border-radius: 0; background: none; overflow: visible; }
+  @media (max-width: 900px) { .wf-canvas { padding: 8px 0; } }
+
+  .m-flow .wf-canvas { height: 190px; }
+  .m-flow .wf-node[data-id="m1"] { --col: 0; top: 20px; }
+  .m-flow .wf-node[data-id="m2"] { --col: 1; top: 20px; }
+  .m-flow .wf-node[data-id="m3"] { --col: 2; top: 20px; }
+  .m-flow .wf-node[data-id="m4"] { --col: 3; top: 20px; }
+  @media (max-width: 900px) {
+    .m-flow .wf-canvas { height: auto; grid-template-columns: minmax(0, 320px); justify-content: center; }
+    .m-flow .wf-node { grid-area: auto !important; }
+  }
 </style>
 </head>
 <body>
@@ -286,9 +362,9 @@
   <div class="cs-hero-media">
     <img src="Images%20-%20for%20Website/case-studies/membership-hero.jpg" alt="" loading="lazy">
     <div class="cs-badges">
-      <div class="cs-badge"><strong>6</strong><span>Automated workflows</span></div>
-      <div class="cs-badge"><strong>0</strong><span>Manual steps</span></div>
-      <div class="cs-badge"><strong>5</strong><span>Membership tiers</span></div>
+      <div class="cs-badge"><strong>0</strong><span>Manual steps in renewals</span></div>
+      <div class="cs-badge"><strong>Automatic</strong><span>A new ticket on every renewal</span></div>
+      <div class="cs-badge"><strong>1 record</strong><span>Every member, all five tiers</span></div>
     </div>
   </div>
 </header>
@@ -337,31 +413,34 @@
       <div class="approach-item"><span class="approach-num">06</span><span>Cancellation updates both tracking tabs at once</span></div>
     </div>
 
+    <figure class="wf m-flow" aria-labelledby="wf-caption">
+      <div class="wf-canvas" data-edges="m1>m2 m2>m3 m3>m4">
+        <svg class="wf-lines" aria-hidden="true"></svg>
+        <div class="wf-node trigger" data-id="m1">
+          <div class="wf-node-head"><span class="wf-icon"><img src="Images%20-%20for%20Website/tools/tickettailor.png" alt="" width="20" height="20"></span><span><span class="wf-type">Trigger</span><span class="wf-title">New purchase</span></span></div>
+          <p>A member buys any of the five tiers</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node action" data-id="m2">
+          <div class="wf-node-head"><span class="wf-icon"><img src="Images%20-%20for%20Website/tools/googlesheets.svg" alt="" width="20" height="20"></span><span><span class="wf-type">Record</span><span class="wf-title">Member record</span></span></div>
+          <p>Logged and kept up to date automatically</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node ai" data-id="m3">
+          <div class="wf-node-head"><span class="wf-icon"><img src="Images%20-%20for%20Website/tools/pabbly.png" alt="" width="20" height="20"></span><span><span class="wf-type">Lifecycle</span><span class="wf-title">Activation &amp; renewal</span></span></div>
+          <p>Reminders go out at the right time</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node output" data-id="m4">
+          <div class="wf-node-head"><span class="wf-icon"><img src="Images%20-%20for%20Website/tools/tickettailor.png" alt="" width="20" height="20"></span><span><span class="wf-type">Send</span><span class="wf-title">New ticket</span></span></div>
+          <p>Issued automatically on every renewal</p>
+          <span class="wf-status">Connected</span>
+        </div>
+      </div>
+      <figcaption id="wf-caption" class="wf-sr">A new purchase in Ticket Tailor is logged to the member record in Google Sheets. Pabbly then handles activation and renewal reminders, and a new ticket is issued automatically on every renewal.</figcaption>
+    </figure>
+
     <h2>What we built</h2>
-    <div class="email-mock2">
-      <div class="banner">
-        <p class="eyebrow">Sample activation email &middot; anonymised</p>
-        <p class="greet">Hi <strong>Sam</strong>, one last step to activate your membership.</p>
-        <h4>Sample Membership</h4>
-        <p class="price">$XX / year &middot; Renews automatically</p>
-        <div class="btn-mock">ACTIVATE MY MEMBERSHIP</div>
-        <p class="fine">No charge today &middot; Secure checkout</p>
-      </div>
-    </div>
-    <p class="email-caption2">Example format, anonymised. Not a real client, name, or price</p>
-
-    <div class="sheet-mock">
-      <div class="tabs">
-        <span class="tab">All Contacts</span>
-        <span class="tab active">Active Members</span>
-      </div>
-      <table>
-        <tr><th>First name</th><th>Last name</th><th>Email</th><th>Tier</th><th>Price</th><th>Renewal date</th><th>Days until renewal</th><th>Reminder sent</th><th>Status</th></tr>
-        <tr><td>Sam</td><td>Ellis</td><td>example@email.com</td><td>Gold</td><td>$XX</td><td>Jul 15 2026</td><td>43</td><td>No</td><td><span class="status-pill active">Active</span></td></tr>
-      </table>
-    </div>
-    <p class="email-caption2">Example database structure, anonymised. Not real member data</p>
-
     <div class="workflow">
       <span class="workflow-num">01</span>
       <div>
@@ -426,9 +505,9 @@
       <h2>The results</h2>
       <p>The entire membership lifecycle now runs without manual input. From the moment someone purchases through to renewal, reminders, and cancellation, every action triggers automatically, every record updates in real time, and every communication routes to the correct tier.</p>
       <div class="results-stats">
-        <div class="result-stat"><strong>6</strong><span>Automated workflows</span></div>
-        <div class="result-stat"><strong>0</strong><span>Manual steps</span></div>
-        <div class="result-stat"><strong>5</strong><span>Membership tiers</span></div>
+        <div class="result-stat"><strong>0</strong><span>Manual steps in renewals</span></div>
+        <div class="result-stat"><strong>Automatic</strong><span>A new ticket on every renewal</span></div>
+        <div class="result-stat"><strong>1 record</strong><span>Every member, all five tiers</span></div>
       </div>
     </div>
   </div>
@@ -471,9 +550,9 @@
       <div class="cmp-col after">
         <p class="cmp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.7 2.7L16 9.8"/></svg>With the automation</p>
         <ul>
-          <li>6 automated workflows covering the full lifecycle</li>
-          <li>0 manual steps in renewals or tracking</li>
-          <li>Full SOP and video walkthroughs handed over</li>
+          <li>Members renew without re-entering payment details</li>
+          <li>A new ticket goes out automatically on every renewal</li>
+          <li>One accurate record of every member, across all five tiers</li>
         </ul>
       </div>
     </div>
@@ -500,5 +579,57 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  var canvas = document.querySelector('.wf-canvas');
+  if (!canvas) return;
+  var svg = canvas.querySelector('.wf-lines'), NS = 'http://www.w3.org/2000/svg';
+  var edges = canvas.getAttribute('data-edges').split(' ').map(function (e) { return e.split('>'); });
+  function node(id) { return canvas.querySelector('[data-id="' + id + '"]'); }
+  function draw() {
+    var c = canvas.getBoundingClientRect();
+    svg.setAttribute('viewBox', '0 0 ' + c.width + ' ' + c.height);
+    svg.innerHTML = '';
+    edges.forEach(function (e) {
+      var a = node(e[0]).getBoundingClientRect(), b = node(e[1]).getBoundingClientRect(), d, x1, y1, x2, y2;
+      if (b.left > a.right - 10) {              // target to the right: leave from the side
+        x1 = a.right - c.left; y1 = a.top + a.height / 2 - c.top; x2 = b.left - c.left; y2 = b.top + b.height / 2 - c.top;
+        var mx = (x1 + x2) / 2; d = 'M' + x1 + ' ' + y1 + ' C' + mx + ' ' + y1 + ' ' + mx + ' ' + y2 + ' ' + x2 + ' ' + y2;
+      } else {                                  // target below: leave from the bottom
+        x1 = a.left + a.width / 2 - c.left; y1 = a.bottom - c.top; x2 = b.left + b.width / 2 - c.left; y2 = b.top - c.top;
+        var my = (y1 + y2) / 2; d = 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + my + ' ' + x2 + ' ' + my + ' ' + x2 + ' ' + y2;
+      }
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); svg.appendChild(p);
+      [[x1, y1], [x2, y2]].forEach(function (pt) {
+        var dot = document.createElementNS(NS, 'circle'); dot.setAttribute('cx', pt[0]); dot.setAttribute('cy', pt[1]); dot.setAttribute('r', 3); svg.appendChild(dot);
+      });
+    });
+  }
+  // Drag nodes on wide screens
+  var drag = null;
+  canvas.addEventListener('pointerdown', function (e) {
+    var n = e.target.closest('.wf-node');
+    if (!n || window.innerWidth <= 900) return;
+    var c = canvas.getBoundingClientRect(), r = n.getBoundingClientRect();
+    drag = { n: n, dx: e.clientX - r.left, dy: e.clientY - r.top, c: c };
+    n.classList.add('dragging'); n.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var c = drag.c, n = drag.n;
+    var x = Math.max(0, Math.min(c.width - n.offsetWidth, e.clientX - c.left - drag.dx));
+    var y = Math.max(0, Math.min(c.height - n.offsetHeight, e.clientY - c.top - drag.dy));
+    n.style.left = x + 'px'; n.style.top = y + 'px'; draw();
+  });
+  function stop() { if (drag) { drag.n.classList.remove('dragging'); drag = null; } }
+  canvas.addEventListener('pointerup', stop); canvas.addEventListener('pointercancel', stop);
+  window.addEventListener('resize', function () {
+    canvas.querySelectorAll('.wf-node').forEach(function (n) { n.style.left = n.style.top = ''; });
+    draw();
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  draw();
+})();
+</script>
 </body>
 </html>

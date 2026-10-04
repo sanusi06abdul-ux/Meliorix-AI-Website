@@ -163,6 +163,8 @@
 
   /* Phone showing an example result, then the plan by email and the PDF */
   .phone-demo { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .phone { cursor: pointer; }
+  .phone:focus-visible { outline: 3px solid var(--green); outline-offset: 6px; }
   .phone-demo figcaption { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); text-align: center; max-width: 320px; }
   .pd-toggle { font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; cursor: pointer; }
   .pd-toggle:hover { border-color: var(--ink); }
@@ -301,9 +303,9 @@
         </div>
       </div>
       <figure class="phone-demo">
-        <div class="phone" aria-hidden="true">
+        <div class="phone" role="button" tabindex="0" title="Play again" aria-label="Example result on a phone. Press to play the example again.">
           <span class="phone-btn l1"></span><span class="phone-btn l2"></span><span class="phone-btn r1"></span>
-          <div class="phone-screen">
+          <div class="phone-screen" aria-hidden="true">
             <div class="phone-notch"></div>
             <div class="phone-status"><span>9:41</span><span class="phone-icons"><i></i><i></i><i></i></span></div>
             <div class="phone-scroll">
@@ -369,10 +371,6 @@
             <span class="pd-tap" data-pd="tap"></span>
           </div>
         </div>
-        <figcaption>
-          <span>Example for an agency onboarding new clients: the result, the plan by email, then the PDF. Your answers give your own numbers.</span>
-          <button type="button" class="pd-toggle" data-pd="toggle" aria-pressed="false">Pause</button>
-        </figcaption>
       </figure>
     </div>
   </header>
@@ -884,22 +882,16 @@
   frame.addEventListener("load", function () { fitPdf(); setTimeout(fitPdf, 800); });
 
   // ---- Playback ----------------------------------------------------------
-  var screen = root.querySelector(".phone-screen"), scroller = root.querySelector(".phone-scroll"), toggle = $("toggle");
+  var screen = root.querySelector(".phone-screen"), scroller = root.querySelector(".phone-scroll"), phone = root.querySelector(".phone");
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var userPaused = reduce, visible = true;
   function playing() { return !userPaused && visible && !document.hidden; }
   var finished = false;
-  function setToggle() {
-    toggle.textContent = finished ? "Replay" : userPaused ? "Play" : "Pause";
-    toggle.setAttribute("aria-pressed", !finished && userPaused ? "true" : "false");
-  }
-  toggle.addEventListener("click", function () {
-    if (finished || !running) { userPaused = false; play(); return; }
-    userPaused = !userPaused; setToggle();
-  });
-  ["wheel", "touchstart"].forEach(function (ev) {
-    root.querySelector(".phone").addEventListener(ev, function () { if (running && !userPaused) { userPaused = true; setToggle(); } }, { passive: true });
-  });
+  function setToggle() {}
+  // Plays once on load; clicking or tapping the phone plays it again
+  function replay() { if (!running) { userPaused = false; play(); } }
+  phone.addEventListener("click", replay);
+  phone.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); replay(); } });
   if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(root);
   setToggle();
 
