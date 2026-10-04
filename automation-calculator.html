@@ -160,6 +160,68 @@
   footer { background: var(--ink); color: var(--paper); padding: 36px 0 26px; }
   footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13.5px; color: #B8B7B1; }
   footer a { color: var(--paper); text-decoration: none; }
+
+  /* Phone showing an example result, then the plan by email and the PDF */
+  .phone-demo { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .phone-demo figcaption { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); text-align: center; max-width: 320px; }
+  .pd-toggle { font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px; cursor: pointer; }
+  .pd-toggle:hover { border-color: var(--ink); }
+  .pd-toggle:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .phone { position: relative; width: 300px; height: 612px; border: 9px solid var(--ink); border-radius: 48px; background: var(--ink); box-shadow: 0 34px 60px -34px rgba(17,18,17,.5); }
+  .phone-btn { position: absolute; width: 4px; background: var(--ink); border-radius: 2px; }
+  .phone-btn.l1 { left: -13px; top: 112px; height: 36px; }
+  .phone-btn.l2 { left: -13px; top: 160px; height: 36px; }
+  .phone-btn.r1 { right: -13px; top: 140px; height: 64px; }
+  .phone-screen { position: absolute; inset: 0; border-radius: 39px; overflow: hidden; background: var(--wash); }
+  .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 118px; height: 24px; background: var(--ink); border-radius: 0 0 15px 15px; z-index: 6; }
+  .phone-status { position: absolute; top: 0; left: 0; right: 0; height: 34px; padding: 6px 24px 0; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; background: rgba(250,250,248,.96); z-index: 5; }
+  .phone-icons { display: flex; gap: 4px; align-items: center; }
+  .phone-icons i { display: block; height: 8px; background: var(--ink); }
+  .phone-icons i:nth-child(1) { width: 12px; clip-path: polygon(0 100%, 100% 0, 100% 100%); }
+  .phone-icons i:nth-child(2) { width: 11px; clip-path: polygon(50% 100%, 0 0, 100% 0); }
+  .phone-icons i:nth-child(3) { width: 20px; height: 10px; border: 1.5px solid var(--ink); border-radius: 3px; padding: 1px; background: linear-gradient(90deg, var(--ink) 70%, transparent 70%) content-box; }
+  .phone-scroll { position: absolute; inset: 34px 0 0 0; overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain; }
+  .phone-scroll::-webkit-scrollbar { display: none; }
+  .phone-screen::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 40px; background: linear-gradient(transparent, var(--wash)); pointer-events: none; z-index: 1; }
+  .pd { width: 390px; zoom: 0.7231; }
+  .pd-nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 16px; background: rgba(250,250,248,.92); border-bottom: 1px solid var(--line); }
+  .pd-nav .link { font-size: 14px; font-weight: 500; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+  .pd-stage { padding: 20px 16px 60px; }
+  .pd .card { margin: 0; }
+  .pd .card-body { padding: 24px 18px 22px; }
+  .pd .stats { grid-template-columns: 1fr; }
+  .pd .request { padding: 20px 16px; }
+  .pd .request .grid2 { grid-template-columns: 1fr; gap: 0; }
+  .pd .request .f { display: block; font-size: 14px; font-weight: 500; margin-top: 14px; }
+  .pd-input { margin-top: 6px; height: 48px; padding: 13px 14px; border: 1.5px solid transparent; border-radius: 12px; background: #fff; color: var(--ink); font-size: 16px; white-space: nowrap; overflow: hidden; }
+  .pd-input.on { border-color: var(--mint); }
+  .pd-input.on::after { content: ""; display: inline-block; width: 1.5px; height: 18px; margin-left: 1px; vertical-align: -3px; background: var(--green); animation: pd-caret 1s steps(1) infinite; }
+  @keyframes pd-caret { 50% { opacity: 0; } }
+  .pd .btn { transition: transform 120ms, background 150ms, opacity 150ms; }
+  .pd .btn.press { transform: scale(.96); background: var(--green-deep); }
+  .pd .btn.busy { opacity: .6; }
+  .pd .done { animation: pd-in 400ms ease-out; }
+  @keyframes pd-in { from { opacity: 0; transform: translateY(8px); } }
+  .pd-dl { position: absolute; left: 10px; right: 10px; bottom: 14px; z-index: 3; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--ink); color: var(--paper); border-radius: 14px; box-shadow: 0 10px 24px rgba(17,18,17,.3); transform: translateY(140%); transition: transform 380ms cubic-bezier(.2,.8,.2,1); }
+  .pd-dl.show { transform: none; }
+  .pd-dl-icon { flex: 0 0 auto; width: 30px; height: 36px; display: grid; place-items: end center; padding-bottom: 5px; border-radius: 4px; background: #fff; color: #C2412C; font-size: 8px; font-weight: 700; letter-spacing: .04em; }
+  .pd-dl-text { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: 10.5px; line-height: 1.35; }
+  .pd-dl-text b { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pd-dl-text span { color: #B8B7B1; }
+  .pd-dl-open { flex: 0 0 auto; color: var(--mint); font-size: 12px; font-weight: 600; padding: 4px 6px; border-radius: 6px; transition: background 120ms; }
+  .pd-dl-open.press { background: rgba(93,202,165,.18); }
+  .pd-viewer { position: absolute; inset: 34px 0 0 0; z-index: 4; display: flex; flex-direction: column; background: #DAD9D3; transform: translateY(100%); transition: transform 450ms cubic-bezier(.2,.8,.2,1); }
+  .pd-viewer.show { transform: none; }
+  .pd-viewer-bar { flex: 0 0 auto; display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; padding: 9px 10px; background: var(--paper); border-bottom: 1px solid var(--line); font-size: 11px; }
+  .pd-viewer-bar span:first-child { color: var(--green); font-weight: 600; }
+  .pd-viewer-bar b { font-weight: 600; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pd-viewer-body { flex: 1; overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain; padding: 10px; }
+  .pd-viewer-body::-webkit-scrollbar { display: none; }
+  .pd-sheet { position: relative; width: 100%; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(17,18,17,.18); }
+  .pd-sheet iframe { position: absolute; top: 0; left: 0; width: 794px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .pd-tap { position: absolute; z-index: 7; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: rgba(17,18,17,.22); border: 2px solid rgba(255,255,255,.85); opacity: 0; transform: scale(.6); pointer-events: none; transition: opacity 150ms, transform 150ms; }
+  .pd-tap.on { opacity: 1; transform: scale(1); }
+  @media (max-width: 380px) { .phone { width: 272px; height: 556px; } .pd { zoom: 0.651; } }
 </style>
 </head>
 <body>
@@ -193,16 +255,80 @@
           <span class="cta-note">No email needed to see your results.</span>
         </div>
       </div>
-      <aside class="sample" aria-label="Example result">
-        <p class="mono">Example result</p>
-        <h3>Onboarding new clients · agency, 6–20 people</h3>
-        <div class="mini-stats">
-          <div><b>5 hrs</b><span>a week</span></div>
-          <div><b>230 hrs</b><span>a year</span></div>
+      <figure class="phone-demo">
+        <div class="phone" aria-hidden="true">
+          <span class="phone-btn l1"></span><span class="phone-btn l2"></span><span class="phone-btn r1"></span>
+          <div class="phone-screen">
+            <div class="phone-notch"></div>
+            <div class="phone-status"><span>9:41</span><span class="phone-icons"><i></i><i></i><i></i></span></div>
+            <div class="phone-scroll">
+              <div class="pd">
+                <div class="pd-nav"><span class="logo"><img class="mark" src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="28" height="26">Meliorix AI</span><span class="link">Case studies</span></div>
+                <div class="pd-stage">
+                  <div class="card">
+                    <div class="card-bar"><i style="width:100%"></i></div>
+                    <div class="card-body">
+                      <p class="mono">Your results</p>
+                      <h2 data-pd="title">Onboarding new clients takes about 5 hours a week</h2>
+                      <div class="stats">
+                        <div><b data-pd="weekly">5</b><span>hours a week</span></div>
+                        <div><b data-pd="annual">230</b><span>hours a year</span></div>
+                        <div><b data-pd="value">&pound;6,900</b><span>of staff time a year</span></div>
+                      </div>
+                      <p class="basis" data-pd="basis"></p>
+                      <div class="box"><h3>What this means for you</h3><p data-pd="summary"></p></div>
+                      <div class="idea-card">
+                        <p class="k">Top automation idea</p>
+                        <h4 data-pd="auto-title">Hands-free client onboarding</h4>
+                        <p><b>The problem:</b> <span data-pd="auto-problem"></span></p>
+                        <p><b>The fix:</b> <span data-pd="auto-fix"></span></p>
+                        <p><b>Why it fits you:</b> <span data-pd="auto-why"></span></p>
+                      </div>
+                      <div class="idea-card">
+                        <p class="k">Where AI could help</p>
+                        <h4 data-pd="ai-title">AI that reads documents for you</h4>
+                        <p><b>What it does:</b> <span data-pd="ai-what"></span></p>
+                        <p><b>Why it fits you:</b> <span data-pd="ai-why"></span></p>
+                        <p><b>You stay in charge:</b> <span data-pd="ai-charge"></span></p>
+                      </div>
+                      <div class="box" style="background:var(--paper-2)"><h3>Your first step this week</h3><p data-pd="first"></p></div>
+                      <div class="more" data-pd="more"></div>
+                      <div class="request" data-pd="request">
+                        <h3>Get your full plan by email</h3>
+                        <p class="lead">All 3 automation ideas, both AI ideas, and your first step, in a short email you can come back to.</p>
+                        <span class="f">Your email</span>
+                        <div class="pd-input" data-pd="email"></div>
+                        <div class="grid2">
+                          <div><span class="f">First name <span style="opacity:.6">(optional)</span></span><div class="pd-input"></div></div>
+                          <div><span class="f">Company <span style="opacity:.6">(optional)</span></span><div class="pd-input"></div></div>
+                        </div>
+                        <span class="btn btn-go" data-pd="send">Email me my plan</span>
+                        <p class="small">We only use your email to send this plan, plus anything you've ticked above.</p>
+                      </div>
+                      <div class="done" data-pd="done" hidden><strong>Done.</strong> Your plan is on its way to <span data-pd="done-email"></span>, with a PDF attached. If it's not there in a couple of minutes, check your spam folder. You can also download it below.</div>
+                      <div class="links" data-pd="pdf-row" hidden><span class="btn btn-go" data-pd="pdf-btn">&#8681; Download PDF</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pd-dl" data-pd="dl">
+              <span class="pd-dl-icon">PDF</span>
+              <span class="pd-dl-text"><b>Meliorix-AI-Automation-Plan.pdf</b><span>Download complete</span></span>
+              <span class="pd-dl-open" data-pd="open">Open</span>
+            </div>
+            <div class="pd-viewer" data-pd="viewer">
+              <div class="pd-viewer-bar"><span>Done</span><b>Meliorix-AI-Automation-Plan.pdf</b><span></span></div>
+              <div class="pd-viewer-body" data-pd="viewer-body"><div class="pd-sheet" data-pd="sheet"></div></div>
+            </div>
+            <span class="pd-tap" data-pd="tap"></span>
+          </div>
         </div>
-        <div class="idea"><b>Hands-free client onboarding</b><span class="tag">No AI needed</span><br><span style="color:var(--muted)">Welcome email, forms and reminders go out automatically when a client signs.</span></div>
-        <div class="idea"><b>AI that reads documents for you</b><span class="tag">AI</span><br><span style="color:var(--muted)">Pulls the key terms and dates out of long documents.</span></div>
-      </aside>
+        <figcaption>
+          <span>Example for an agency onboarding new clients: the result, the plan by email, then the PDF. Your answers give your own numbers.</span>
+          <button type="button" class="pd-toggle" data-pd="toggle" aria-pressed="false">Pause</button>
+        </figcaption>
+      </figure>
     </div>
   </header>
   <section class="how">
@@ -676,6 +802,139 @@
     document.querySelectorAll("#feedback button").forEach(function (x) { x.setAttribute("aria-pressed", false); });
   }
   track("calculator_viewed");
+})();
+</script>
+<script>
+(function () {
+  var AC = window.AutomationCalc, root = document.querySelector(".phone-demo");
+  if (!AC || !root) return;
+  var out = AC.run({ business_type: "agency", team_size: "6-20", processes: ["onboarding"], primary_process: "onboarding",
+    ai_tasks: ["reading"], frequency: "weekly", duration: 60, duration_unit: "minutes", people: 5, hourly_cost: 30,
+    manual_level: "manual", error_frequency: "occasionally", problem_type: "slow", tools_count: "3-5", priority: "save_time" });
+  if (!out.ok) return;
+  var EMAIL = "you@yourbusiness.co.uk";
+  var r = out.results, top = out.recommendations[0], ai = out.ai_recommendations[0], c = out.copy;
+  function $(k) { return root.querySelector('[data-pd="' + k + '"]'); }
+  function set(k, t) { var el = $(k); if (el) el.textContent = t; }
+  set("title", AC.labelOf("processes", out.answers.primary_process) + " takes about " + AC.fmt(r.weekly_hours) + " hours a week");
+  set("weekly", AC.fmt(r.weekly_hours)); set("annual", AC.fmt(r.annual_hours, 0));
+  set("value", AC.money(r.annual_time_value)); set("basis", r.basis); set("summary", c.summary);
+  set("auto-title", top.title); set("auto-problem", top.problem); set("auto-fix", top.fix); set("auto-why", c.why[top.id]);
+  set("ai-title", ai.title); set("ai-what", ai.what); set("ai-why", c.why[ai.id]); set("ai-charge", ai.in_charge);
+  set("first", c.first_step); set("done-email", EMAIL);
+  $("more").innerHTML = "<p>Also in your full plan:</p><ul>" +
+    out.recommendations.slice(1).map(function (x) { return "<li>" + AC.escapeHtml(x.title) + "</li>"; }).join("") +
+    out.ai_recommendations.slice(1).map(function (x) { return "<li>" + AC.escapeHtml(x.title) + " (AI)</li>"; }).join("") + "</ul>";
+
+  // The real PDF design, drawn small inside the phone's PDF viewer
+  var sheet = $("sheet"), frame = document.createElement("iframe");
+  frame.setAttribute("tabindex", "-1"); frame.setAttribute("title", "");
+  frame.srcdoc = AC.renderReportPdfHtml(out, { email: EMAIL }, {});
+  sheet.appendChild(frame);
+  function fitPdf() {
+    var w = sheet.clientWidth; if (!w) return;
+    var k = w / 794, d = frame.contentDocument, h = d && d.documentElement ? d.documentElement.scrollHeight : 1123;
+    frame.style.height = h + "px"; frame.style.transform = "scale(" + k + ")"; sheet.style.height = Math.ceil(h * k) + "px";
+  }
+  frame.addEventListener("load", function () { fitPdf(); setTimeout(fitPdf, 800); });
+
+  // ---- Playback ----------------------------------------------------------
+  var screen = root.querySelector(".phone-screen"), scroller = root.querySelector(".phone-scroll"), toggle = $("toggle");
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var userPaused = reduce, visible = true;
+  function playing() { return !userPaused && visible && !document.hidden; }
+  var finished = false;
+  function setToggle() {
+    toggle.textContent = finished ? "Replay" : userPaused ? "Play" : "Pause";
+    toggle.setAttribute("aria-pressed", !finished && userPaused ? "true" : "false");
+  }
+  toggle.addEventListener("click", function () {
+    if (finished || !running) { userPaused = false; play(); return; }
+    userPaused = !userPaused; setToggle();
+  });
+  ["wheel", "touchstart"].forEach(function (ev) {
+    root.querySelector(".phone").addEventListener(ev, function () { if (running && !userPaused) { userPaused = true; setToggle(); } }, { passive: true });
+  });
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(root);
+  setToggle();
+
+  // Time only moves while the demo is playing
+  function wait(ms) {
+    return new Promise(function (res) {
+      var last = null;
+      function tick(now) { if (last !== null && playing()) ms -= now - last; last = now; if (ms <= 0) res(); else requestAnimationFrame(tick); }
+      requestAnimationFrame(tick);
+    });
+  }
+  function glide(el, to, ms) {
+    var from = el.scrollTop, t = 0, last = null;
+    return new Promise(function (res) {
+      function tick(now) {
+        if (last !== null && playing()) t += now - last; last = now;
+        var p = Math.min(1, t / ms), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        el.scrollTop = from + (to - from) * e;
+        if (p < 1) requestAnimationFrame(tick); else res();
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  function offsetIn(el) {
+    return el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+  }
+  async function tap(el) {
+    var s = screen.getBoundingClientRect(), b = el.getBoundingClientRect(), dot = $("tap");
+    dot.style.left = (b.left + b.width / 2 - s.left) + "px"; dot.style.top = (b.top + b.height / 2 - s.top) + "px";
+    dot.classList.add("on"); el.classList.add("press"); await wait(260);
+    el.classList.remove("press"); dot.classList.remove("on"); await wait(200);
+  }
+  function reset() {
+    scroller.scrollTop = 0; $("viewer-body").scrollTop = 0;
+    $("email").textContent = ""; $("email").classList.remove("on");
+    $("request").hidden = false; $("done").hidden = true; $("pdf-row").hidden = true;
+    $("send").textContent = "Email me my plan"; $("send").classList.remove("busy");
+    $("pdf-btn").innerHTML = "&#8681; Download PDF"; $("pdf-btn").classList.remove("busy");
+    $("dl").classList.remove("show"); $("viewer").classList.remove("show");
+  }
+
+  // Plays once and stays on the open PDF. Replay starts it again.
+  var running = false;
+  async function play() {
+    if (running) return; running = true; finished = false; setToggle();
+    {
+      reset();
+      await wait(1600);
+      // Read down the result to the email form
+      var req = $("request");
+      await glide(scroller, offsetIn(req) - 40, 5500);
+      await wait(700);
+      // Type an email and send
+      var input = $("email"); input.classList.add("on");
+      for (var i = 1; i <= EMAIL.length; i++) { input.textContent = EMAIL.slice(0, i); await wait(45 + Math.random() * 35); }
+      await wait(500);
+      await tap($("send"));
+      $("send").textContent = "Sending…"; $("send").classList.add("busy");
+      await wait(1300);
+      // Confirmation, then the PDF button
+      req.hidden = true; $("done").hidden = false; $("pdf-row").hidden = false;
+      scroller.scrollTop = Math.max(0, offsetIn($("done")) - 60);
+      await wait(2000);
+      await tap($("pdf-btn"));
+      $("pdf-btn").textContent = "Preparing your PDF…"; $("pdf-btn").classList.add("busy");
+      await wait(1500);
+      $("pdf-btn").innerHTML = "&#8681; Download PDF"; $("pdf-btn").classList.remove("busy");
+      $("dl").classList.add("show");
+      await wait(1300);
+      await tap($("open"));
+      $("dl").classList.remove("show");
+      fitPdf(); $("viewer").classList.add("show");
+      await wait(1600);
+      // Read through the PDF
+      var body = $("viewer-body");
+      await glide(body, Math.min(body.scrollHeight - body.clientHeight, 420), 3500);
+    }
+    running = false; finished = true; userPaused = false; setToggle();
+  }
+  if (!reduce) play();
 })();
 </script>
 </body>

@@ -142,6 +142,7 @@
     color: #6B6B65;
   }
 
+
   /* Tools ticker */
   .tools-strip { background: var(--paper-2); border-bottom: 1px solid var(--line); padding-block: 22px; }
   .tools-strip .wrap { display: flex; align-items: center; gap: 24px; }
@@ -149,9 +150,9 @@
   .ticker-mask { overflow: hidden; flex: 1; min-width: 0; }
   .ticker-inner { display: flex; width: max-content; animation: ticker-scroll 26s linear infinite; }
   .ticker-mask:hover .ticker-inner { animation-play-state: paused; }
-  .ticker-track { display: flex; align-items: baseline; gap: 28px; padding-right: 28px; flex-shrink: 0; }
-  .tools-strip .tool { display: inline-flex; align-items: center; gap: 7px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14.5px; color: #3A3A36; white-space: nowrap; }
-  .tools-strip .tool::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; flex-shrink: 0; }
+  .ticker-track { display: flex; align-items: center; gap: 28px; padding-right: 28px; flex-shrink: 0; }
+  .tools-strip .tool { display: inline-flex; align-items: center; gap: 9px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14.5px; color: #3A3A36; white-space: nowrap; }
+  .tools-strip .tool img { width: 20px; height: 20px; flex-shrink: 0; }
   @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @media (max-width: 640px) { .tools-strip .strip-label { display: none; } }
 
@@ -204,29 +205,66 @@
     color: var(--line);
   }
 
-  /* Process (quadrant) */
-  .process {
-    margin-top: 56px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+  /* Process (pinned cards, ported from 21st.dev chamaac/how-it-works) */
+  .hiw { position: relative; margin-top: 56px; padding: 24px 0 8px; }
+  .hiw::before {
+    content: ''; position: absolute; inset: 0 -32px; pointer-events: none;
+    background: linear-gradient(rgba(17,18,17,0.07) 1px, transparent 1px) 0 4px / 100% 32px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
   }
-  .process-step { background: var(--paper-2); border-radius: 8px; padding: 34px 32px; }
-  .process-step .num { font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: var(--green); font-weight: 500; }
-  .process-step h3 { font-size: 20px; margin-top: 16px; }
-  .process-step p { font-size: 15px; color: #6B6B65; margin-top: 10px; }
-  .process-step.accent { background: linear-gradient(135deg, #14966F 0%, var(--green) 55%, var(--green-deep) 100%); }
-  .process-step.accent .num { color: var(--paper); opacity: 0.8; }
+  .hiw-board { position: relative; max-width: 1000px; height: 900px; margin: 0 auto; }
+  .hiw-path { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .hiw-path path {
+    fill: none; stroke: #C9C7BE; stroke-width: 2; stroke-dasharray: 8 6; stroke-linecap: round;
+    vector-effect: non-scaling-stroke; animation: hiw-dash 3s linear infinite;
+  }
+  @keyframes hiw-dash { to { stroke-dashoffset: -140; } }
+  .process-step { position: absolute; width: 300px; z-index: 1; }
+  .process-step:nth-child(2) { top: 0; left: 15%; }
+  .process-step:nth-child(3) { top: 120px; right: 15%; }
+  .process-step:nth-child(4) { top: 450px; left: 15%; }
+  .process-step:nth-child(5) { top: 570px; right: 10%; }
+  .process-step:hover { z-index: 3; }
+  .hiw-card {
+    background: #fff; padding: 8px; border-radius: 25px; border: 1px solid #EEEDE8;
+    box-shadow: 0 10px 20px rgba(17,18,17,0.12); transform: rotate(var(--tilt, 8deg));
+    transition: transform 300ms ease;
+  }
+  .process-step:nth-child(odd) .hiw-card { --tilt: -8deg; }
+  .process-step:hover .hiw-card { transform: rotate(var(--tilt, 8deg)) scale(1.05); }
+  .hiw-pin { display: block; width: 30px; height: 30px; margin: 6px auto 20px; color: var(--green); }
+  .hiw-inner { border-radius: 15px; padding: 18px 18px 22px; background: var(--paper-2); border: 1px solid var(--line); }
+  .hiw-inner .num { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 36px; line-height: 1; color: var(--green); }
+  .hiw-inner h3 { font-size: 23px; line-height: 1.1; margin-top: 18px; }
+  .hiw-inner p { font-size: 14px; line-height: 1.5; color: #6B6B65; margin-top: 10px; }
+  .process-step.accent .hiw-pin { color: #14966F; }
+  .process-step.accent .hiw-inner { background: linear-gradient(135deg, #14966F 0%, var(--green) 55%, var(--green-deep) 100%); border-color: transparent; }
+  .process-step.accent .num { color: #B9E8D7; }
   .process-step.accent h3 { color: var(--paper); }
   .process-step.accent p { color: rgba(250,250,248,0.85); }
-  .process-step.dark { background: linear-gradient(135deg, #1B2622 0%, var(--ink) 60%); }
+  .process-step.tint .hiw-pin { color: var(--green-deep); }
+  .process-step.tint .hiw-inner { background: linear-gradient(135deg, #DCEEE7 0%, #C7E4D8 100%); border-color: rgba(15,110,86,0.22); }
+  .process-step.tint .num { color: var(--green-deep); }
+  .process-step.tint p { color: #3F5A50; }
+  .process-step.dark .hiw-pin { color: var(--ink); }
+  .process-step.dark .hiw-inner { background: linear-gradient(135deg, #1B2622 0%, var(--ink) 60%); border-color: transparent; }
   .process-step.dark .num { color: var(--mint); }
   .process-step.dark h3 { color: var(--paper); }
   .process-step.dark p { color: var(--muted-ink); }
-  .process-step.tint { background: linear-gradient(135deg, #DCEEE7 0%, #C7E4D8 100%); border: 1px solid rgba(15,110,86,0.22); }
-  .process-step.tint .num { color: var(--green-deep); }
-  .process-step.tint p { color: #3F5A50; }
-  @media (max-width: 640px) { .process { grid-template-columns: 1fr; } }
+  @media (max-width: 900px) {
+    .hiw-board { height: auto; display: flex; flex-direction: column; gap: 36px; padding: 8px 0 16px; }
+    .hiw-path { display: none; }
+    .process-step { position: relative; inset: auto !important; width: min(320px, 100%); }
+    .process-step:nth-child(odd) { align-self: flex-end; }
+    .hiw-card { --tilt: 3deg; }
+    .process-step:nth-child(odd) .hiw-card { --tilt: -3deg; }
+  }
+  @media (max-width: 480px) { .process-step, .process-step:nth-child(odd) { align-self: center; } }
+  @media (prefers-reduced-motion: reduce) {
+    .hiw-path path { animation: none; }
+    .hiw-card, .process-step:hover .hiw-card { transition: none; transform: rotate(var(--tilt, 8deg)); }
+  }
 
   /* Melior definition card */
   .melior-wrap { display: flex; justify-content: center; }
@@ -583,6 +621,151 @@
   #case-studies .story-panel h3 { font-size: clamp(24px, 2.8vw, 32px); line-height: 1.2; text-wrap: balance; }
   #case-studies .story-link { margin-top: 28px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; }
   @media (max-width: 720px) { section#case-studies { padding: 80px 0; } }
+
+  /* ---------- Hero integration card ---------- */
+  .ic-card { position: relative; max-width: 460px; margin-inline: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: 0 24px 48px rgba(17,18,17,0.08); }
+  .ic-stage {
+    position: relative; aspect-ratio: 440 / 300; container-type: inline-size; border-bottom: 1px solid var(--line);
+    background: radial-gradient(rgba(17,18,17,0.09) 1px, transparent 1px) 0 0 / 16px 16px, linear-gradient(180deg, var(--paper-2), var(--paper));
+  }
+  .ic-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ic-line { fill: none; stroke: #CFCDC4; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+  .ic-pulse { fill: none; stroke: var(--green); stroke-width: 2; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 14 86; stroke-dashoffset: 100; animation: ic-flow 3.3s linear infinite; }
+  @keyframes ic-flow { to { stroke-dashoffset: 0; } }
+  .ic-tile, .ic-hub { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; background: #fff; border: 1px solid var(--line); box-shadow: 0 6px 16px rgba(17,18,17,0.08); }
+  .ic-tile { width: 12cqi; height: 12cqi; border-radius: 3.2cqi; color: var(--ink); }
+  .ic-tile img { width: 48%; height: 48%; }
+  .ic-hub { left: 50%; top: 50%; width: 17cqi; height: 17cqi; border-radius: 4.5cqi; box-shadow: 0 10px 28px rgba(15,110,86,0.18); border-color: rgba(15,110,86,0.25); }
+  .ic-hub img { width: 50%; height: auto; }
+  .ic-body { padding: 24px 28px 28px; text-align: left; }
+  .ic-body h3 { font-size: 21px; line-height: 1.25; }
+  .ic-body p { margin-top: 8px; font-size: 15px; line-height: 1.55; color: #6B6B65; }
+  @media (prefers-reduced-motion: reduce) { .ic-pulse { animation: none; stroke-dashoffset: 0; stroke-dasharray: none; opacity: 0; } }
+
+  /* ---------- Problems: tab switcher (after 21st.dev feature-11) ---------- */
+  .pf { margin-top: 52px; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
+  .pf-tabs { display: flex; flex-direction: column; gap: 6px; }
+  .pf-tab {
+    text-align: left; background: none; border: 0; border-left: 2px solid transparent; padding: 16px 0 16px 22px;
+    color: var(--muted-ink-2); font: inherit; cursor: pointer; transition: color 200ms ease, border-color 200ms ease;
+  }
+  .pf-tab:hover { color: var(--muted-ink); }
+  .pf-tab.is-active { border-left-color: var(--mint); color: var(--paper); }
+  .pf-tab-head { display: flex; align-items: center; gap: 12px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 19px; line-height: 1.3; }
+  .pf-tab-head svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .pf-tab.is-active .pf-tab-head svg { color: var(--mint); }
+  .pf-tab-desc { display: block; margin: 6px 0 0 32px; font-size: 14.5px; line-height: 1.5; color: var(--muted-ink-2); }
+  .pf-tab.is-active .pf-tab-desc { color: var(--muted-ink); }
+  .pf-tab:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+  .pf-panels { display: grid; }
+  .pf-panel { background: var(--paper); color: var(--ink); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.22); }
+  .js .pf-panel { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 260ms ease, transform 260ms ease, visibility 0s 260ms; }
+  .js .pf-panel.is-active { opacity: 1; visibility: visible; transform: none; transition: opacity 260ms ease, transform 260ms ease, visibility 0s; }
+  .pf-panels .pf-panel + .pf-panel { margin-top: 20px; }
+  .js .pf-panels .pf-panel + .pf-panel { margin-top: 0; }
+  .pf-cols { display: grid; grid-template-columns: 1fr 1fr; }
+  .pf-col { padding: 28px 28px 26px; }
+  .pf-col.after { background: linear-gradient(155deg, #E4F1EA 0%, #CCE7DA 100%); }
+  .pf-col-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .pf-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 5px 11px; border-radius: 20px; white-space: nowrap; }
+  .before .pf-tag { background: rgba(178,58,42,0.10); color: #B23A2A; }
+  .after .pf-tag { background: rgba(8,80,65,0.14); color: var(--green-deep); }
+  .pf-stat { text-align: right; font-size: 10.5px; line-height: 1.3; text-transform: uppercase; letter-spacing: 0.03em; color: #6B6B65; }
+  .pf-stat b { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; line-height: 1.1; letter-spacing: 0; text-transform: none; }
+  .before .pf-stat b { color: #B23A2A; }
+  .after .pf-stat b { color: var(--green-deep); }
+  .pf-col h3 { margin-top: 22px; font-size: 20px; line-height: 1.3; }
+  .after h3 { color: #0B2E24; }
+  .pf-col ul { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 9px; }
+  .pf-col li { display: flex; gap: 9px; align-items: flex-start; font-size: 14px; line-height: 1.45; color: #3A3A36; }
+  .after li { color: #1F3D33; }
+  .before li::before { content: '\2715'; color: #B23A2A; font-size: 10px; margin-top: 4px; flex-shrink: 0; }
+  .after li::before { content: '\2713'; color: var(--green-deep); font-size: 12px; font-weight: 700; margin-top: 2px; flex-shrink: 0; }
+  .pf-impact { display: flex; gap: 18px; align-items: baseline; padding: 18px 28px; border-top: 1px solid var(--line); }
+  .pf-impact span { flex-shrink: 0; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--green-deep); }
+  .pf-impact p { font-size: 14.5px; font-weight: 600; line-height: 1.45; }
+  @media (max-width: 900px) {
+    .pf { grid-template-columns: 1fr; gap: 28px; }
+    .pf-tab { padding: 12px 0 12px 18px; }
+    .pf-tab-desc { display: none; }
+  }
+  @media (max-width: 600px) {
+    .pf-cols { grid-template-columns: 1fr; }
+    .pf-col { padding: 22px 20px; }
+    .pf-impact { flex-direction: column; gap: 4px; padding: 16px 20px; }
+  }
+
+  /* Melior: quiet dictionary note */
+  section.melior-section { padding: 56px 0; }
+  .melior-section .melior-card { max-width: 560px; background: none; border: 0; border-left: 2px solid var(--mint); border-radius: 0; box-shadow: none; padding: 4px 0 4px 24px; }
+  .melior-section .melior-head { gap: 10px; }
+  .melior-section .melior-word { font-size: 22px; font-weight: 600; }
+  .melior-section .melior-pos { font-size: 11px; font-weight: 500; text-transform: none; letter-spacing: 0; background: none; padding: 0; color: #8A8A84; }
+  .melior-section .melior-def { margin-top: 6px; font-size: 15px; color: #6B6B65; }
+  .melior-section .melior-def strong { color: inherit; font-weight: 600; font-style: italic; }
+  .melior-section .melior-body { margin-top: 10px; font-size: 15px; line-height: 1.65; color: #4A4A46; }
+  @media (max-width: 720px) { section.melior-section { padding: 44px 0; } }
+
+  /* ---------- Design notes pass: hierarchy, contrast, solid CTAs ---------- */
+  /* Primary calls to action use the brand green as the accent colour */
+  .btn-primary { background: var(--green); color: #fff; font-weight: 500; }
+  .btn-primary:hover { background: var(--green-deep); }
+  .btn-on-ink:hover { background: var(--mint); color: var(--ink); }
+  .nav-cta { flex-shrink: 0; background: var(--green); color: #fff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 10px 18px; border-radius: 4px; }
+  .nav-cta:hover { background: var(--green-deep); }
+  .text-cta { font-size: 15px; font-weight: 500; color: var(--paper); text-decoration: none; border-bottom: 1px solid rgba(250,250,248,0.4); padding-bottom: 2px; }
+  .text-cta:hover { color: var(--mint); border-color: var(--mint); }
+  /* Contrast fixes */
+  .eng-cta { color: var(--mint); }
+  .melior-section .melior-pos { color: #6B6B65; }
+  /* One heading scale for every section */
+  section h2, #case-studies h2, #testimonials h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.12; max-width: 720px; text-wrap: balance; }
+  .closing h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.12; }
+  /* Phones: headline first, picture after */
+  @media (max-width: 860px) { .hero-visual { order: 0; margin-top: 48px; max-width: 420px; } }
+
+  /* ---------- Mobile pass ---------- */
+  .nav-toggle { display: none; }
+  @media (max-width: 760px) {
+    nav { padding: 14px 0; }
+    nav .wrap { gap: 10px; }
+    .nav-cta { margin-left: auto; padding: 11px 16px; }
+    .nav-toggle {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; margin-right: -8px;
+      background: none; border: 1px solid var(--line); border-radius: 4px; color: var(--ink); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer;
+    }
+    .nav-toggle svg { width: 20px; height: 20px; }
+    .nav-toggle path { transition: transform 200ms ease, opacity 200ms ease; transform-origin: 12px 12px; }
+    nav.is-open .nav-toggle .l1 { transform: translateY(5px) rotate(45deg); }
+    nav.is-open .nav-toggle .l2 { opacity: 0; }
+    nav.is-open .nav-toggle .l3 { transform: translateY(-5px) rotate(-45deg); }
+    nav.is-open .nav-links {
+      display: flex; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: 0 18px 30px rgba(17,18,17,0.10); padding: 8px 16px 16px;
+    }
+    nav.is-open .nav-links a { display: block; padding: 14px 4px; font-size: 16px; color: var(--ink); border-bottom: 1px solid var(--paper-2); }
+    nav.is-open .nav-links a::after { display: none; }
+  }
+  @media (max-width: 380px) { .logo { font-size: 17px; } .nav-toggle span { display: none; } }
+
+  /* Menu and nav links land below the sticky bar, not under it */
+  section[id], header[id], form[id] { scroll-margin-top: 84px; }
+
+  /* Inputs at 16px so phones don't zoom in when a field is tapped */
+  .form-row input, .form-row textarea { font-size: 16px; }
+
+  /* Bigger tap areas without changing how links look */
+  .story-link, .eng-cta { position: relative; }
+  .story-link::after, .eng-cta::after { content: ""; position: absolute; inset: -12px -6px; }
+  .quote-dot { width: 36px; height: 44px; }
+  .quote-dot::before { top: 21px; }
+  .quote-dots { margin-top: 24px; gap: 4px; }
+
+  /* Small labels stay readable on phones */
+  @media (max-width: 600px) {
+    .pf-tag, .story-tag, .eng-tag, .melior-section .melior-pos { font-size: 12px; }
+    .pf-stat, .pf-impact span { font-size: 11.5px; }
+  }
 </style>
 </head>
 <body>
@@ -593,7 +776,7 @@
       <img class="mark" src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="28" height="26">
       Meliorix AI
     </a>
-    <ul class="nav-links">
+    <ul class="nav-links" id="nav-links">
       <li><a href="#what">What we do</a></li>
       <li><a href="#process">How it works</a></li>
       <li><a href="#case-studies">Case studies</a></li>
@@ -601,7 +784,8 @@
       <li><a href="#contact">Contact</a></li>
       <li><a href="automation-calculator.html">Free calculator</a></li>
     </ul>
-    <a class="contact-link" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+    <a class="nav-cta" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M4 7h16"/><path class="l2" d="M4 12h16"/><path class="l3" d="M4 17h16"/></svg><span>Menu</span></button>
   </div>
 </nav>
 
@@ -611,22 +795,23 @@
       <h1>Automation built around how your business <span class="accent">actually</span> works.</h1>
       <p class="sub">Meliorix AI designs and builds custom AI automations for small and medium-sized businesses. No off-the-shelf software, no features you'll never use.</p>
       <div class="cta-row">
-        <a class="btn-primary" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
-        <span class="cta-note">Free initial call, no obligation</span>
+        <a class="btn-primary" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a free call</a>
+        <span class="cta-note">30 minutes, no obligation</span>
       </div>
       <a class="calc-link" href="automation-calculator.html">Not sure where to start? Find your automation &amp; AI opportunities in 3 minutes &rarr;</a>
     </div>
     <div class="hero-visual">
       <div class="mock-glow" aria-hidden="true"></div>
-      <div class="mock-card" role="img" aria-label="Example preview of a daily automation summary, showing tasks completed automatically and one flagged item">
-        <div class="mock-card-head">
-          <span class="mock-dot" aria-hidden="true"></span>
-          <span class="mock-title">Automation Summary</span>
-          <span class="mock-time">Today</span>
+      <div class="ic-card">
+        <div class="ic-stage">
+          <svg class="ic-lines" viewBox="0 0 440 300" preserveAspectRatio="none" aria-hidden="true"><path class="ic-line" d="M95 70 H200 V114"/><path class="ic-line" d="M330 55 H240 V114"/><path class="ic-line" d="M80 150 H184"/><path class="ic-line" d="M362 150 H256"/><path class="ic-line" d="M205 256 V186"/><path class="ic-line" d="M340 245 H240 V186"/><path class="ic-pulse" d="M95 70 H200 V114" pathLength="100" style="animation-delay:0.00s"/><path class="ic-pulse" d="M330 55 H240 V114" pathLength="100" style="animation-delay:0.55s"/><path class="ic-pulse" d="M80 150 H184" pathLength="100" style="animation-delay:1.10s"/><path class="ic-pulse" d="M362 150 H256" pathLength="100" style="animation-delay:1.65s"/><path class="ic-pulse" d="M205 256 V186" pathLength="100" style="animation-delay:2.20s"/><path class="ic-pulse" d="M340 245 H240 V186" pathLength="100" style="animation-delay:2.75s"/></svg>
+          <div class="ic-tile t1" style="left:21.591%;top:23.333%" title="Gmail"><img src="Images%20-%20for%20Website/tools/gmail.svg" alt="Gmail" width="24" height="24"></div><div class="ic-tile t2" style="left:75.000%;top:18.333%" title="Slack"><img src="Images%20-%20for%20Website/tools/slack.svg" alt="Slack" width="24" height="24"></div><div class="ic-tile t3" style="left:18.182%;top:50.000%" title="Google Sheets"><img src="Images%20-%20for%20Website/tools/googlesheets.svg" alt="Google Sheets" width="24" height="24"></div><div class="ic-tile t4" style="left:82.273%;top:50.000%" title="HubSpot"><img src="Images%20-%20for%20Website/tools/hubspot.svg" alt="HubSpot" width="24" height="24"></div><div class="ic-tile t5" style="left:46.591%;top:85.333%" title="Google Calendar"><img src="Images%20-%20for%20Website/tools/googlecalendar.svg" alt="Google Calendar" width="24" height="24"></div><div class="ic-tile t6" style="left:77.273%;top:81.667%" title="Stripe"><img src="Images%20-%20for%20Website/tools/stripe.svg" alt="Stripe" width="24" height="24"></div>
+          <div class="ic-hub" role="img" aria-label="Meliorix AI"><img src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="34" height="31"></div>
         </div>
-        <div class="mock-row"><span class="mock-tag">Done</span> 12 orders synced to your system</div>
-        <div class="mock-row"><span class="mock-tag">Done</span> 3 renewal reminders sent</div>
-        <div class="mock-row muted">Nothing needs your attention today</div>
+        <div class="ic-body">
+          <h3>Works with the tools you already run</h3>
+          <p>We connect the inbox, CRM, spreadsheets and calendar you already use, so information moves between them on its own.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -638,47 +823,47 @@
     <div class="ticker-mask">
       <div class="ticker-inner">
         <div class="ticker-track">
-          <span class="tool">n8n</span>
-          <span class="tool">Zapier</span>
-          <span class="tool">Make</span>
-          <span class="tool">OpenAI</span>
-          <span class="tool">Gmail</span>
-          <span class="tool">Slack</span>
-          <span class="tool">Google Sheets</span>
-          <span class="tool">Notion</span>
-          <span class="tool">Airtable</span>
-          <span class="tool">HubSpot</span>
-          <span class="tool">Calendly</span>
-          <span class="tool">Stripe</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/n8n.svg" alt="" width="20" height="20">n8n</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/zapier.svg" alt="" width="20" height="20">Zapier</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/make.svg" alt="" width="20" height="20">Make</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/openai.svg" alt="" width="20" height="20">OpenAI</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/gmail.svg" alt="" width="20" height="20">Gmail</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/slack.svg" alt="" width="20" height="20">Slack</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/googlesheets.svg" alt="" width="20" height="20">Google Sheets</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/notion.svg" alt="" width="20" height="20">Notion</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/airtable.svg" alt="" width="20" height="20">Airtable</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/hubspot.svg" alt="" width="20" height="20">HubSpot</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/calendly.svg" alt="" width="20" height="20">Calendly</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/stripe.svg" alt="" width="20" height="20">Stripe</span>
         </div>
         <div class="ticker-track" aria-hidden="true">
-          <span class="tool">n8n</span>
-          <span class="tool">Zapier</span>
-          <span class="tool">Make</span>
-          <span class="tool">OpenAI</span>
-          <span class="tool">Gmail</span>
-          <span class="tool">Slack</span>
-          <span class="tool">Google Sheets</span>
-          <span class="tool">Notion</span>
-          <span class="tool">Airtable</span>
-          <span class="tool">HubSpot</span>
-          <span class="tool">Calendly</span>
-          <span class="tool">Stripe</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/n8n.svg" alt="" width="20" height="20">n8n</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/zapier.svg" alt="" width="20" height="20">Zapier</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/make.svg" alt="" width="20" height="20">Make</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/openai.svg" alt="" width="20" height="20">OpenAI</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/gmail.svg" alt="" width="20" height="20">Gmail</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/slack.svg" alt="" width="20" height="20">Slack</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/googlesheets.svg" alt="" width="20" height="20">Google Sheets</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/notion.svg" alt="" width="20" height="20">Notion</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/airtable.svg" alt="" width="20" height="20">Airtable</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/hubspot.svg" alt="" width="20" height="20">HubSpot</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/calendly.svg" alt="" width="20" height="20">Calendly</span>
+          <span class="tool"><img src="Images%20-%20for%20Website/tools/stripe.svg" alt="" width="20" height="20">Stripe</span>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<section>
+<section class="melior-section">
   <div class="wrap melior-wrap">
     <div class="melior-card reveal">
       <div class="melior-head">
         <span class="melior-word">Melior</span>
         <span class="melior-pos">Latin &middot; Adjective</span>
       </div>
-      <p class="melior-def">"Better." The comparative of <strong>bonus</strong> (good). Not the best, not perfect, just better than it was.</p>
-      <p class="melior-body">That's the idea behind Meliorix AI. We're not selling a perfect system or a finished platform. We build <strong>one specific automation</strong> that makes your business run a little better than it did yesterday, then we do it again for the next thing that's slowing you down.</p>
+      <p class="melior-def">"Better." The comparative of <strong>bonus</strong> (good).</p>
+      <p class="melior-body">That's the idea behind Meliorix AI. We make your business better one process at a time. We find what's slowing you down most, build the automation that fixes it, then move on to the next.</p>
     </div>
   </div>
 </section>
@@ -702,26 +887,49 @@
   <div class="wrap">
     <p class="section-label">How it works</p>
     <h2 class="reveal">Four steps, start to finish.</h2>
-    <div class="process">
+    <div class="hiw">
+      <div class="hiw-board">
+      <svg class="hiw-path" viewBox="0 0 1000 900" preserveAspectRatio="none" aria-hidden="true"><path d="M 290 150 C 500 150, 550 270, 710 270 C 850 270, 500 350, 290 450 C 290 600, 550 720, 750 720"/></svg>
       <div class="process-step reveal">
-        <div class="num">01</div>
-        <h3>Discover</h3>
-        <p>We map the exact process losing you time: the tools involved, the handoffs, where it breaks down.</p>
+        <div class="hiw-card">
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+          <div class="hiw-inner">
+            <span class="num">01</span>
+            <h3>Discover</h3>
+            <p>We map the exact process losing you time: the tools involved, the handoffs, where it breaks down.</p>
+          </div>
+        </div>
       </div>
       <div class="process-step accent reveal">
-        <div class="num">02</div>
-        <h3>Build</h3>
-        <p>We design and build the automation around your existing systems, not the other way around.</p>
+        <div class="hiw-card">
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+          <div class="hiw-inner">
+            <span class="num">02</span>
+            <h3>Build</h3>
+            <p>We design and build the automation around your existing systems, not the other way around.</p>
+          </div>
+        </div>
       </div>
       <div class="process-step tint reveal">
-        <div class="num">03</div>
-        <h3>Run</h3>
-        <p>It goes live in your business. We stay on call while it settles in, not just for the handoff.</p>
+        <div class="hiw-card">
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+          <div class="hiw-inner">
+            <span class="num">03</span>
+            <h3>Run</h3>
+            <p>It goes live in your business. We stay on call while it settles in, not just for the handoff.</p>
+          </div>
+        </div>
       </div>
       <div class="process-step dark reveal">
-        <div class="num">04</div>
-        <h3>Improve</h3>
-        <p>It keeps getting tuned as your process changes, so it doesn't go stale the way off-the-shelf tools do.</p>
+        <div class="hiw-card">
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+          <div class="hiw-inner">
+            <span class="num">04</span>
+            <h3>Improve</h3>
+            <p>It keeps getting tuned as your process changes, so it doesn't go stale the way off-the-shelf tools do.</p>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -763,7 +971,7 @@
 
 <section id="testimonials">
   <div class="wrap">
-    <p class="section-label">What clients say</p>
+    <p class="section-label">Client feedback</p>
     <h2 class="reveal">What Clients Say</h2>
   </div>
   <div class="quote-band" aria-roledescription="carousel" aria-label="Client testimonials">
@@ -823,152 +1031,72 @@
   <div class="wrap">
     <p class="section-label">Problems &amp; solutions</p>
     <h2 class="reveal">Every manual bottleneck has an automation that fixes it.</h2>
-    <div class="ps-grid">
-
-      <div class="ps-pair reveal">
-        <div class="ps-card problem">
-          <div class="ps-card-head">
-            <span class="ps-tag">Problem</span>
-            <span class="ps-stat-block"><span class="ps-stat">Hours</span><span class="ps-stat-label">Typical first-reply delay</span></span>
+    <div class="pf reveal">
+      <div class="pf-tabs" role="tablist" aria-orientation="vertical" aria-label="Common bottlenecks">
+        <button type="button" class="pf-tab is-active" role="tab" id="pf-tab-leads" aria-controls="pf-panel-leads" aria-selected="true" tabindex="0"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v4l2 1.5"/></svg>Leads wait, then go cold</span><span class="pf-tab-desc">Instant, qualified follow-up</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-reports" aria-controls="pf-panel-reports" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17v-5M13 17V8M18 17v-3"/></svg>Reports eat a full afternoon</span><span class="pf-tab-desc">Reports that build themselves</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-retype" aria-controls="pf-panel-retype" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16V5a2 2 0 0 1 2-2h11"/></svg>Same info, typed three times</span><span class="pf-tab-desc">One entry, everywhere updated</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-inbox" aria-controls="pf-panel-inbox" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>The inbox never empties</span><span class="pf-tab-desc">Routine handled, escalations flagged</span></button>
+      </div>
+      <div class="pf-panels">
+        <div class="pf-panel is-active" role="tabpanel" id="pf-panel-leads" aria-labelledby="pf-tab-leads">
+          <div class="pf-cols">
+            <div class="pf-col before">
+              <div class="pf-col-head"><span class="pf-tag">Today</span><span class="pf-stat"><b>Hours</b>Typical first-reply delay</span></div>
+              <h3>Leads wait, then go cold</h3>
+              <ul><li>No one replies until someone's free</li><li>Hot leads drift to a faster competitor</li><li>Follow-up depends on who's around that day</li></ul>
+            </div>
+            <div class="pf-col after">
+              <div class="pf-col-head"><span class="pf-tag">With automation</span><span class="pf-stat"><b>Minutes</b>Typical first-reply time</span></div>
+              <h3>Instant, qualified follow-up</h3>
+              <ul><li>Every lead gets a reply the moment it comes in</li><li>Qualifying questions run automatically</li><li>Hot leads get flagged straight to your team</li></ul>
+            </div>
           </div>
-          <h3>Leads wait, then go cold</h3>
-          <ul>
-            <li>No one replies until someone's free</li>
-            <li>Hot leads drift to a faster competitor</li>
-            <li>Follow-up depends on who's around that day</li>
-          </ul>
-          <span class="ps-ghost" aria-hidden="true">01</span>
+          <div class="pf-impact"><span>Business impact</span><p>Leads hear back in minutes, not hours, so fewer go cold.</p></div>
         </div>
-        <div class="ps-arrow" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="pf-panel" role="tabpanel" id="pf-panel-reports" aria-labelledby="pf-tab-reports">
+          <div class="pf-cols">
+            <div class="pf-col before">
+              <div class="pf-col-head"><span class="pf-tag">Today</span><span class="pf-stat"><b>5+ hrs</b>Typical time per report</span></div>
+              <h3>Reports eat a full afternoon</h3>
+              <ul><li>Numbers pulled by hand from three different tools</li><li>Formatting takes longer than the analysis</li><li>Always a week behind by the time it's shared</li></ul>
+            </div>
+            <div class="pf-col after">
+              <div class="pf-col-head"><span class="pf-tag">With automation</span><span class="pf-stat"><b>0 hrs</b>Manual pulling required</span></div>
+              <h3>Reports that build themselves</h3>
+              <ul><li>Pulls straight from the systems you already use</li><li>Formatted and delivered on a schedule</li><li>Ready before anyone has to ask for it</li></ul>
+            </div>
+          </div>
+          <div class="pf-impact"><span>Business impact</span><p>Hours of manual pulling and formatting go back to the team every week.</p></div>
         </div>
-        <div class="ps-card solution">
-          <div class="ps-card-head">
-            <span class="ps-tag">Solution</span>
-            <span class="ps-stat-block"><span class="ps-stat">Minutes</span><span class="ps-stat-label">Typical first-reply time</span></span>
+        <div class="pf-panel" role="tabpanel" id="pf-panel-retype" aria-labelledby="pf-tab-retype">
+          <div class="pf-cols">
+            <div class="pf-col before">
+              <div class="pf-col-head"><span class="pf-tag">Today</span><span class="pf-stat"><b>3&times;</b>Same record, retyped</span></div>
+              <h3>Same info, typed three times</h3>
+              <ul><li>Every new contact re-entered across tools</li><li>Records drift out of sync with each other</li><li>Nobody's fully sure which version is current</li></ul>
+            </div>
+            <div class="pf-col after">
+              <div class="pf-col-head"><span class="pf-tag">With automation</span><span class="pf-stat"><b>1&times;</b>Single source of truth</span></div>
+              <h3>One entry, everywhere updated</h3>
+              <ul><li>A record updates once, everywhere at once</li><li>No more copy-pasting between tabs</li><li>One accurate source, always current</li></ul>
+            </div>
           </div>
-          <h3>Instant, qualified follow-up</h3>
-          <ul>
-            <li>Every lead gets a reply the moment it comes in</li>
-            <li>Qualifying questions run automatically</li>
-            <li>Hot leads get flagged straight to your team</li>
-          </ul>
-          <div class="ps-impact">
-            <span class="ps-impact-label">Business impact</span>
-            <p>Leads hear back in minutes, not hours, so fewer go cold.</p>
+          <div class="pf-impact"><span>Business impact</span><p>One accurate record, no more retyping the same details across tools.</p></div>
+        </div>
+        <div class="pf-panel" role="tabpanel" id="pf-panel-inbox" aria-labelledby="pf-tab-inbox">
+          <div class="pf-cols">
+            <div class="pf-col before">
+              <div class="pf-col-head"><span class="pf-tag">Today</span><span class="pf-stat"><b>Growing</b>Backlog, every day</span></div>
+              <h3>The inbox never empties</h3>
+              <ul><li>Same routine questions, asked daily</li><li>Simple replies wait behind complex ones</li><li>Response time slips as volume grows</li></ul>
+            </div>
+            <div class="pf-col after">
+              <div class="pf-col-head"><span class="pf-tag">With automation</span><span class="pf-stat"><b>24/7</b>Coverage, no new hires</span></div>
+              <h3>Routine handled, escalations flagged</h3>
+              <ul><li>Common questions answered instantly</li><li>Anything unclear routes to a person</li><li>The backlog stops growing</li></ul>
+            </div>
           </div>
-          <span class="ps-ghost" aria-hidden="true">01</span>
+          <div class="pf-impact"><span>Business impact</span><p>Round-the-clock coverage on routine questions, with no new hires.</p></div>
         </div>
       </div>
-
-      <div class="ps-pair reveal">
-        <div class="ps-card problem">
-          <div class="ps-card-head">
-            <span class="ps-tag">Problem</span>
-            <span class="ps-stat-block"><span class="ps-stat">5+ hrs</span><span class="ps-stat-label">Typical time per report</span></span>
-          </div>
-          <h3>Reports eat a full afternoon</h3>
-          <ul>
-            <li>Numbers pulled by hand from three different tools</li>
-            <li>Formatting takes longer than the analysis</li>
-            <li>Always a week behind by the time it's shared</li>
-          </ul>
-          <span class="ps-ghost" aria-hidden="true">02</span>
-        </div>
-        <div class="ps-arrow" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="ps-card solution">
-          <div class="ps-card-head">
-            <span class="ps-tag">Solution</span>
-            <span class="ps-stat-block"><span class="ps-stat">0 hrs</span><span class="ps-stat-label">Manual pulling required</span></span>
-          </div>
-          <h3>Reports that build themselves</h3>
-          <ul>
-            <li>Pulls straight from the systems you already use</li>
-            <li>Formatted and delivered on a schedule</li>
-            <li>Ready before anyone has to ask for it</li>
-          </ul>
-          <div class="ps-impact">
-            <span class="ps-impact-label">Business impact</span>
-            <p>Hours of manual pulling and formatting go back to the team every week.</p>
-          </div>
-          <span class="ps-ghost" aria-hidden="true">02</span>
-        </div>
-      </div>
-
-      <div class="ps-pair reveal">
-        <div class="ps-card problem">
-          <div class="ps-card-head">
-            <span class="ps-tag">Problem</span>
-            <span class="ps-stat-block"><span class="ps-stat">3&times;</span><span class="ps-stat-label">Same record, retyped</span></span>
-          </div>
-          <h3>Same info, typed three times</h3>
-          <ul>
-            <li>Every new contact re-entered across tools</li>
-            <li>Records drift out of sync with each other</li>
-            <li>Nobody's fully sure which version is current</li>
-          </ul>
-          <span class="ps-ghost" aria-hidden="true">03</span>
-        </div>
-        <div class="ps-arrow" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="ps-card solution">
-          <div class="ps-card-head">
-            <span class="ps-tag">Solution</span>
-            <span class="ps-stat-block"><span class="ps-stat">1&times;</span><span class="ps-stat-label">Single source of truth</span></span>
-          </div>
-          <h3>One entry, everywhere updated</h3>
-          <ul>
-            <li>A record updates once, everywhere at once</li>
-            <li>No more copy-pasting between tabs</li>
-            <li>One accurate source, always current</li>
-          </ul>
-          <div class="ps-impact">
-            <span class="ps-impact-label">Business impact</span>
-            <p>One accurate record, no more retyping the same details across tools.</p>
-          </div>
-          <span class="ps-ghost" aria-hidden="true">03</span>
-        </div>
-      </div>
-
-      <div class="ps-pair reveal">
-        <div class="ps-card problem">
-          <div class="ps-card-head">
-            <span class="ps-tag">Problem</span>
-            <span class="ps-stat-block"><span class="ps-stat">Growing</span><span class="ps-stat-label">Backlog, every day</span></span>
-          </div>
-          <h3>The inbox never empties</h3>
-          <ul>
-            <li>Same routine questions, asked daily</li>
-            <li>Simple replies wait behind complex ones</li>
-            <li>Response time slips as volume grows</li>
-          </ul>
-          <span class="ps-ghost" aria-hidden="true">04</span>
-        </div>
-        <div class="ps-arrow" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 5l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="ps-card solution">
-          <div class="ps-card-head">
-            <span class="ps-tag">Solution</span>
-            <span class="ps-stat-block"><span class="ps-stat">24/7</span><span class="ps-stat-label">Coverage, no new hires</span></span>
-          </div>
-          <h3>Routine handled, escalations flagged</h3>
-          <ul>
-            <li>Common questions answered instantly</li>
-            <li>Anything unclear routes to a person</li>
-            <li>The backlog stops growing</li>
-          </ul>
-          <div class="ps-impact">
-            <span class="ps-impact-label">Business impact</span>
-            <p>Round-the-clock coverage on routine questions, with no new hires.</p>
-          </div>
-          <span class="ps-ghost" aria-hidden="true">04</span>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
@@ -1025,7 +1153,7 @@
       <p>Whether you've already got a clear idea or you've just noticed something's slow, tell us about it. No pressure, no jargon, just an honest read on whether automation is the right fix.</p>
       <div class="closing-cta-row">
         <a class="btn-primary btn-on-ink" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call &rarr;</a>
-        <a class="btn-secondary" href="#contact-form">Send a message</a>
+        <a class="text-cta" href="#contact-form">or send us a message</a>
       </div>
       <p class="contact-alt">Prefer email? Reach us directly at <a href="mailto:abdul@meliorixai.com">abdul@meliorixai.com</a>.</p>
     </div>
@@ -1153,6 +1281,46 @@
         statusEl.classList.add('error');
         submitBtn.disabled = false;
       });
+    });
+  }
+
+  var pf = document.querySelector('.pf');
+  if (pf) {
+    var pfTabs = Array.prototype.slice.call(pf.querySelectorAll('.pf-tab'));
+    var pfSelect = function (i, focus) {
+      pfTabs.forEach(function (t, n) {
+        var on = n === i;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).classList.toggle('is-active', on);
+      });
+      if (focus) pfTabs[i].focus();
+    };
+    pfTabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { pfSelect(i); });
+      t.addEventListener('keydown', function (e) {
+        var k = e.key, n = pfTabs.length, j = null;
+        if (k === 'ArrowDown' || k === 'ArrowRight') j = (i + 1) % n;
+        else if (k === 'ArrowUp' || k === 'ArrowLeft') j = (i - 1 + n) % n;
+        else if (k === 'Home') j = 0;
+        else if (k === 'End') j = n - 1;
+        if (j !== null) { e.preventDefault(); pfSelect(j, true); }
+      });
+    });
+  }
+
+  var navToggle = document.querySelector('.nav-toggle');
+  if (navToggle) {
+    var navEl = document.querySelector('nav');
+    var setMenu = function (open) {
+      navEl.classList.toggle('is-open', open);
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    navToggle.addEventListener('click', function () { setMenu(!navEl.classList.contains('is-open')); });
+    document.getElementById('nav-links').addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && navEl.classList.contains('is-open')) { setMenu(false); navToggle.focus(); }
     });
   }
 </script>

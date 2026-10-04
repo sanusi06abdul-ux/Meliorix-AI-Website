@@ -219,6 +219,104 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
+
+  /* ---------- Mobile pass ---------- */
+  .back-link { padding-block: 10px; margin-top: -10px; margin-bottom: 18px; }
+  footer .footer-social { padding: 12px; margin: -12px; }
+  footer .footer-social svg { width: 18px; height: 18px; }
+
+  /* ---------- Workflow block (after 21st.dev n8n-workflow-block) ---------- */
+  .wf { margin: 36px 0; background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 20px 40px rgba(17,18,17,0.06); }
+  .wf-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 2px 4px 16px; }
+  .wf-live { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); background: rgba(15,110,86,0.08); border: 1px solid rgba(15,110,86,0.25); padding: 5px 12px; border-radius: 999px; }
+  .wf-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: wf-blink 2s ease-in-out infinite; }
+  @keyframes wf-blink { 50% { opacity: 0.3; } }
+  .wf-name { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 15px; color: var(--ink); }
+  .wf-since { margin-left: auto; font-size: 13px; color: #6B6B65; }
+  .wf-canvas {
+    position: relative; height: 404px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    background: radial-gradient(rgba(17,18,17,0.10) 1px, transparent 1px) 0 0 / 18px 18px, var(--paper);
+  }
+  .wf-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .wf-lines path { fill: none; stroke: var(--green); stroke-width: 1.6; stroke-dasharray: 6 6; stroke-linecap: round; opacity: 0.55; animation: wf-flow 1.2s linear infinite; }
+  .wf-lines circle { fill: var(--green); }
+  @keyframes wf-flow { to { stroke-dashoffset: -24; } }
+  .wf-node {
+    position: absolute; width: 184px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+    box-shadow: 0 6px 16px rgba(17,18,17,0.06); cursor: grab; user-select: none; touch-action: none; transition: box-shadow 160ms ease;
+  }
+  .wf-node.dragging { cursor: grabbing; box-shadow: 0 14px 28px rgba(17,18,17,0.14); z-index: 3; }
+  .wf-node { --col: 0; left: calc((100% - 212px) * var(--col) / 3 + 14px); }
+  .wf-node[data-id="n1"] { top: 24px; }                .wf-node[data-id="n2"] { --col: 1; top: 24px; }
+  .wf-node[data-id="n3"] { top: 220px; }               .wf-node[data-id="n4"] { --col: 1; top: 220px; }
+  .wf-node[data-id="n5"] { --col: 2; top: 128px; }
+  .wf-node[data-id="n6"] { --col: 3; top: 24px; }      .wf-node[data-id="n7"] { --col: 3; top: 220px; }
+  .wf-node.trigger { border-color: rgba(15,110,86,0.35); }
+  .wf-node.ai { border-color: rgba(93,202,165,0.7); background: linear-gradient(160deg, #F2FAF6, #fff 70%); }
+  .wf-node.output { border-color: rgba(17,18,17,0.3); }
+  .wf-node-head { display: flex; align-items: center; gap: 10px; }
+  .wf-icon { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: var(--paper-2); color: var(--green); }
+  .wf-node.trigger .wf-icon, .wf-node.merge .wf-icon { background: rgba(15,110,86,0.09); }
+  .wf-icon svg, .wf-icon img { width: 18px; height: 18px; }
+  .wf-type { display: block; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #6B6B65; }
+  .wf-title { display: block; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 14.5px; line-height: 1.25; color: var(--ink); }
+  .wf-node p { margin: 8px 0 0 !important; font-size: 12.5px !important; line-height: 1.45 !important; color: #4A4A46 !important; }
+  .wf-status { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green); }
+  .wf-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--mint); }
+  .wf-foot { display: flex; align-items: center; gap: 20px; padding: 14px 4px 2px; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #4A4A46; }
+  .wf-foot i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); margin-right: 8px; vertical-align: 1px; }
+  .wf-foot i.g { background: var(--green); }
+  .wf-hint { margin-left: auto; color: #6B6B65; }
+  .wf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 900px) {
+    .wf { padding: 14px; }
+    .wf-since { margin-left: 0; width: 100%; }
+    .wf-canvas { height: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 34px 14px; padding: 18px 14px; }
+    .wf-node { position: relative; left: auto !important; top: auto !important; width: auto; margin: 0; cursor: default; touch-action: auto; }
+    .wf-node[data-id="n1"] { grid-area: 1 / 1; } .wf-node[data-id="n3"] { grid-area: 1 / 2; }
+    .wf-node[data-id="n2"] { grid-area: 2 / 1; } .wf-node[data-id="n4"] { grid-area: 2 / 2; }
+    .wf-node[data-id="n5"], .wf-node[data-id="n6"], .wf-node[data-id="n7"] { grid-column: 1 / -1; width: min(100%, 300px); justify-self: center; }
+    .wf-hint { display: none; }
+  }
+  @media (max-width: 420px) {
+    .wf-canvas { gap: 30px 10px; padding: 14px 10px; }
+    .wf-node { padding: 10px 11px; }
+    .wf-icon { width: 28px; height: 28px; }
+    .wf-title { font-size: 13.5px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .wf-lines path, .wf-live i { animation: none; } }
+
+  /* Tech stack chips with logos */
+  .tech-chip { display: inline-flex; align-items: center; gap: 10px; }
+  .tech-chip img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+
+  /* ---------- Before vs after (after 21st.dev comparison-03) ---------- */
+  .before-after { padding: 72px 0; }
+  .before-after h2 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.15; color: var(--ink); max-width: 640px; text-wrap: balance; }
+  .cmp { margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #fff; }
+  .cmp-col { padding: 34px 36px 36px; }
+  .cmp-col + .cmp-col { border-left: 1px solid var(--line); }
+  .cmp-col.after { background: linear-gradient(160deg, rgba(15,110,86,0.06), rgba(93,202,165,0.02)); }
+  .cmp-label { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #6B6B65; }
+  .cmp-label svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .cmp-col.after .cmp-label { color: var(--green-deep); }
+  .cmp-col ul { list-style: none; margin-top: 22px; display: flex; flex-direction: column; gap: 16px; }
+  .cmp-col li { display: flex; gap: 14px; align-items: flex-start; font-size: 16px; line-height: 1.5; }
+  .cmp-col.before li { color: #6B6B65; text-decoration: line-through; text-decoration-color: rgba(107,107,101,0.55); text-decoration-thickness: 1px; }
+  .cmp-col.before li::before { content: ""; flex-shrink: 0; width: 12px; height: 1.5px; margin-top: 12px; background: #A8A79F; }
+  .cmp-col.after li { color: var(--ink); }
+  .cmp-col.after li::before {
+    content: ""; flex-shrink: 0; width: 16px; height: 16px; margin-top: 4px; background: var(--green);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.5l5 5L20 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 12.5l5 5L20 6.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+  @media (max-width: 680px) {
+    .before-after { padding: 52px 0; }
+    .cmp { grid-template-columns: 1fr; }
+    .cmp-col { padding: 26px 22px 28px; }
+    .cmp-col + .cmp-col { border-left: 0; border-top: 1px solid var(--line); }
+    .cmp-col li { font-size: 15px; }
+  }
 </style>
 </head>
 <body>
@@ -287,27 +385,57 @@
       <div class="approach-item"><span class="approach-num">02</span><span>Lower-league scraper runs four times a day to catch what the main pass misses</span></div>
     </div>
 
-    <svg viewBox="0 0 700 220" width="100%" height="auto" role="img" aria-labelledby="archTitle" style="margin: 32px 0;">
-      <title id="archTitle">Diagram showing the two-workflow architecture: scheduled RSS and news fetching, a separate four-times-daily lower-league scrape feeding into it, both filtered by AI, merged, and sent as one 8am email</title>
-      <rect x="10" y="20" width="140" height="40" rx="4" fill="none" stroke="#DEDCD3"/>
-      <text x="80" y="45" fill="#3A3A36" font-size="12" font-family="Inter, sans-serif" text-anchor="middle">Scheduled trigger (8am)</text>
-      <rect x="10" y="150" width="140" height="40" rx="4" fill="none" stroke="#DEDCD3"/>
-      <text x="80" y="171" fill="#3A3A36" font-size="11.5" font-family="Inter, sans-serif" text-anchor="middle">Lower-league scrape</text>
-      <text x="80" y="185" fill="#6B6B65" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">runs 4&times; daily</text>
-      <line x1="150" y1="40" x2="250" y2="95" stroke="#0F6E56" stroke-width="1.5"/>
-      <line x1="150" y1="170" x2="250" y2="110" stroke="#0F6E56" stroke-width="1.5"/>
-      <rect x="252" y="80" width="140" height="46" rx="4" fill="none" stroke="#0F6E56" stroke-width="1.6"/>
-      <text x="322" y="99" fill="#0F6E56" font-size="12" font-family="Space Grotesk, sans-serif" text-anchor="middle">Merge sources</text>
-      <text x="322" y="114" fill="#6B6B65" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">RSS + Google News + scrape</text>
-      <line x1="392" y1="103" x2="452" y2="103" stroke="#0F6E56" stroke-width="1.5"/>
-      <rect x="454" y="80" width="120" height="46" rx="4" fill="none" stroke="#0F6E56" stroke-width="1.6"/>
-      <text x="514" y="99" fill="#0F6E56" font-size="12" font-family="Space Grotesk, sans-serif" text-anchor="middle">AI filter</text>
-      <text x="514" y="114" fill="#6B6B65" font-size="10" font-family="Inter, sans-serif" text-anchor="middle">qualifying deals only</text>
-      <line x1="574" y1="103" x2="620" y2="103" stroke="#0F6E56" stroke-width="1.5"/>
-      <rect x="622" y="78" width="70" height="50" rx="4" fill="#FAFAF8" stroke="#0F6E56" stroke-width="1.8"/>
-      <text x="657" y="98" fill="#111211" font-size="11" font-family="Space Grotesk, sans-serif" text-anchor="middle">8am</text>
-      <text x="657" y="112" fill="#6B6B65" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">email brief</text>
-    </svg>
+    <figure class="wf" aria-labelledby="wf-caption">
+      <div class="wf-head">
+        <span class="wf-live"><i></i>Active</span>
+        <span class="wf-name">Two connected n8n workflows</span>
+        <span class="wf-since">Live since January 2026</span>
+      </div>
+      <div class="wf-canvas" data-edges="n1>n2 n2>n5 n3>n4 n4>n5 n5>n6 n6>n7">
+        <svg class="wf-lines" aria-hidden="true"></svg>
+        <div class="wf-node trigger" data-id="n1">
+          <div class="wf-node-head"><span class="wf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><span class="wf-type">Trigger</span><span class="wf-title">Schedule</span></span></div>
+          <p>Every day at 8am</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node action" data-id="n2">
+          <div class="wf-node-head"><span class="wf-icon"><img src="Images%20-%20for%20Website/tools/rss.svg" alt="" width="20" height="20"></span><span><span class="wf-type">Fetch</span><span class="wf-title">RSS + Google News</span></span></div>
+          <p>Sports-business feeds and targeted searches</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node trigger" data-id="n3">
+          <div class="wf-node-head"><span class="wf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><span class="wf-type">Trigger</span><span class="wf-title">Schedule</span></span></div>
+          <p>6am, 12pm, 6pm and midnight</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node action" data-id="n4">
+          <div class="wf-node-head"><span class="wf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span><span><span class="wf-type">Fetch</span><span class="wf-title">Lower-league scrape</span></span></div>
+          <p>A news aggregator, four times a day</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node merge" data-id="n5">
+          <div class="wf-node-head"><span class="wf-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="12" r="2"/><path d="M8 5h2a4 4 0 0 1 4 4v1a2 2 0 0 0 2 2M8 19h2a4 4 0 0 0 4-4v-1a2 2 0 0 1 2-2"/></svg></span><span><span class="wf-type">Merge</span><span class="wf-title">Merge sources</span></span></div>
+          <p>Everything from the last 24 hours</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node ai" data-id="n6">
+          <div class="wf-node-head"><span class="wf-icon"><img src="Images%20-%20for%20Website/tools/openai.svg" alt="" width="20" height="20"></span><span><span class="wf-type">AI</span><span class="wf-title">OpenAI filter</span></span></div>
+          <p>Keeps qualifying partnership deals only</p>
+          <span class="wf-status">Connected</span>
+        </div>
+        <div class="wf-node output" data-id="n7">
+          <div class="wf-node-head"><span class="wf-icon"><img src="Images%20-%20for%20Website/tools/gmail.svg" alt="" width="20" height="20"></span><span><span class="wf-type">Send</span><span class="wf-title">Gmail</span></span></div>
+          <p>The Football Partnership Brief at 8am</p>
+          <span class="wf-status">Connected</span>
+        </div>
+      </div>
+      <div class="wf-foot">
+        <span><i class="g"></i>7 nodes</span>
+        <span><i></i>6 connections</span>
+        <span class="wf-hint">Drag nodes to move them</span>
+      </div>
+      <figcaption id="wf-caption" class="wf-sr">The main workflow runs at 8am: it fetches RSS feeds and Google News. A second workflow scrapes a lower-league news aggregator at 6am, 12pm, 6pm and midnight. Both feed a merge step, then an OpenAI filter keeps only qualifying partnership deals, and Gmail sends the brief at 8am.</figcaption>
+    </figure>
 
     <h2>What we built</h2>
     <div class="workflow">
@@ -404,28 +532,28 @@
     <p class="cs-overview-eyebrow">Technology stack</p>
     <h2 style="font-size: 20px;">Built with the tools already in use</h2>
     <div class="tech-chips">
-      <span class="tech-chip">n8n</span>
-      <span class="tech-chip">OpenAI</span>
-      <span class="tech-chip">Gmail</span>
+      <span class="tech-chip"><img src="Images%20-%20for%20Website/tools/n8n.svg" alt="" width="20" height="20">n8n</span>
+      <span class="tech-chip"><img src="Images%20-%20for%20Website/tools/openai.svg" alt="" width="20" height="20">OpenAI</span>
+      <span class="tech-chip"><img src="Images%20-%20for%20Website/tools/gmail.svg" alt="" width="20" height="20">Gmail</span>
     </div>
   </div>
 </section>
 
 <section class="before-after">
   <div class="wrap">
-    <p class="cs-overview-eyebrow">Transformation</p>
-    <h2>Before vs after</h2>
-    <div class="ba-grid">
-      <div class="ba-col before">
-        <h4>Before</h4>
+    <p class="cs-overview-eyebrow">Before vs after</p>
+    <h2>Every morning, before and after the brief</h2>
+    <div class="cmp">
+      <div class="cmp-col before">
+        <p class="cmp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5M12 16h.01"/></svg>Doing it by hand</p>
         <ul>
           <li>Announcements scattered across dozens of outlets</li>
           <li>Hours spent manually reading sports news each morning</li>
           <li>Lower-league deals routinely missed</li>
         </ul>
       </div>
-      <div class="ba-col after">
-        <h4>After</h4>
+      <div class="cmp-col after">
+        <p class="cmp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12.5 2.7 2.7L16 9.8"/></svg>With the automation</p>
         <ul>
           <li>6&ndash;8 hours saved weekly</li>
           <li>4&times; daily scrapes, so nothing gets missed</li>
@@ -456,5 +584,57 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  var canvas = document.querySelector('.wf-canvas');
+  if (!canvas) return;
+  var svg = canvas.querySelector('.wf-lines'), NS = 'http://www.w3.org/2000/svg';
+  var edges = canvas.getAttribute('data-edges').split(' ').map(function (e) { return e.split('>'); });
+  function node(id) { return canvas.querySelector('[data-id="' + id + '"]'); }
+  function draw() {
+    var c = canvas.getBoundingClientRect();
+    svg.setAttribute('viewBox', '0 0 ' + c.width + ' ' + c.height);
+    svg.innerHTML = '';
+    edges.forEach(function (e) {
+      var a = node(e[0]).getBoundingClientRect(), b = node(e[1]).getBoundingClientRect(), d, x1, y1, x2, y2;
+      if (b.left > a.right - 10) {              // target to the right: leave from the side
+        x1 = a.right - c.left; y1 = a.top + a.height / 2 - c.top; x2 = b.left - c.left; y2 = b.top + b.height / 2 - c.top;
+        var mx = (x1 + x2) / 2; d = 'M' + x1 + ' ' + y1 + ' C' + mx + ' ' + y1 + ' ' + mx + ' ' + y2 + ' ' + x2 + ' ' + y2;
+      } else {                                  // target below: leave from the bottom
+        x1 = a.left + a.width / 2 - c.left; y1 = a.bottom - c.top; x2 = b.left + b.width / 2 - c.left; y2 = b.top - c.top;
+        var my = (y1 + y2) / 2; d = 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + my + ' ' + x2 + ' ' + my + ' ' + x2 + ' ' + y2;
+      }
+      var p = document.createElementNS(NS, 'path'); p.setAttribute('d', d); svg.appendChild(p);
+      [[x1, y1], [x2, y2]].forEach(function (pt) {
+        var dot = document.createElementNS(NS, 'circle'); dot.setAttribute('cx', pt[0]); dot.setAttribute('cy', pt[1]); dot.setAttribute('r', 3); svg.appendChild(dot);
+      });
+    });
+  }
+  // Drag nodes on wide screens
+  var drag = null;
+  canvas.addEventListener('pointerdown', function (e) {
+    var n = e.target.closest('.wf-node');
+    if (!n || window.innerWidth <= 900) return;
+    var c = canvas.getBoundingClientRect(), r = n.getBoundingClientRect();
+    drag = { n: n, dx: e.clientX - r.left, dy: e.clientY - r.top, c: c };
+    n.classList.add('dragging'); n.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var c = drag.c, n = drag.n;
+    var x = Math.max(0, Math.min(c.width - n.offsetWidth, e.clientX - c.left - drag.dx));
+    var y = Math.max(0, Math.min(c.height - n.offsetHeight, e.clientY - c.top - drag.dy));
+    n.style.left = x + 'px'; n.style.top = y + 'px'; draw();
+  });
+  function stop() { if (drag) { drag.n.classList.remove('dragging'); drag = null; } }
+  canvas.addEventListener('pointerup', stop); canvas.addEventListener('pointercancel', stop);
+  window.addEventListener('resize', function () {
+    canvas.querySelectorAll('.wf-node').forEach(function (n) { n.style.left = n.style.top = ''; });
+    draw();
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  draw();
+})();
+</script>
 </body>
 </html>
