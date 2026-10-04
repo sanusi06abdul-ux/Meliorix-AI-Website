@@ -848,6 +848,27 @@
 
   /* Menu links land on the section heading, just below the sticky bar */
   section[id] { scroll-margin-top: 24px; }
+
+  /* ---------- FAQ (after 21st.dev vaib215/faq-tabs) ---------- */
+  .faq-panels { max-width: 860px; }
+  .faq-tabs { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .faq-tab { font: inherit; font-size: 14px; font-weight: 500; padding: 9px 16px; min-height: 40px; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: #4A4A46; cursor: pointer; transition: background 150ms ease, color 150ms ease, border-color 150ms ease; }
+  .faq-tab:hover { border-color: var(--green); color: var(--ink); }
+  .faq-tab[aria-selected="true"] { background: var(--green); border-color: var(--green); color: #fff; }
+  .faq-tab:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .faq-panels { margin-top: 24px; }
+  .js .faq-panel { display: none; }
+  .js .faq-panel.is-active { display: block; animation: faq-in 260ms ease; }
+  @keyframes faq-in { from { opacity: 0; transform: translateY(6px); } }
+  .faq-item { border-bottom: 1px solid var(--line); }
+  .faq-item:first-child { border-top: 1px solid var(--line); }
+  .faq-item summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 20px 2px; font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 18px; color: var(--ink); }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: ""; flex-shrink: 0; width: 10px; height: 10px; border-right: 1.6px solid var(--green); border-bottom: 1.6px solid var(--green); transform: rotate(45deg) translateY(-3px); transition: transform 200ms ease; }
+  .faq-item[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
+  .faq-item summary:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .faq-item p { padding: 0 2px 22px; max-width: 680px; font-size: 16px; line-height: 1.7; color: #4A4A46; }
+  @media (max-width: 600px) { .faq-item summary { font-size: 16.5px; padding: 18px 2px; } }
 </style>
 </head>
 <body>
@@ -1248,6 +1269,35 @@
   </div>
 </section>
 
+<section id="faq">
+  <div class="wrap faq-wrap">
+    <p class="section-label">FAQ</p>
+    <h2 class="reveal">Questions owners ask before booking a call.</h2>
+    <div class="faq-tabs" role="tablist" aria-label="Question topics"><button type="button" class="faq-tab" role="tab" id="faq-tab-0" aria-controls="faq-panel-0" aria-selected="true" tabindex="0">Getting started</button><button type="button" class="faq-tab" role="tab" id="faq-tab-1" aria-controls="faq-panel-1" aria-selected="false" tabindex="-1">Cost and timing</button><button type="button" class="faq-tab" role="tab" id="faq-tab-2" aria-controls="faq-panel-2" aria-selected="false" tabindex="-1">How it works</button><button type="button" class="faq-tab" role="tab" id="faq-tab-3" aria-controls="faq-panel-3" aria-selected="false" tabindex="-1">After launch</button></div>
+    <div class="faq-panels">
+        <div class="faq-panel is-active" role="tabpanel" id="faq-panel-0" aria-labelledby="faq-tab-0">
+          <details class="faq-item"><summary>Do I need to know what to automate?</summary><p>No. Bring the task that eats up your team's time. On the call we walk through it together and tell you honestly whether automation is the right fix. If you'd like a head start, the free calculator shows what a task is costing you in about 3 minutes.</p></details>
+          <details class="faq-item"><summary>What happens on the free call?</summary><p>It's 30 minutes with no obligation. We look at one process you'd like to fix, ask how it runs today, and give you a straight answer on whether it's worth automating and what that would involve.</p></details>
+          <details class="faq-item"><summary>What kind of businesses do you work with?</summary><p>Owner-led service businesses, such as agencies, letting agents, home services and professional firms. If your team loses hours to copying, chasing or re-checking the same things, we can probably help.</p></details>
+        </div>
+        <div class="faq-panel" role="tabpanel" id="faq-panel-1" aria-labelledby="faq-tab-1">
+          <details class="faq-item"><summary>How much does it cost?</summary><p>It depends on the process, so we scope it with you before anything starts. A pilot has a fixed scope, so you know what you're getting before you commit.</p></details>
+          <details class="faq-item"><summary>How long does it take?</summary><p>A pilot usually takes 2 to 4 weeks, from first call to an automation running in your business.</p></details>
+          <details class="faq-item"><summary>Do I have to commit long term?</summary><p>No. Most people start with a pilot on one process and get a clear go or no-go at the end. Ongoing partner work runs month to month.</p></details>
+        </div>
+        <div class="faq-panel" role="tabpanel" id="faq-panel-2" aria-labelledby="faq-tab-2">
+          <details class="faq-item"><summary>Will we have to change our tools?</summary><p>No. We build around the tools you already use, such as your inbox, CRM, spreadsheets and calendar. Nothing needs to be migrated.</p></details>
+          <details class="faq-item"><summary>Do you use AI for everything?</summary><p>No. We use AI where it genuinely adds something and plain automation where it doesn't. One of our client builds runs a whole membership programme with no AI at all.</p></details>
+          <details class="faq-item"><summary>Will my team need to learn anything new?</summary><p>Very little. You get SOPs, diagrams and a video walkthrough, so you and your team know exactly how it works.</p></details>
+        </div>
+        <div class="faq-panel" role="tabpanel" id="faq-panel-3" aria-labelledby="faq-tab-3">
+          <details class="faq-item"><summary>What happens after it goes live?</summary><p>We stay close while it settles in. As your business changes, we tune the automation to match, then move on to the next process holding you back.</p></details>
+          <details class="faq-item"><summary>What if our process changes later?</summary><p>Tell us. Everything is documented, so changes are straightforward, and partner clients get priority tuning when new needs come up.</p></details>
+        </div>
+    </div>
+  </div>
+</section>
+
 <section class="closing on-ink forest" id="contact">
   <div class="wrap closing-grid">
     <div class="reveal">
@@ -1438,6 +1488,23 @@
       hxIo.observe(hx);
     } else { hxPlay(); }
   }
+
+  var faqTabs = Array.prototype.slice.call(document.querySelectorAll('.faq-tab'));
+  var faqSelect = function (i, focus) {
+    faqTabs.forEach(function (t, n) {
+      var on = n === i;
+      t.setAttribute('aria-selected', on ? 'true' : 'false'); t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).classList.toggle('is-active', on);
+    });
+    if (focus) faqTabs[i].focus();
+  };
+  faqTabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { faqSelect(i); });
+    t.addEventListener('keydown', function (e) {
+      var n = faqTabs.length, j = e.key === 'ArrowRight' ? (i + 1) % n : e.key === 'ArrowLeft' ? (i - 1 + n) % n : null;
+      if (j !== null) { e.preventDefault(); faqSelect(j, true); }
+    });
+  });
 </script>
 
 </body>
