@@ -222,6 +222,42 @@
   .pd-tap { position: absolute; z-index: 7; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: rgba(17,18,17,.22); border: 2px solid rgba(255,255,255,.85); opacity: 0; transform: scale(.6); pointer-events: none; transition: opacity 150ms, transform 150ms; }
   .pd-tap.on { opacity: 1; transform: scale(1); }
   @media (max-width: 380px) { .phone { width: 272px; height: 556px; } .pd { zoom: 0.651; } }
+
+  /* ---------- Site menu (matches the homepage) ---------- */
+  nav { padding: 24px 0; }
+  nav .wrap { gap: 24px; }
+  .logo { flex-shrink: 0; color: var(--ink); }
+  .nav-links { display: flex; gap: 28px; list-style: none; font-size: 14px; }
+  .nav-links a { position: relative; padding-bottom: 3px; text-decoration: none; color: #6B6B65; transition: color 150ms ease; }
+  .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--ink); }
+  .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: var(--green); transform: scaleX(0); transform-origin: left; transition: transform 220ms ease; }
+  .nav-links a:hover::after, .nav-links a[aria-current="page"]::after { transform: scaleX(1); }
+  .nav-cta { flex-shrink: 0; background: var(--green); color: #fff; text-decoration: none; font-size: 14px; font-weight: 500; padding: 10px 18px; border-radius: 4px; }
+  .nav-cta:hover { background: var(--green-deep); }
+  .nav-toggle { display: none; }
+  @media (max-width: 760px) {
+    nav { padding: 14px 0; }
+    nav .wrap { gap: 10px; }
+    .nav-links { display: none; }
+    .nav-cta { margin-left: auto; padding: 11px 16px; }
+    .nav-toggle {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; margin-right: -8px;
+      background: none; border: 1px solid var(--line); border-radius: 4px; color: var(--ink); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer;
+    }
+    .nav-toggle svg { width: 20px; height: 20px; }
+    .nav-toggle path { transition: transform 200ms ease, opacity 200ms ease; transform-origin: 12px 12px; }
+    nav.is-open .nav-toggle .l1 { transform: translateY(5px) rotate(45deg); }
+    nav.is-open .nav-toggle .l2 { opacity: 0; }
+    nav.is-open .nav-toggle .l3 { transform: translateY(-5px) rotate(-45deg); }
+    nav.is-open .nav-links {
+      display: flex; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: 0 18px 30px rgba(17,18,17,0.10); padding: 8px 16px 16px;
+    }
+    nav.is-open .nav-links a { display: block; padding: 14px 4px; font-size: 16px; color: var(--ink); border-bottom: 1px solid var(--paper-2); }
+    nav.is-open .nav-links a::after { display: none; }
+  }
+  @media (max-width: 380px) { .logo { font-size: 17px; } .nav-toggle span { display: none; } }
+  .nav-toggle:focus-visible, .nav-cta:focus-visible, .nav-links a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 </style>
 </head>
 <body>
@@ -232,7 +268,16 @@
       <img class="mark" src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="28" height="26">
       Meliorix AI
     </a>
-    <a class="link" href="index.html#case-studies">Case studies</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html#what">What we do</a></li>
+      <li><a href="index.html#process">How it works</a></li>
+      <li><a href="index.html#case-studies">Case studies</a></li>
+      <li><a href="index.html#problems">Problems</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="automation-calculator.html" aria-current="page">Free calculator</a></li>
+    </ul>
+    <a class="nav-cta" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M4 7h16"/><path class="l2" d="M4 12h16"/><path class="l3" d="M4 17h16"/></svg><span>Menu</span></button>
   </div>
 </nav>
 
@@ -935,6 +980,22 @@
     running = false; finished = true; userPaused = false; setToggle();
   }
   if (!reduce) play();
+})();
+</script>
+<script>
+(function () {
+  var navToggle = document.querySelector('.nav-toggle');
+  if (!navToggle) return;
+  var navEl = document.querySelector('nav');
+  function setMenu(open) {
+    navEl.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  navToggle.addEventListener('click', function () { setMenu(!navEl.classList.contains('is-open')); });
+  document.getElementById('nav-links').addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navEl.classList.contains('is-open')) { setMenu(false); navToggle.focus(); }
+  });
 })();
 </script>
 </body>
