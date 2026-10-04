@@ -289,24 +289,40 @@
     .story-media { min-height: 200px; border-right: none; border-bottom: 1px dashed var(--line); }
   }
 
-  /* Testimonials */
-  .testimonial-spotlight-list { margin-top: 56px; display: flex; flex-direction: column; gap: 64px; }
-  .testimonial-spotlight { max-width: 760px; margin-inline: auto; text-align: center; }
-  .spotlight-quote {
-    font-family: 'Space Grotesk', sans-serif; font-style: italic; font-weight: 500;
-    font-size: clamp(21px, 3vw, 30px); line-height: 1.45; color: var(--ink);
+  /* Testimonials: photo band + one quote at a time */
+  #testimonials { padding-bottom: 0; }
+  .quote-band { position: relative; margin-top: 64px; min-height: 560px; display: grid; place-items: center; padding: 80px 24px; overflow: hidden; }
+  .quote-bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 700ms ease; }
+  .quote-bg.is-active { opacity: 1; }
+  .quote-band::after { content: ''; position: absolute; inset: 0; background: rgba(17,18,17,0.38); pointer-events: none; }
+  .quote-card {
+    position: relative; z-index: 1; width: 100%; max-width: 680px;
+    background: var(--green-deep); color: var(--paper);
+    padding: 64px 76px 44px; text-align: center;
   }
-  .spotlight-quote .hl { font-style: normal; color: var(--green-deep); }
-  .spotlight-person { margin-top: 32px; display: flex; align-items: center; justify-content: center; gap: 14px; }
-  .testimonial-avatar {
-    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
-    background: linear-gradient(135deg, #14966F, var(--green-deep)); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 14px;
+  .quote-slides { display: grid; }
+  .quote-slide { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity 220ms ease, visibility 0s 220ms; }
+  .quote-slide.is-active { opacity: 1; visibility: visible; transition: opacity 380ms ease 220ms, visibility 0s 220ms; }
+  .quote-slide blockquote { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: clamp(19px, 2.2vw, 23px); line-height: 1.5; letter-spacing: -0.01em; }
+  .quote-slide figcaption { margin-top: 26px; font-size: 14px; color: #B9E8D7; }
+  .quote-slide figcaption span { display: block; margin-top: 2px; font-size: 12.5px; color: rgba(250,250,248,0.6); }
+  .quote-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px;
+    display: grid; place-items: center; background: transparent; border: 0; color: var(--paper); cursor: pointer; opacity: 0.75;
   }
-  .spotlight-name { font-size: 14.5px; font-weight: 600; color: var(--ink); text-align: left; }
-  .spotlight-role { font-size: 12.5px; color: #6B6B65; margin-top: 2px; text-align: left; }
-  @media (max-width: 640px) { .spotlight-quote { font-size: 20px; } }
+  .quote-arrow:hover { opacity: 1; }
+  .quote-arrow.prev { left: 14px; }
+  .quote-arrow.next { right: 14px; }
+  .quote-dots { margin-top: 36px; display: flex; justify-content: center; gap: 8px; }
+  .quote-dot { width: 30px; height: 18px; padding: 0; border: 0; background: transparent; cursor: pointer; position: relative; }
+  .quote-dot::before { content: ''; position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: rgba(250,250,248,0.35); }
+  .quote-dot[aria-current="true"]::before { background: var(--paper); }
+  .quote-card :focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+  @media (max-width: 640px) {
+    .quote-band { min-height: 0; padding: 48px 16px; }
+    .quote-card { padding: 48px 28px 32px; }
+    .quote-arrow { top: auto; bottom: 18px; transform: none; }
+  }
 
   /* Checklist */
   .check-grid { margin-top: 44px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 60px; }
@@ -556,6 +572,17 @@
     .hero-visual { order: -1; max-width: 320px; margin-inline: auto; }
   }
 
+
+  /* ---------- Case studies: airier layout ---------- */
+  section#case-studies { padding: 120px 0; }
+  section#testimonials { padding-top: 120px; }
+  #case-studies .section-label, #testimonials .section-label { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+  #case-studies .section-label::before, #testimonials .section-label::before { content: ''; width: 32px; height: 1px; background: currentColor; flex-shrink: 0; }
+  #case-studies h2, #testimonials h2 { font-size: clamp(34px, 4.6vw, 50px); line-height: 1.08; max-width: 720px; text-wrap: balance; }
+  #case-studies .story-list { margin-top: 56px; }
+  #case-studies .story-panel h3 { font-size: clamp(24px, 2.8vw, 32px); line-height: 1.2; text-wrap: balance; }
+  #case-studies .story-link { margin-top: 28px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; }
+  @media (max-width: 720px) { section#case-studies { padding: 80px 0; } }
 </style>
 </head>
 <body>
@@ -714,7 +741,7 @@
           <span class="story-tag">AI Automation</span>
           <h3>A daily brief that catches partnership news before anyone else does</h3>
           <p class="story-desc">Their partnership news took hours to track by hand. We built an AI digest that finds it and delivers it every morning at 8am.</p>
-          <a class="story-link" href="case-study-partnership.html">Read the full case study &rarr;</a>
+          <a class="story-link" href="case-study-partnership.html">Read the case study</a>
         </div>
       </article>
 
@@ -726,7 +753,7 @@
           <span class="story-tag">AI Automation</span>
           <h3>A membership programme that runs itself, across five tiers</h3>
           <p class="story-desc">Renewals, tickets, and records all needed a person. Six connected workflows now run the entire membership lifecycle on their own.</p>
-          <a class="story-link" href="case-study-membership.html">Read the full case study &rarr;</a>
+          <a class="story-link" href="case-study-membership.html">Read the case study</a>
         </div>
       </article>
 
@@ -737,28 +764,32 @@
 <section id="testimonials">
   <div class="wrap">
     <p class="section-label">What clients say</p>
-    <h2 class="reveal">Real feedback from clients.</h2>
-    <div class="testimonial-spotlight-list">
-      <div class="testimonial-spotlight reveal">
-        <p class="spotlight-quote">&ldquo;Before this I was spending <span class="hl">6&ndash;8 hours weekly</span> looking for partnership news. Now I receive a daily email informing me of the activity going on within the sponsorship market, allowing me to <span class="hl">capture high-intent leads</span> looking to activate sponsorships.&rdquo;</p>
-        <div class="spotlight-person">
-          <div class="testimonial-avatar" aria-hidden="true">SA</div>
-          <div>
-            <p class="spotlight-name">Founder, Sports Sponsorship Agency</p>
-            <p class="spotlight-role">Partnership news automation</p>
-          </div>
-        </div>
+    <h2 class="reveal">What Clients Say</h2>
+  </div>
+  <div class="quote-band" aria-roledescription="carousel" aria-label="Client testimonials">
+    <div class="quote-bg is-active" style="background-image: url('Images%20-%20for%20Website/case-studies/partnership-hero.jpg')"></div>
+    <div class="quote-bg" style="background-image: url('Images%20-%20for%20Website/case-studies/membership-hero.jpg')"></div>
+    <div class="quote-card">
+      <button class="quote-arrow prev" type="button" aria-label="Previous testimonial">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="quote-slides" aria-live="polite">
+        <figure class="quote-slide is-active" aria-roledescription="slide" aria-label="1 of 2">
+          <blockquote>&ldquo;Before this I was spending 6&ndash;8 hours weekly looking for partnership news. Now I receive a daily email informing me of the activity going on within the sponsorship market, allowing me to capture high-intent leads looking to activate sponsorships.&rdquo;</blockquote>
+          <figcaption>Founder, Sports Sponsorship Agency<span>Partnership news automation</span></figcaption>
+        </figure>
+        <figure class="quote-slide" aria-roledescription="slide" aria-label="2 of 2" aria-hidden="true">
+          <blockquote>&ldquo;He's focused on providing solutions in a quick period of time. He finds the problem and quickly resolves it, while explaining what, how, and why he took certain actions, without adding extra workload to your process. His work is very appreciated.&rdquo;</blockquote>
+          <figcaption>Founder, Membership Platform<span>Membership lifecycle automation</span></figcaption>
+        </figure>
       </div>
-      <div class="testimonial-spotlight reveal">
-        <p class="spotlight-quote">&ldquo;He's focused on providing solutions in a <span class="hl">quick period of time</span>. He finds the problem and quickly resolves it, while explaining what, how, and why he took certain actions, without adding extra workload to your process. His work is <span class="hl">very appreciated</span>.&rdquo;</p>
-        <div class="spotlight-person">
-          <div class="testimonial-avatar" aria-hidden="true">MP</div>
-          <div>
-            <p class="spotlight-name">Founder, Membership Platform</p>
-            <p class="spotlight-role">Membership lifecycle automation</p>
-          </div>
-        </div>
+      <div class="quote-dots">
+        <button class="quote-dot" type="button" aria-label="Show testimonial 1" aria-current="true"></button>
+        <button class="quote-dot" type="button" aria-label="Show testimonial 2" aria-current="false"></button>
       </div>
+      <button class="quote-arrow next" type="button" aria-label="Next testimonial">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </div>
 </section>
@@ -1077,6 +1108,26 @@
     revealEls.forEach(function (el) { io.observe(el); });
   } else {
     revealEls.forEach(function (el) { el.classList.add('in'); });
+  }
+
+  var band = document.querySelector('.quote-band');
+  if (band) {
+    var slides = band.querySelectorAll('.quote-slide');
+    var bgs = band.querySelectorAll('.quote-bg');
+    var dots = band.querySelectorAll('.quote-dot');
+    var current = 0;
+    function show(i) {
+      current = (i + slides.length) % slides.length;
+      slides.forEach(function (el, n) {
+        el.classList.toggle('is-active', n === current);
+        el.setAttribute('aria-hidden', n === current ? 'false' : 'true');
+      });
+      bgs.forEach(function (el, n) { el.classList.toggle('is-active', n === current); });
+      dots.forEach(function (el, n) { el.setAttribute('aria-current', n === current ? 'true' : 'false'); });
+    }
+    band.querySelector('.quote-arrow.prev').addEventListener('click', function () { show(current - 1); });
+    band.querySelector('.quote-arrow.next').addEventListener('click', function () { show(current + 1); });
+    dots.forEach(function (el, n) { el.addEventListener('click', function () { show(n); }); });
   }
 
   var contactForm = document.getElementById('contact-form');
