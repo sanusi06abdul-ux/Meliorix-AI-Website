@@ -830,6 +830,24 @@
   .hiw-board.map6 .process-step:nth-child(6) { top: 900px; left: 15%; }
   .hiw-board.map6 .process-step:nth-child(7) { top: 1020px; right: 15%; }
   @media (max-width: 900px) { .hiw-board.map6 { height: auto; } }
+
+  /* Hero tools picture sits straight on the hero background */
+  .hero .ic-card { max-width: 540px; background: none; border: 0; border-radius: 0; box-shadow: none; overflow: visible; }
+  .hero .hx-stage { background: none; }
+  .hero .hx-line { stroke: rgba(17,18,17,0.22); }
+  .hero .hx-tile { box-shadow: 0 8px 22px rgba(17,18,17,0.10); }
+  .hero .hx-hub { box-shadow: 0 14px 36px rgba(15,110,86,0.22); }
+
+  /* Phones: give the hero picture the full column width (it has no width of its own) */
+  @media (max-width: 860px) { .hero-visual { width: 100%; max-width: 420px; margin-inline: auto; } .hero .ic-card { width: 100%; } }
+
+  /* Bigger, and sitting a little higher */
+  .hero .ic-card { max-width: 600px; }
+  @media (min-width: 861px) { .hero-visual { align-self: start; margin-top: 8px; } }
+  @media (max-width: 860px) { .hero-visual { max-width: 480px; margin-top: 24px; } }
+
+  /* Menu links land on the section heading, just below the sticky bar */
+  section[id] { scroll-margin-top: 24px; }
 </style>
 </head>
 <body>
