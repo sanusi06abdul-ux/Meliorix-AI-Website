@@ -766,6 +766,70 @@
     .pf-tag, .story-tag, .eng-tag, .melior-section .melior-pos { font-size: 12px; }
     .pf-stat, .pf-impact span { font-size: 11.5px; }
   }
+
+  /* ---------- Hero card: the tools story, played once ---------- */
+  .hx-stage {
+    position: relative; aspect-ratio: 440 / 300; max-width: 100%; container-type: inline-size;
+    background: radial-gradient(rgba(17,18,17,0.09) 1px, transparent 1px) 0 0 / 16px 16px, linear-gradient(180deg, var(--paper-2), var(--paper));
+  }
+  .hx-instant, .hx-instant * { transition: none !important; }
+  .hx-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hx-line { fill: none; stroke: #C4C2B8; stroke-width: 1.6; stroke-dasharray: 100 100; stroke-dashoffset: 0; transition: stroke-dashoffset 1100ms ease calc(var(--d, 0s) + 500ms); }
+  .hx-stage[data-step="1"] .hx-line, .hx-stage:not([data-step="4"]) .hx-line.l6 { stroke-dashoffset: 100; transition-delay: 0s; }
+  .hx-pulse { fill: none; stroke: var(--green); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 14 86; stroke-dashoffset: 100; opacity: 0; transition: opacity 400ms ease; animation: ic-flow 3.3s linear infinite; }
+  .hx-stage[data-step="3"] .hx-pulse:not(.l6), .hx-stage[data-step="4"] .hx-pulse { opacity: 1; transition-delay: 300ms; }
+  .hx-tile {
+    position: absolute; left: var(--fx); top: var(--fy); width: 12cqi; height: 12cqi; border-radius: 3.2cqi;
+    display: grid; place-items: center; background: #fff; border: 1px solid var(--line); box-shadow: 0 6px 16px rgba(17,18,17,0.08);
+    transform: translate(-50%, -50%);
+    transition: left 1200ms cubic-bezier(.25,.8,.25,1), top 1200ms cubic-bezier(.25,.8,.25,1), transform 1200ms cubic-bezier(.25,.8,.25,1), opacity 400ms ease, border-color 300ms ease, box-shadow 300ms ease;
+  }
+  .hx-tile img { width: 48%; height: 48%; }
+  .hx-stage[data-step="1"] .hx-tile { left: var(--sx); top: var(--sy); transform: translate(-50%, -50%) rotate(var(--sr)); opacity: 0.85; }
+  .hx-stage[data-step="2"] .hx-tile.later, .hx-stage[data-step="3"] .hx-tile.later { opacity: 0.45; border-style: dashed; box-shadow: none; }
+  .hx-hub {
+    position: absolute; left: 50%; top: 50%; width: 17cqi; height: 17cqi; border-radius: 4.5cqi; display: grid; place-items: center;
+    background: #fff; border: 1px solid rgba(15,110,86,0.25); box-shadow: 0 10px 28px rgba(15,110,86,0.18);
+    transform: translate(-50%, -50%) scale(1); opacity: 1; transition: transform 700ms ease 300ms, opacity 700ms ease 300ms;
+  }
+  .hx-hub img { width: 50%; height: auto; }
+  .hx-stage[data-step="1"] .hx-hub { transform: translate(-50%, -50%) scale(0.85); opacity: 0; transition-delay: 0s; }
+
+  /* ---------- Hero background (after 21st.dev ibelick background-snippets: grid + corner glow) ---------- */
+  header.hero {
+    background:
+      radial-gradient(circle 820px at 100% 200px, rgba(93,202,165,0.24), transparent),
+      radial-gradient(circle 520px at 0% 0%, rgba(15,110,86,0.05), transparent),
+      var(--paper);
+  }
+  header.hero::before {
+    background-image:
+      linear-gradient(to right, rgba(17,18,17,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(17,18,17,0.05) 1px, transparent 1px);
+    background-size: 6rem 4rem;
+    background-position: -1px -1px;
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+            mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+  .hero .mock-glow { display: none; }
+
+  /* Inside every build: five points, three across on wide screens */
+  @media (min-width: 900px) { .check-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* How it works: six pinned cards, three across */
+  .hiw-board.six { height: auto; max-width: 1080px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px 40px; padding: 16px 8px 24px; }
+  .hiw-board.six .process-step { position: relative; width: auto; top: auto !important; left: auto !important; right: auto !important; display: flex; }
+  .hiw-board.six .hiw-card { --tilt: 3deg; flex: 1; display: flex; flex-direction: column; }
+  .hiw-board.six .process-step:nth-child(odd) .hiw-card { --tilt: -3deg; }
+  .hiw-board.six .hiw-inner { flex: 1; }
+  @media (max-width: 900px) { .hiw-board.six { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 28px; } .hiw-board.six .process-step { align-self: stretch; } }
+  @media (max-width: 600px) { .hiw-board.six { grid-template-columns: minmax(0, 360px); justify-content: center; } }
+
+  /* How it works: six cards winding down the page, joined by the dashed path */
+  .hiw-board.map6 { height: 1350px; }
+  .hiw-board.map6 .process-step:nth-child(6) { top: 900px; left: 15%; }
+  .hiw-board.map6 .process-step:nth-child(7) { top: 1020px; right: 15%; }
+  @media (max-width: 900px) { .hiw-board.map6 { height: auto; } }
 </style>
 </head>
 <body>
@@ -793,24 +857,20 @@
   <div class="wrap">
     <div>
       <h1>Automation built around how your business <span class="accent">actually</span> works.</h1>
-      <p class="sub">Meliorix AI designs and builds custom AI automations for small and medium-sized businesses. No off-the-shelf software, no features you'll never use.</p>
+      <p class="sub">Custom automation &amp; AI implementation for owner-led service businesses: agencies, letting agents, home services and professional firms. Built around the tools you already use, one process at a time.</p>
       <div class="cta-row">
         <a class="btn-primary" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a free call</a>
         <span class="cta-note">30 minutes, no obligation</span>
       </div>
-      <a class="calc-link" href="automation-calculator.html">Not sure where to start? Find your automation &amp; AI opportunities in 3 minutes &rarr;</a>
+      <a class="calc-link" href="automation-calculator.html">Not sure where to start? Find your automation &amp; AI opportunities in 3 minutes →</a>
     </div>
     <div class="hero-visual">
       <div class="mock-glow" aria-hidden="true"></div>
-      <div class="ic-card">
-        <div class="ic-stage">
-          <svg class="ic-lines" viewBox="0 0 440 300" preserveAspectRatio="none" aria-hidden="true"><path class="ic-line" d="M95 70 H200 V114"/><path class="ic-line" d="M330 55 H240 V114"/><path class="ic-line" d="M80 150 H184"/><path class="ic-line" d="M362 150 H256"/><path class="ic-line" d="M205 256 V186"/><path class="ic-line" d="M340 245 H240 V186"/><path class="ic-pulse" d="M95 70 H200 V114" pathLength="100" style="animation-delay:0.00s"/><path class="ic-pulse" d="M330 55 H240 V114" pathLength="100" style="animation-delay:0.55s"/><path class="ic-pulse" d="M80 150 H184" pathLength="100" style="animation-delay:1.10s"/><path class="ic-pulse" d="M362 150 H256" pathLength="100" style="animation-delay:1.65s"/><path class="ic-pulse" d="M205 256 V186" pathLength="100" style="animation-delay:2.20s"/><path class="ic-pulse" d="M340 245 H240 V186" pathLength="100" style="animation-delay:2.75s"/></svg>
-          <div class="ic-tile t1" style="left:21.591%;top:23.333%" title="Gmail"><img src="Images%20-%20for%20Website/tools/gmail.svg" alt="Gmail" width="24" height="24"></div><div class="ic-tile t2" style="left:75.000%;top:18.333%" title="Slack"><img src="Images%20-%20for%20Website/tools/slack.svg" alt="Slack" width="24" height="24"></div><div class="ic-tile t3" style="left:18.182%;top:50.000%" title="Google Sheets"><img src="Images%20-%20for%20Website/tools/googlesheets.svg" alt="Google Sheets" width="24" height="24"></div><div class="ic-tile t4" style="left:82.273%;top:50.000%" title="HubSpot"><img src="Images%20-%20for%20Website/tools/hubspot.svg" alt="HubSpot" width="24" height="24"></div><div class="ic-tile t5" style="left:46.591%;top:85.333%" title="Google Calendar"><img src="Images%20-%20for%20Website/tools/googlecalendar.svg" alt="Google Calendar" width="24" height="24"></div><div class="ic-tile t6" style="left:77.273%;top:81.667%" title="Stripe"><img src="Images%20-%20for%20Website/tools/stripe.svg" alt="Stripe" width="24" height="24"></div>
-          <div class="ic-hub" role="img" aria-label="Meliorix AI"><img src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="34" height="31"></div>
-        </div>
-        <div class="ic-body">
-          <h3>Works with the tools you already run</h3>
-          <p>We connect the inbox, CRM, spreadsheets and calendar you already use, so information moves between them on its own.</p>
+      <div class="ic-card hx-card">
+        <div class="hx-stage" data-step="4" role="img" aria-label="Your everyday tools, such as Gmail, Google Sheets, Slack, HubSpot, Google Calendar and Stripe, connected by Meliorix AI">
+          <svg class="hx-lines" viewBox="0 0 440 300" preserveAspectRatio="none" aria-hidden="true"><path class="hx-line" d="M95 70 H200 V114" pathLength="100" style="--d:0.00s"></path><path class="hx-line" d="M330 55 H240 V114" pathLength="100" style="--d:0.12s"></path><path class="hx-line" d="M80 150 H184" pathLength="100" style="--d:0.24s"></path><path class="hx-line" d="M362 150 H256" pathLength="100" style="--d:0.36s"></path><path class="hx-line" d="M205 256 V186" pathLength="100" style="--d:0.48s"></path><path class="hx-line l6" d="M340 245 H240 V186" pathLength="100" style="--d:0.60s"></path><path class="hx-pulse" d="M95 70 H200 V114" pathLength="100" style="animation-delay:0.00s"></path><path class="hx-pulse" d="M330 55 H240 V114" pathLength="100" style="animation-delay:0.55s"></path><path class="hx-pulse" d="M80 150 H184" pathLength="100" style="animation-delay:1.10s"></path><path class="hx-pulse" d="M362 150 H256" pathLength="100" style="animation-delay:1.65s"></path><path class="hx-pulse" d="M205 256 V186" pathLength="100" style="animation-delay:2.20s"></path><path class="hx-pulse l6" d="M340 245 H240 V186" pathLength="100" style="animation-delay:2.75s"></path></svg>
+          <div class="hx-tile" style="--sx:16%;--sy:18%;--sr:-4deg;--fx:21.591%;--fy:23.333%"><img src="Images%20-%20for%20Website/tools/gmail.svg" alt="" width="24" height="24"></div><div class="hx-tile" style="--sx:69%;--sy:12%;--sr:3deg;--fx:75%;--fy:18.333%"><img src="Images%20-%20for%20Website/tools/slack.svg" alt="" width="24" height="24"></div><div class="hx-tile" style="--sx:24%;--sy:57%;--sr:3deg;--fx:18.182%;--fy:50%"><img src="Images%20-%20for%20Website/tools/googlesheets.svg" alt="" width="24" height="24"></div><div class="hx-tile" style="--sx:88%;--sy:43%;--sr:-3deg;--fx:82.273%;--fy:50%"><img src="Images%20-%20for%20Website/tools/hubspot.svg" alt="" width="24" height="24"></div><div class="hx-tile" style="--sx:41%;--sy:90%;--sr:4deg;--fx:46.591%;--fy:85.333%"><img src="Images%20-%20for%20Website/tools/googlecalendar.svg" alt="" width="24" height="24"></div><div class="hx-tile later" style="--sx:84%;--sy:88%;--sr:-3deg;--fx:77.273%;--fy:81.667%"><img src="Images%20-%20for%20Website/tools/stripe.svg" alt="" width="24" height="24"></div>
+          <div class="hx-hub"><img src="Images%20-%20for%20Website/files/meliorix-m-caret-color.svg" alt="" width="34" height="31"></div>
         </div>
       </div>
     </div>
@@ -860,7 +920,7 @@
     <div class="melior-card reveal">
       <div class="melior-head">
         <span class="melior-word">Melior</span>
-        <span class="melior-pos">Latin &middot; Adjective</span>
+        <span class="melior-pos">Latin · Adjective</span>
       </div>
       <p class="melior-def">"Better." The comparative of <strong>bonus</strong> (good).</p>
       <p class="melior-body">That's the idea behind Meliorix AI. We make your business better one process at a time. We find what's slowing you down most, build the automation that fixes it, then move on to the next.</p>
@@ -871,7 +931,7 @@
 <section id="what">
   <div class="wrap">
     <p class="section-label">What we do</p>
-    <h2 class="reveal">One team, one automation, built to fit. Not a subscription you half use.</h2>
+    <h2 class="reveal">We learn how your business runs, then build automations around it.</h2>
     <div class="what-grid reveal">
       <p>Every business runs on its own mix of spreadsheets, inboxes, and manual handoffs. We look at where your team's time actually goes, then build the specific automation that removes it. Nothing more.</p>
       <ul class="not-list">
@@ -886,47 +946,67 @@
 <section id="process">
   <div class="wrap">
     <p class="section-label">How it works</p>
-    <h2 class="reveal">Four steps, start to finish.</h2>
+    <h2 class="reveal">Six steps, start to finish.</h2>
     <div class="hiw">
-      <div class="hiw-board">
-      <svg class="hiw-path" viewBox="0 0 1000 900" preserveAspectRatio="none" aria-hidden="true"><path d="M 290 150 C 500 150, 550 270, 710 270 C 850 270, 500 350, 290 450 C 290 600, 550 720, 750 720"/></svg>
+      <div class="hiw-board map6">
+      <svg class="hiw-path" viewBox="0 0 1000 1350" preserveAspectRatio="none" aria-hidden="true"><path d="M 300 150 C 500 150, 520 270, 700 270 C 860 270, 520 420, 300 600 C 300 700, 520 720, 720 720 C 880 720, 520 880, 300 1050 C 300 1150, 520 1170, 700 1170"/></svg>
       <div class="process-step reveal">
         <div class="hiw-card">
-          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>
           <div class="hiw-inner">
             <span class="num">01</span>
             <h3>Discover</h3>
-            <p>We map the exact process losing you time: the tools involved, the handoffs, where it breaks down.</p>
-          </div>
-        </div>
-      </div>
-      <div class="process-step accent reveal">
-        <div class="hiw-card">
-          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
-          <div class="hiw-inner">
-            <span class="num">02</span>
-            <h3>Build</h3>
-            <p>We design and build the automation around your existing systems, not the other way around.</p>
+            <p>We find the bottlenecks costing your business time and money.</p>
           </div>
         </div>
       </div>
       <div class="process-step tint reveal">
         <div class="hiw-card">
-          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>
+          <div class="hiw-inner">
+            <span class="num">02</span>
+            <h3>Map</h3>
+            <p>We walk through the process with you step by step, mapping every manual task, delay and handoff, so you can see exactly where time and money are being lost.</p>
+          </div>
+        </div>
+      </div>
+      <div class="process-step accent reveal">
+        <div class="hiw-card">
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>
           <div class="hiw-inner">
             <span class="num">03</span>
+            <h3>Prioritise</h3>
+            <p>We pick out the opportunities worth the most to your business and decide where automation or AI will make the biggest difference first.</p>
+          </div>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="hiw-card">
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>
+          <div class="hiw-inner">
+            <span class="num">04</span>
+            <h3>Build</h3>
+            <p>We build the automation around the tools you already use. You see it working before anything goes live.</p>
+          </div>
+        </div>
+      </div>
+      <div class="process-step tint reveal">
+        <div class="hiw-card">
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>
+          <div class="hiw-inner">
+            <span class="num">05</span>
             <h3>Run</h3>
-            <p>It goes live in your business. We stay on call while it settles in, not just for the handoff.</p>
+            <p>It goes live in your business. You get SOPs, diagrams and a walkthrough, so you and your team know exactly how it works.</p>
           </div>
         </div>
       </div>
       <div class="process-step dark reveal">
         <div class="hiw-card">
-          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+          <svg class="hiw-pin" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5" fill="none" stroke-width="2"></path><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"></path></svg>
           <div class="hiw-inner">
-            <span class="num">04</span>
+            <span class="num">06</span>
             <h3>Improve</h3>
-            <p>It keeps getting tuned as your process changes, so it doesn't go stale the way off-the-shelf tools do.</p>
+            <p>As your business changes, we tune the automation to match. Then we move on to the next process holding you back.</p>
           </div>
         </div>
       </div>
@@ -947,8 +1027,8 @@
         </div>
         <div class="story-panel">
           <span class="story-tag">AI Automation</span>
-          <h3>A daily brief that catches partnership news before anyone else does</h3>
-          <p class="story-desc">Their partnership news took hours to track by hand. We built an AI digest that finds it and delivers it every morning at 8am.</p>
+          <h3>6-8 hours a week of manual research, replaced by a daily&nbsp; email</h3>
+          <p class="story-desc">Partnership news was scattered across dozens of outlets, and lower-league clubs barely appeared in mainstream media. Now an AI digest finds the genuine announcements and sends them every morning, so the founder spends that time closing deals.</p>
           <a class="story-link" href="case-study-partnership.html">Read the case study</a>
         </div>
       </article>
@@ -959,8 +1039,8 @@
         </div>
         <div class="story-panel">
           <span class="story-tag">AI Automation</span>
-          <h3>A membership programme that runs itself, across five tiers</h3>
-          <p class="story-desc">Renewals, tickets, and records all needed a person. Six connected workflows now run the entire membership lifecycle on their own.</p>
+          <h3>Manual membership management fully handled by automation</h3>
+          <p class="story-desc">Members re-entered payment details at every renewal and tickets were reissued by hand. Six connected workflows now handle the whole lifecycle, from purchase and activation reminders to renewals and cancellations.</p>
           <a class="story-link" href="case-study-membership.html">Read the case study</a>
         </div>
       </article>
@@ -979,15 +1059,15 @@
     <div class="quote-bg" style="background-image: url('Images%20-%20for%20Website/case-studies/membership-hero.jpg')"></div>
     <div class="quote-card">
       <button class="quote-arrow prev" type="button" aria-label="Previous testimonial">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </button>
       <div class="quote-slides" aria-live="polite">
         <figure class="quote-slide is-active" aria-roledescription="slide" aria-label="1 of 2">
-          <blockquote>&ldquo;Before this I was spending 6&ndash;8 hours weekly looking for partnership news. Now I receive a daily email informing me of the activity going on within the sponsorship market, allowing me to capture high-intent leads looking to activate sponsorships.&rdquo;</blockquote>
+          <blockquote>“Before this I was spending 6–8 hours weekly looking for partnership news. Now I receive a daily email informing me of the activity going on within the sponsorship market, allowing me to capture high-intent leads looking to activate sponsorships.”</blockquote>
           <figcaption>Founder, Sports Sponsorship Agency<span>Partnership news automation</span></figcaption>
         </figure>
         <figure class="quote-slide" aria-roledescription="slide" aria-label="2 of 2" aria-hidden="true">
-          <blockquote>&ldquo;He's focused on providing solutions in a quick period of time. He finds the problem and quickly resolves it, while explaining what, how, and why he took certain actions, without adding extra workload to your process. His work is very appreciated.&rdquo;</blockquote>
+          <blockquote>“He's focused on providing solutions in a quick period of time. He finds the problem and quickly resolves it, while explaining what, how, and why he took certain actions, without adding extra workload to your process. His work is very appreciated.”</blockquote>
           <figcaption>Founder, Membership Platform<span>Membership lifecycle automation</span></figcaption>
         </figure>
       </div>
@@ -996,7 +1076,7 @@
         <button class="quote-dot" type="button" aria-label="Show testimonial 2" aria-current="false"></button>
       </div>
       <button class="quote-arrow next" type="button" aria-label="Next testimonial">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7.5 4l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </button>
     </div>
   </div>
@@ -1005,23 +1085,27 @@
 <section class="on-ink">
   <div class="wrap">
     <p class="section-label">Inside every build</p>
-    <h2 class="reveal">What you can expect, every time.</h2>
+    <h2 class="reveal">What you get, every time.</h2>
     <div class="check-grid">
       <div class="check-item reveal">
-        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div><h3>Reads from your existing tools</h3><p>Connects directly to your CRM, sheets, inbox, or ticketing system. Nothing to migrate.</p></div>
+        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"></rect><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div><h3>Works with your tools</h3><p>Connects to the CRM, spreadsheets, inbox or booking system you already use. Nothing to migrate.</p></div>
       </div>
       <div class="check-item reveal">
-        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div><h3>Runs on schedule or on trigger</h3><p>Timed digests, or an instant reaction the moment something happens.</p></div>
+        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"></rect><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div><h3>Runs on its own</h3><p>On a schedule, e.g a weekly report every Friday, or the moment something happens, like a new enquiry.</p></div>
       </div>
       <div class="check-item reveal">
-        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div><h3>Updates records without manual entry</h3><p>No more copying the same information between systems by hand.</p></div>
+        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"></rect><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div><h3>No more retyping</h3><p>Records update across your systems once, without anyone copying them over.</p></div>
       </div>
       <div class="check-item reveal">
-        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div><h3>Documented, not a black box</h3><p>You get the SOP, the diagrams, and a walkthrough. Not just a login.</p></div>
+        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"></rect><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div><h3>AI only where it helps</h3><p>We use AI where it genuinely adds something and plain automation where it doesn't.</p></div>
+      </div>
+      <div class="check-item reveal">
+        <svg class="check-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"></rect><path d="M5 10l3.2 3.2L15 6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div><h3>Fully Documented &amp; Handed Over</h3><p>You get the SOPs, diagrams and video walkthroughs so you and your team know how everything works.</p></div>
       </div>
     </div>
   </div>
@@ -1033,7 +1117,7 @@
     <h2 class="reveal">Every manual bottleneck has an automation that fixes it.</h2>
     <div class="pf reveal">
       <div class="pf-tabs" role="tablist" aria-orientation="vertical" aria-label="Common bottlenecks">
-        <button type="button" class="pf-tab is-active" role="tab" id="pf-tab-leads" aria-controls="pf-panel-leads" aria-selected="true" tabindex="0"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7v4l2 1.5"/></svg>Leads wait, then go cold</span><span class="pf-tab-desc">Instant, qualified follow-up</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-reports" aria-controls="pf-panel-reports" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17v-5M13 17V8M18 17v-3"/></svg>Reports eat a full afternoon</span><span class="pf-tab-desc">Reports that build themselves</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-retype" aria-controls="pf-panel-retype" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16V5a2 2 0 0 1 2-2h11"/></svg>Same info, typed three times</span><span class="pf-tab-desc">One entry, everywhere updated</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-inbox" aria-controls="pf-panel-inbox" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>The inbox never empties</span><span class="pf-tab-desc">Routine handled, escalations flagged</span></button>
+        <button type="button" class="pf-tab is-active" role="tab" id="pf-tab-leads" aria-controls="pf-panel-leads" aria-selected="true" tabindex="0"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M12 7v4l2 1.5"></path></svg>Leads wait, then go cold</span><span class="pf-tab-desc">Instant, qualified follow-up</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-reports" aria-controls="pf-panel-reports" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M8 17v-5M13 17V8M18 17v-3"></path></svg>Reports eat a full afternoon</span><span class="pf-tab-desc">Reports that build themselves</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-retype" aria-controls="pf-panel-retype" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M4 16V5a2 2 0 0 1 2-2h11"></path></svg>Same info, typed three times</span><span class="pf-tab-desc">One entry, everywhere updated</span></button><button type="button" class="pf-tab" role="tab" id="pf-tab-inbox" aria-controls="pf-panel-inbox" aria-selected="false" tabindex="-1"><span class="pf-tab-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>The inbox never empties</span><span class="pf-tab-desc">Routine handled, escalations flagged</span></button>
       </div>
       <div class="pf-panels">
         <div class="pf-panel is-active" role="tabpanel" id="pf-panel-leads" aria-labelledby="pf-tab-leads">
@@ -1069,12 +1153,12 @@
         <div class="pf-panel" role="tabpanel" id="pf-panel-retype" aria-labelledby="pf-tab-retype">
           <div class="pf-cols">
             <div class="pf-col before">
-              <div class="pf-col-head"><span class="pf-tag">Today</span><span class="pf-stat"><b>3&times;</b>Same record, retyped</span></div>
+              <div class="pf-col-head"><span class="pf-tag">Today</span><span class="pf-stat"><b>3×</b>Same record, retyped</span></div>
               <h3>Same info, typed three times</h3>
               <ul><li>Every new contact re-entered across tools</li><li>Records drift out of sync with each other</li><li>Nobody's fully sure which version is current</li></ul>
             </div>
             <div class="pf-col after">
-              <div class="pf-col-head"><span class="pf-tag">With automation</span><span class="pf-stat"><b>1&times;</b>Single source of truth</span></div>
+              <div class="pf-col-head"><span class="pf-tag">With automation</span><span class="pf-stat"><b>1×</b>Single source of truth</span></div>
               <h3>One entry, everywhere updated</h3>
               <ul><li>A record updates once, everywhere at once</li><li>No more copy-pasting between tabs</li><li>One accurate source, always current</li></ul>
             </div>
@@ -1120,8 +1204,8 @@
           </ul>
         </div>
         <div class="eng-row-value">
-          <span class="eng-value">2&ndash;4 weeks</span>
-          <a class="eng-cta" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book &rarr;</a>
+          <span class="eng-value">2–4 weeks</span>
+          <a class="eng-cta" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book →</a>
         </div>
       </div>
       <div class="eng-row featured reveal">
@@ -1139,7 +1223,7 @@
         </div>
         <div class="eng-row-value">
           <span class="eng-value">Month to month</span>
-          <a class="eng-cta" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book &rarr;</a>
+          <a class="eng-cta" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book →</a>
         </div>
       </div>
     </div>
@@ -1152,26 +1236,26 @@
       <h2>Got a bottleneck? Let's <span class="accent">fix it</span>.</h2>
       <p>Whether you've already got a clear idea or you've just noticed something's slow, tell us about it. No pressure, no jargon, just an honest read on whether automation is the right fix.</p>
       <div class="closing-cta-row">
-        <a class="btn-primary btn-on-ink" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call &rarr;</a>
+        <a class="btn-primary btn-on-ink" href="https://calendly.com/abdul-meliorixai/30min" target="_blank" rel="noopener">Book a call →</a>
         <a class="text-cta" href="#contact-form">or send us a message</a>
       </div>
       <p class="contact-alt">Prefer email? Reach us directly at <a href="mailto:abdul@meliorixai.com">abdul@meliorixai.com</a>.</p>
     </div>
     <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact-form reveal" id="contact-form">
       <input type="hidden" name="form-name" value="contact">
-      <p class="hp-field" hidden><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+      <p class="hp-field" hidden=""><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
       <div class="form-fields">
         <div class="form-row">
           <label for="cf-name">Name</label>
-          <input type="text" id="cf-name" name="name" autocomplete="name" required>
+          <input type="text" id="cf-name" name="name" autocomplete="name" required="">
         </div>
         <div class="form-row">
           <label for="cf-email">Email</label>
-          <input type="email" id="cf-email" name="email" autocomplete="email" required>
+          <input type="email" id="cf-email" name="email" autocomplete="email" required="">
         </div>
         <div class="form-row">
-          <label for="cf-message">What's eating your team's time?</label>
-          <textarea id="cf-message" name="message" rows="4" required></textarea>
+          <label for="cf-message">HOW CAN WE HELP YOUR BUSINESS?</label>
+          <textarea id="cf-message" name="message" rows="4" required=""></textarea>
         </div>
         <button type="submit" class="btn-primary btn-on-ink">Send message</button>
         <p class="form-status" aria-live="polite"></p>
@@ -1189,9 +1273,9 @@
           <img class="mark" src="Images%20-%20for%20Website/files/meliorix-m-caret-white.svg" alt="" width="28" height="26">
           Meliorix AI
         </a>
-        <p>Custom AI automation for small and medium-sized businesses. Built around how you already work.</p>
+        <p>Custom automation &amp; AI implementation for owner-led service businesses. Built around the tools you already use, one process at a time.</p>
         <a class="footer-social" href="https://www.linkedin.com/company/meliorix-ai/" target="_blank" rel="noopener" aria-label="Meliorix AI on LinkedIn">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path></svg>
         </a>
       </div>
       <div class="footer-col">
@@ -1212,7 +1296,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; <span id="year"></span> Meliorix AI</span>
+      <span>© <span id="year"></span> Meliorix AI</span>
       <span>abdul@meliorixai.com</span>
     </div>
   </div>
@@ -1322,6 +1406,19 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && navEl.classList.contains('is-open')) { setMenu(false); navToggle.focus(); }
     });
+  }
+
+  var hx = document.querySelector('.hx-stage');
+  if (hx && !reduceMotion) {
+    hx.classList.add('hx-instant'); hx.setAttribute('data-step', '1'); void hx.offsetWidth; hx.classList.remove('hx-instant');
+    var hxPlay = function () {
+      setTimeout(function () { hx.setAttribute('data-step', '3'); }, 400);
+      setTimeout(function () { hx.setAttribute('data-step', '4'); }, 2600);
+    };
+    if ('IntersectionObserver' in window) {
+      var hxIo = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { hxIo.disconnect(); hxPlay(); } }, { threshold: 0.4 });
+      hxIo.observe(hx);
+    } else { hxPlay(); }
   }
 </script>
 
